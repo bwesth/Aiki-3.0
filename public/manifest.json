@@ -1,0 +1,31 @@
+  {
+    "manifest_version": 2,
+    "name": "Link2",
+    "description": "Aiki Microlearning",
+    "version": "1.0.0",
+    "permissions": [
+      "activeTab",
+      "declarativeContent",
+      "storage",
+      "tabs",
+      "webNavigation",
+      "webRequest",
+      "windows",
+      "webRequestBlocking",
+      "<all_urls>"
+    ],
+    "background": {
+      "scripts": ["build/background.js"],
+      "persistent": true
+    },
+    "browser_action": {
+      "default_popup": "index.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://*/*"],
+        "js": ["build/injection.js"]
+      }
+    ],
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  }
