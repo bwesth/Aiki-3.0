@@ -1,4 +1,7 @@
 import browser from "webextension-polyfill";
+import {logAction, logSessionStart} from "./logger.js";
+
+// logAction();
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -115,7 +118,7 @@ let endTime;
 //   }
 // });
 
-chrome.webNavigation.onCompleted.addListener(startSession);
+chrome.webNavigation.onCompleted.addListener(startSessionListener);
 
 /*Fires when the active tab in a window changes. Note that the tab's URL may not be set at the time this event fired,
 but you can listen to onUpdated events so as to be notified when a URL is set.*/
@@ -124,23 +127,38 @@ chrome.tabs.onActivated
 /* */
 chrome.tabs.onRemoved
 
-function startSession(details) {
-    if (details.frameId == '0') {
-      let host = details.url.split("/")[2];
-  
-      console.log("This is the host: " + host);
-      
-        //If the host is Codecademy, we start a timer.
-        if (host = "www.codecademy.com") {
-          beginTime = new Date();
-        }
-      
-      chrome.webNavigation.onCompleted.addListener(endSession);
-      chrome.webNavigation.onCompleted.removeListener(startSession);
+//Creates a listener at the start of a session that gathers all the data for us, and logs it atm.
+//Probably should split this shit up.
+function startSessionListener(details) {
+  if (details.frameId == '0') {
+    let host = details.url.split("/")[2];
+
+    console.log("This is the host: " + host);
+
+    //If the host is Codecademy, we start a timer.
+    if (host = "www.codecademy.com") {
+      beginTime = new Date();
+
+      //What do we want here?
+      //WHAT/HOW/WHEN/WHO
+      //WHO/WHAT/HOW/WHEN/EXTRA SHIT
+      //USER, HOST, NAVIGATIONTYPE, TIMESTAMP, EXTRA
+      let tag = "SESSIONSTART" //could be a lot of different tags!
+      let who = "John";
+      let how = "dunno";
+      let moar = {date:beginTime, eventDetails: details};
+
+      logSessionStart(tag, who, host, how, beginTime.toLocaleString(), moar);
+          
+      chrome.webNavigation.onCompleted.addListener(endSessionListener);
+      chrome.webNavigation.onCompleted.removeListener(startSessionListener);
+    }
   }
 };
 
-function endSession(details) {
+//Creates a listener at the end of a session that gathers all the data for us, and logs it atm.
+//Probably should split this shit up.
+function endSessionListener(details) {
     if (details.frameId == '0'){
       let host = details.url.split("/")[2];
 
@@ -149,14 +167,14 @@ function endSession(details) {
         console.log("The begin time was: " + beginTime.toLocaleString());
         console.log("The end time was: " + endTime.toLocaleString());
 
-        chrome.webNavigation.onCompleted.removeListener(endSession);
-        chrome.webNavigation.onCompleted.addListener(startSession);
+        chrome.webNavigation.onCompleted.removeListener(endSessionListener);
+        chrome.webNavigation.onCompleted.addListener(startSessionListener);
         console.log(sessionLength(endTime,beginTime, host));
       }
     }
 };
 
-
+//Attempts to calculate the given length for a session.
 function sessionLength(date1, date2, host) {
   let time = date1.getTime() - date2.getTime();
   return("You spent " + Math.floor(time/1000) + " seconds on " + host);

@@ -1,7 +1,30 @@
 //Logging functions go here
+export function logAction (actor, time, action, sessionStatus) {
+    const log = {};
+    assignProperty(log, "actor", "John");
+    console.log(log);
+}
 
-function logAction (actor, time, action, sessionStatus) {
-    console.log(actor + " performed this " + action + " at this " + time);
+function assignProperty (logObject, propertyName, propertyValue) {
+    logObject[propertyName] = propertyValue;
+}
+
+//Could take an array of properties???? Later perhaps.
+function assignProperties (logObject, propertyName, propertyValue) {
+    logObject[propertyName] = propertyValue;
+}
+
+export function logSessionStart(tag, who, what, how, when, moar) {
+    const log = {tag:tag, user:who, host:what, navigationtype:how, timestamp:when, details: moar}
+    console.log(log);
+}
+
+function logSessionEnd(who, what, how, when) {
+
+}
+
+function logSessionAbort(who, what, how, when) {
+
 }
 
 //JOHN PROCRASTINATES at www.facebook.com AT 15.25
