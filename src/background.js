@@ -86,14 +86,14 @@ function sessionLength(date1, date2, host) {
 
 let procNameList = ["youtube", "facebook", "reddit", "9gag"];
 
-let currentName;
+// let currentName;
 
 chrome.tabs.onActivated.addListener((details) =>
-  events.userActivatesTab(details, currentName, procNameList)
+  events.userActivatesTab(details)
 );
 
 // First-time setup of listeners
-events.addOnSiteListeners(currentName);
+events.addOnSiteListeners();
 
 // https://www.facebook.com/
 // https://www.youtube.com/

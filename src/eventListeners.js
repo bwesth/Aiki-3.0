@@ -1,3 +1,9 @@
+import { logEvent } from "./logger.js";
+
+// Need to fetch these from storage
+let procNameList = ["youtube", "facebook", "reddit", "9gag"];
+let currentName;
+
 //Creates a listener at the start of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
 function startSessionListener(details, beginTime) {
@@ -57,7 +63,7 @@ function endSessionListener(details, endTime, beginTime) {
   }
 }
 
-function userOnSite(details, currentName) {
+function userOnSite(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -81,7 +87,7 @@ function userOnSite(details, currentName) {
   }
 }
 
-function userLeftSite(details, currentName) {
+function userLeftSite(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -104,83 +110,98 @@ function userLeftSite(details, currentName) {
 }
 
 //Trying to handle what happens when a user activates a tab.
-function userActivatesTab(details, currentName, procNameList) {
-  sendMessage(details.tabId, "returnURL").then((response) => {
-    console.log(response);
-    // nameOfNewTab = parseUrlToName(response);
-  });
-  // let nameOfNewTab = await parseUrlToName(
-  //   await sendMessage(details.tabId, "returnURL")
-  // );
-  let nameOfNewTab = "";
-  //
-  if (currentName) {
-    //If current name is not undefined, then that means our current TAB is a procrastination site.
-    if (currentName !== nameOfNewTab) {
-      //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-      removeLeftSiteListeners();
-      addOnSiteListeners();
+function userActivatesTab(details) {
+  //   sendMessage(details.tabId, "returnURL").then((response) => {
+  //     console.log("This is the response as seen by listener:");
+  //     console.log(response);
+  //     // nameOfNewTab = parseUrlToName(response);
+  //   });
 
-      let logInfo = {
-        tag: "SESSIONEND",
-        name: currentName,
-        user: "John",
-        navigationType: "Left tab",
-        moar: { date: new Date(), eventDetails: details },
-      };
-      logEvent(logInfo);
+  chrome.tabs.sendMessage(
+    details.tabId,
+    { action: "returnURL" },
+    function (response) {
+      console.log("Getting response:");
+      console.log(response);
+      let nameOfNewTab = parseUrlToName(response.host);
+      console.log(nameOfNewTab + " should be parsed from " + response.host);
+      console.log("CurrentName: " + currentName);
+      //
+      if (currentName) {
+        console.log("currentName is defined");
+        //If current name is not undefined, then that means our current TAB is a procrastination site.
+        if (currentName !== nameOfNewTab) {
+          console.log("currentName is not same as new tab");
+          //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
+          removeLeftSiteListeners();
+          addOnSiteListeners();
 
-      currentName = undefined;
+          let logInfo = {
+            tag: "SESSIONEND",
+            name: currentName,
+            user: "John",
+            navigationType: "Left tab",
+            moar: { date: new Date(), eventDetails: details },
+          };
+          logEvent(logInfo);
+
+          currentName = undefined;
+        }
+      } else {
+        console.log("currentName is undefined");
+        //If current name IS undefined, then we MAY be arriving at a procrastination site now.
+        if (procNameList.includes(nameOfNewTab)) {
+          console.log(nameOfNewTab + " is on the list.");
+          //If the name of the new tab is in our procNameList, then we need to start a new proc session.
+          addLeftSiteListeners();
+          removeOnSiteListeners();
+
+          let logInfo = {
+            tag: "SESSIONSTART",
+            name: currentName,
+            user: "John",
+            navigationType: "Opened new tab",
+            moar: { date: new Date(), eventDetails: details },
+          };
+          logEvent(logInfo);
+
+          currentName = nameOfNewTab;
+        } else {
+          console.log(nameOfNewTab + " is not on the list.");
+        }
+      }
+      //
     }
-  } else {
-    //If current name IS undefined, then we MAY be arriving at a procrastination site now.
-    if (procNameList.includes(nameOfNewTab)) {
-      //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-      addLeftSiteListeners();
-      removeOnSiteListeners();
-
-      let logInfo = {
-        tag: "SESSIONSTART",
-        name: currentName,
-        user: "John",
-        navigationType: "Opened new tab",
-        moar: { date: new Date(), eventDetails: details },
-      };
-      logEvent(logInfo);
-
-      currentName = nameOfNewTab;
-    }
-  }
-  //
+  );
 }
 
-function addOnSiteListeners(currentName) {
+function addOnSiteListeners() {
   chrome.webNavigation.onCompleted.addListener((details) =>
-    userOnSite(details, currentName)
+    userOnSite(details)
   );
 }
 
-function removeOnSiteListeners(currentName) {
+function removeOnSiteListeners() {
   chrome.webNavigation.onCompleted.removeListener((details) =>
-    userOnSite(details, currentName)
+    userOnSite(details)
   );
 }
 
-function addLeftSiteListeners(currentName) {
+function addLeftSiteListeners() {
   chrome.tabs.onRemoved.addListener((details) =>
-    userLeftSite(details, currentName)
+    userLeftSite(details)
   );
   chrome.webNavigation.onCompleted.addListener((details) =>
-    userLeftSite(details, currentName)
+    userLeftSite(details)
   );
 }
 
-function removeLeftSiteListeners(currentName) {
+function removeLeftSiteListeners() {
   chrome.tabs.onRemoved.removeListener((details) =>
-    userLeftSite(details, currentName)
+    userLeftSite(details)
   );
   chrome.webNavigation.onCompleted.removeListener((details) =>
-    userLeftSite(details, currentName)
+    userLeftSite(details)
   );
 }
 
@@ -192,6 +213,7 @@ export default {
   addOnSiteListeners,
 };
 
+//Helpers
 async function sendMessage(tabId, action) {
   console.log("Sending message to tab " + tabId);
   console.log(action);
@@ -202,8 +224,8 @@ async function sendMessage(tabId, action) {
   });
 }
 
-async function parseUrlToName(url) {
-  let host = url.split("/")[2];
-  let name = host.split(".")[1];
-  return name;
+function parseUrlToName(url) {
+  //   let host = url.split("/")[2];
+  //   let name = host.split(".")[1];
+  return url.split(".")[1];
 }
