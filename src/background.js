@@ -1,7 +1,5 @@
 import browser from "webextension-polyfill";
-import {logAction, logSessionStart} from "./logger.js";
-
-// logAction();
+import {logEvent} from "./logger.js";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -77,46 +75,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 function sendMessage(tabId, message) {
   chrome.tabs.sendMessage(tabId, { message: message }, function (response) {
-    // console.log(response.message);
   });
-}
-
-function logWhatever(string) {
-  const currentDate = new Date();
-  const timestamp = currentDate.now;
-  // console.log(timestamp + " " + string);
 }
 
 let beginTime;
 let endTime;
-
-
-//When you load codecademy.
-// chrome.webNavigation.onCompleted.addListener((details) => {
-
-//   if (details.frameId == '0') {
-//     let host = details.url.split("/")[2];
-
-//     console.log("This is the host: " + host);
-    
-//       //If the host is Codecademy, we start a timer.
-//       if (host = "www.codecademy.com") {
-//         beginTime = new Date().toLocaleString();
-
-//         //We start a new listener that detects when we navigate away from the page, and logs an end time.
-//         chrome.webNavigation.onCompleted.addListener((details) => {
-//           if (details.frameId == '0'){
-//             let host2 = details.url.split("/")[2];
-
-//             if (host2 !== "www.codecademy.com") {
-//               endTime = new Date().toLocaleString();
-//               console.log("The begin time was: " + beginTime);
-//               console.log("The end time was: " + endTime);
-//             }
-//         }})
-//       }
-//   }
-// });
 
 chrome.webNavigation.onCompleted.addListener(startSessionListener);
 
@@ -132,10 +95,10 @@ chrome.tabs.onRemoved
 function startSessionListener(details) {
   if (details.frameId == '0') {
     let host = details.url.split("/")[2];
-
     console.log("This is the host: " + host);
 
-    //If the host is Codecademy, we start a timer.
+    //If the host is Codecademy, we start a timer. 
+    //Need to find a way to change the host we're looking at.
     if (host = "www.codecademy.com") {
       beginTime = new Date();
 
@@ -143,12 +106,9 @@ function startSessionListener(details) {
       //WHAT/HOW/WHEN/WHO
       //WHO/WHAT/HOW/WHEN/EXTRA SHIT
       //USER, HOST, NAVIGATIONTYPE, TIMESTAMP, EXTRA
-      let tag = "SESSIONSTART" //could be a lot of different tags!
-      let who = "John";
-      let how = "dunno";
-      let moar = {date:beginTime, eventDetails: details};
+      let logInfo = {tag:"SESSIONSTART", host: host, user:"John", navigationType:"dunno",moar:{date:beginTime, eventDetails:details}}
 
-      logSessionStart(tag, who, host, how, beginTime.toLocaleString(), moar);
+      logEvent(logInfo);
           
       chrome.webNavigation.onCompleted.addListener(endSessionListener);
       chrome.webNavigation.onCompleted.removeListener(startSessionListener);
@@ -164,8 +124,9 @@ function endSessionListener(details) {
 
       if (host !== "www.codecademy.com") {
         endTime = new Date();
-        console.log("The begin time was: " + beginTime.toLocaleString());
-        console.log("The end time was: " + endTime.toLocaleString());
+
+        let logInfo = {tag:"SESSIONEND", host: host, user:"John", navigationType:"leave :(", moar:{date:beginTime, eventDetails:details}}
+        logEvent(logInfo);
 
         chrome.webNavigation.onCompleted.removeListener(endSessionListener);
         chrome.webNavigation.onCompleted.addListener(startSessionListener);
