@@ -8,16 +8,18 @@ import { AikiOverlay, Link } from "./HTMLInjection/componentBucket";
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(location.host);
   console.log(request);
-  switch (request.message.action) {
-    case "returnURL" :
-      sendResponse(location.host)
+  console.log(request.action);
+  switch (request.action) {
+    case "returnURL":
+      console.log("sending host to background: " + location.host);
+      sendResponse({ host: location.host });
       break;
-    case "redirection" :
-      redirectRequest()
+    case "redirection":
+      redirectRequest();
       break;
-  } 
+  }
 
-  function redirectRequest () {
+  function redirectRequest() {
     // console.log(request);
     // console.log(sender);
     sendResponse({ message: "Redirection successful" });
@@ -28,8 +30,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   }
   return true;
 });
-
-
 
 // function setStyle(element, style) {
 //   element.style[style.property] = style.value;

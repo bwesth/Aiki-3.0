@@ -1,5 +1,6 @@
 import browser from "webextension-polyfill";
-import {logEvent} from "./logger.js";
+import { logEvent } from "./logger.js";
+import events from "./eventListeners";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -73,167 +74,26 @@ let redirected = false;
 //   }
 // });
 
-function sendMessage(tabId, message) {
-  chrome.tabs.sendMessage(tabId, { message: message }, function (response) {
-    return response;
-  });
-}
-
 let beginTime;
 let endTime;
-// chrome.webNavigation.onCompleted.addListener(startSessionListener);
-//Creates a listener at the start of a session that gathers all the data for us, and logs it atm.
-//Probably should split this shit up.
-function startSessionListener(details) {
-  if (details.frameId == '0') {
-    let host = details.url.split("/")[2];
-    console.log("This is the host: " + host);
-
-    //If the host is Codecademy, we start a timer. 
-    //Need to find a way to change the host we're looking at.
-    if (host = "www.codecademy.com") {
-      beginTime = new Date();
-
-      let logInfo = {tag:"SESSIONSTART", host: host, user:"John", navigationType:"dunno",moar:{date:beginTime, eventDetails:details}}
-
-      logEvent(logInfo);
-          
-      chrome.webNavigation.onCompleted.addListener(endSessionListener);
-      chrome.webNavigation.onCompleted.removeListener(startSessionListener);
-    }
-  }
-};
-
-//Creates a listener at the end of a session that gathers all the data for us, and logs it atm.
-//Probably should split this shit up.
-function endSessionListener(details) {
-    if (details.frameId == '0'){
-      let host = details.url.split("/")[2];
-      
-      if (host !== "www.codecademy.com") {
-        endTime = new Date();
-
-        let logInfo = {tag:"SESSIONEND", host: host, user:"John", navigationType:"leave :(", moar:{date:beginTime, eventDetails:details}}
-        logEvent(logInfo);
-
-        chrome.webNavigation.onCompleted.removeListener(endSessionListener);
-        chrome.webNavigation.onCompleted.addListener(startSessionListener);
-        console.log(sessionLength(endTime,beginTime, host));
-      }
-    }
-};
+// chrome.webNavigation.onCompleted.addListener((details => startSessionListener(details, endTime, beginTime)));
 
 //Attempts to calculate the given length for a session.
 function sessionLength(date1, date2, host) {
   let time = date1.getTime() - date2.getTime();
-  return("You spent " + Math.floor(time/1000) + " seconds on " + host);
+  return "You spent " + Math.floor(time / 1000) + " seconds on " + host;
 }
 
-let procNameList = [
-  "youtube",
-  "facebook",
-  "reddit",
-  "9gag",
-];
+let procNameList = ["youtube", "facebook", "reddit", "9gag"];
 
 let currentName;
 
-function userOnSite(details) {
-  if (details.frameId == '0') {
-    let name = parseUrlToName(details.url);
-
-    console.log("This is the site name: " + name);
-    //If the site name is in the procUrlList, we start a timer. 
-    if (procNameList.includes(name)) {
-      currentName = name;
-
-      let logInfo = {tag:"SESSIONSTART", name: name, user:"John", navigationType:"Start",moar:{date:new Date(), eventDetails:details}}
-
-      logEvent(logInfo);
-      removeOnSiteListeners()
-      addLeftSiteListeners()
-      
-    }
-  }
-}
-
-function userLeftSite(details) {
-  if (details.frameId == '0'){
-    let name = parseUrlToName(details.url);
-
-    if (name !== currentName) {
-
-      let logInfo = {tag:"SESSIONEND", name: currentName, user:"John", navigationType:"left the site", moar:{date:new Date(), eventDetails:details}}
-      logEvent(logInfo);
-
-      addOnSiteListeners()
-      removeLeftSiteListeners()
-
-      currentName = undefined;
-    }
-  }
-}
-
-//Trying to handle what happens when a user activates a tab.
-function userActivatesTab(details) {
-  let url = sendMessage(details.tabId,{action:"returnURL"});
-  console.log(url)
-  nameOfNewTab = parseUrlToName(url);
-
-  //
-if (currentName) { //If current name is not undefined, then that means our current TAB is a procrastination site.
-    if (currentName !== nameOfNewTab) { //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-      removeLeftSiteListeners();
-      addOnSiteListeners();
-
-      let logInfo = {tag:"SESSIONEND", name: currentName, user:"John", navigationType:"Left tab", moar:{date:new Date(), eventDetails:details}}
-      logEvent(logInfo);
-
-      currentName = undefined;
-    }
-  } else { //If current name IS undefined, then we MAY be arriving at a procrastination site now.
-    if (procNameList.includes(nameOfNewTab)) { //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-      addLeftSiteListeners();
-      removeOnSiteListeners();
-
-      let logInfo = {tag:"SESSIONSTART", name: currentName, user:"John", navigationType:"Opened new tab", moar:{date:new Date(), eventDetails:details}}
-      logEvent(logInfo);
-
-      currentName = nameOfNewTab;
-    }
-  }
-  //
-}
-
-chrome.tabs.onActivated.addListener(userActivatesTab)
-
-function addOnSiteListeners () {
-  chrome.webNavigation.onCompleted.addListener(userOnSite)
-}
-
-function removeOnSiteListeners() {
-  chrome.webNavigation.onCompleted.removeListener(userOnSite)
-}
-
-function addLeftSiteListeners() {
-  chrome.tabs.onRemoved.addListener(userLeftSite)
-  chrome.webNavigation.onCompleted.addListener(userLeftSite)
-}
-
-function removeLeftSiteListeners() {
-  chrome.tabs.onRemoved.removeListener(userLeftSite)
-  chrome.webNavigation.onCompleted.removeListener(userLeftSite)
-}
+chrome.tabs.onActivated.addListener((details) =>
+  events.userActivatesTab(details, currentName, procNameList)
+);
 
 // First-time setup of listeners
-addOnSiteListeners()
-
-function parseUrlToName(url) {
-  let host = url.split("/")[2];
-  let name = host.split(".")[1];
-  return name;
-};
-
+events.addOnSiteListeners(currentName);
 
 // https://www.facebook.com/
 // https://www.youtube.com/
