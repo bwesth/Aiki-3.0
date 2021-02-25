@@ -1,5 +1,5 @@
 export function logsvent(tag, who, what, how, when, details) {
-    const log = {tag:tag, user:who, host:what, navigationtype:how, timestamp:when, details: moar}
+    const log = {tag:tag, user:who, name:what, navigationtype:how, timestamp:when, details: moar}
     console.log(log);
 }
 

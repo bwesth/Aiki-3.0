@@ -4,19 +4,31 @@ import browser from "webextension-polyfill";
 import { AikiOverlay, Link } from "./HTMLInjection/componentBucket";
 
 // Listener for messages from background script.
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request);
-  console.log(sender);
   console.log(location.host);
-  // if (request.message === location.host) {
+  console.log(request);
+  switch (request.message.action) {
+    case "returnURL" :
+      sendResponse(location.host)
+      break;
+    case "redirection" :
+      redirectRequest()
+      break;
+  } 
+
+  function redirectRequest () {
+    // console.log(request);
+    // console.log(sender);
     sendResponse({ message: "Redirection successful" });
     let aikiOverlay = AikiOverlay();
     let link = Link();
     aikiOverlay.appendChild(link);
     document.body.appendChild(aikiOverlay);
-  // }
+  }
   return true;
 });
+
 
 
 // function setStyle(element, style) {
