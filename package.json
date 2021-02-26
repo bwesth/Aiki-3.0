@@ -18,6 +18,7 @@
     "webextension-polyfill": "^0.7.0"
   },
   "dependencies": {
+    "firebase": "^8.2.9",
     "sirv-cli": "^1.0.0"
   }
 }

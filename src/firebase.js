@@ -19,7 +19,7 @@ async function test() {
   const res = await db
     .collection("Users")
     .doc("johnsuserkey")
-    .set(["One", "two", "three", "tree"]);
+    .set({whatever: ["One", "two", "three", "tree"]});
   console.log(res);
 }
 
