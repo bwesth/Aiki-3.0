@@ -3,7 +3,8 @@ import { logEvent } from "./logger.js";
 import events from "./eventListeners";
 import firebase from "./firebase";
 
-firebase();
+//firebase.test();
+firebase.addJohn();
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {

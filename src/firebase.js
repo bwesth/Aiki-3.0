@@ -15,6 +15,7 @@ var firebaseConfig = {
 app.initializeApp(firebaseConfig);
 
 const db = app.firestore();
+
 async function test() {
   const res = await db
     .collection("Users")
@@ -23,4 +24,12 @@ async function test() {
   console.log(res);
 }
 
-export default test;
+async function addJohn() {
+  const res = await db
+  .collection("John is awesome")
+  .doc("awesomesauce")
+  .set({john:["Why", "won't", "you", "die"]});
+  console.log(res);
+}
+
+export default {test, addJohn};
