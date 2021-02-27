@@ -19,15 +19,14 @@ function startSessionListener(details, beginTime) {
     if ((name = redirectionTarget.name)) {
       beginTime = new Date();
 
-      let logInfo = {
+      logEvent({
         tag: "SESSIONSTART",
-        name: name,
+        name: name || "",
         user: "John",
         navigationType: "dunno",
-        details: { date: beginTime, eventDetails: details },
-      };
-
-      logEvent(logInfo);
+        date: beginTime,
+        eventDetails: details,
+      });
 
       chrome.webNavigation.onCompleted.addListener((details) =>
         endSessionListener(details, endtime)
@@ -40,6 +39,8 @@ function startSessionListener(details, beginTime) {
 //Creates a listener at the end of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
 function endSessionListener(details, endTime, beginTime) {
+  console.log("Session end listener");
+
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -47,10 +48,11 @@ function endSessionListener(details, endTime, beginTime) {
       endTime = new Date();
       logEvent({
         tag: "SESSIONEND",
-        name: name,
+        name: name || "",
         user: "John",
         navigationType: "leave :(",
-        details: { date: beginTime, eventDetails: details },
+        date: beginTime,
+        eventDetails: details,
       });
 
       chrome.webNavigation.onCompleted.removeListener((details) =>
@@ -65,6 +67,7 @@ function endSessionListener(details, endTime, beginTime) {
 }
 
 function userOnSite(details) {
+  console.log("User on site listener");
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -72,16 +75,14 @@ function userOnSite(details) {
     //If the site name is in the procUrlList, we start a timer.
     if (procNameList.includes(name)) {
       currentName = name;
-
-      let logInfo = {
+      logEvent({
         tag: "SESSIONSTART",
-        name: name,
+        name: name || "",
         user: "John",
         navigationType: "Start",
-        details: { date: new Date(), eventDetails: details },
-      };
-
-      logEvent(logInfo);
+        date: new Date(),
+        eventDetails: details,
+      });
       removeOnSiteListeners();
       addLeftSiteListeners();
     }
@@ -89,18 +90,20 @@ function userOnSite(details) {
 }
 
 function userLeftSite(details) {
+  console.log("User left site listener");
+
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
     if (name !== currentName) {
-      let logInfo = {
+      logEvent({
         tag: "SESSIONEND",
-        name: currentName,
+        name: currentName || "",
         user: "John",
         navigationType: "left the site",
-        details: { date: new Date(), eventDetails: details },
-      };
-      logEvent(logInfo);
+        date: new Date(),
+        eventDetails: details,
+      });
 
       addOnSiteListeners();
       removeLeftSiteListeners();
@@ -112,12 +115,9 @@ function userLeftSite(details) {
 
 //Trying to handle what happens when a user activates a tab.
 function userActivatesTab(details) {
-  console.log("Attempting to send message to tab: " + details.tabId);
-  console.log(details);
-  chrome.tabs.sendMessage(
-    details.tabId,
-    { action: "returnURL" },
-    tabActivatedCallback(response)
+  console.log("Tab activation listener");
+  chrome.tabs.sendMessage(details.tabId, { action: "returnURL" }, (response) =>
+    tabActivatedCallback(response, details)
   );
 }
 
@@ -172,7 +172,7 @@ function parseUrlToName(url) {
   return url.split(".")[1];
 }
 
-function tabActivatedCallback(response) {
+function tabActivatedCallback(response, details) {
   if (response) {
     console.log("Getting response:");
     console.log(response);
@@ -189,8 +189,19 @@ function tabActivatedCallback(response) {
         //If the name of the new tab is in our procNameList, then we need to start a new proc session.
         addLeftSiteListeners();
         removeOnSiteListeners();
-        logInfo("SESSIONSTART", "tab change", details);
+        logEvent({
+          tag: "SESSIONSTART",
+          name: "",
+          navigationType: "tab change",
+          date: new Date(),
+          eventDetails: details,
+        });
         currentName = nameOfNewTab;
+      } else {
+        console.log(
+          nameOfNewTab +
+            " is not on the list. This is not a procrastination site."
+        );
       }
     } else {
       console.log(
@@ -202,20 +213,18 @@ function tabActivatedCallback(response) {
         //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
         removeLeftSiteListeners();
         addOnSiteListeners();
-        logInfo("SESSIONEND", "tab change", details);
+        logEvent({
+          tag: "SESSIONEND",
+          name: "",
+          navigationType: "tab change",
+          date: new Date(),
+          eventDetails: details,
+        });
+
         currentName = undefined;
+      } else {
+        console.log("CurrentTab same as new tab, session not broken.");
       }
     }
   }
-}
-
-// This needs a rethink
-function logInfo(tag, type, details) {
-  logEvent({
-    tag: tag,
-    name: currentName,
-    user: "John",
-    navigationType: type,
-    details: { date: new Date().toLocaleString, eventDetails: details },
-  });
 }

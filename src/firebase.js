@@ -15,31 +15,18 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-async function test() {
-  const res = await db
-    .collection("Users")
-    .doc("johnsuserkey")
-    .set({ whatever: ["One", "two", "three", "tree"] });
-  console.log(res);
-}
-
-async function addJohn() {
-  const res = await db
-    .collection("John is awesome")
-    .doc("awesomesauce")
-    .set({ john: ["Why", "won't", "you", "die"] });
-  console.log(res);
-}
-
 async function addDoc(UID) {
   const res = await db.collection("log_entries").doc(UID).set({});
 }
 
 async function addEntry(UID, entry) {
+  console.log("Creating log for " + UID);
+  console.log(entry);
   const ref = db.collection("log_entries").doc(UID);
+  console.log("ref created");
   const res = await ref.update({
-    [entry.details.date.getTime()]: entry,
+    [entry.date.getTime()]: entry,
   });
 }
 
-export default { test, addJohn, addEntry, addDoc };
+export default { addEntry, addDoc };

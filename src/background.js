@@ -89,9 +89,7 @@ function sessionLength(date1, date2, host) {
 
 // let currentName;
 
-chrome.tabs.onActivated.addListener((details) =>
-  events.userActivatesTab(details)
-);
+chrome.tabs.onActivated.addListener(events.userActivatesTab);
 
 // First-time setup of listeners
 // events.addOnSiteListeners();
