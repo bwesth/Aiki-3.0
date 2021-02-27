@@ -24,7 +24,7 @@ function startSessionListener(details, beginTime) {
         name: name,
         user: "John",
         navigationType: "dunno",
-        moar: { date: beginTime, eventDetails: details },
+        details: { date: beginTime, eventDetails: details },
       };
 
       logEvent(logInfo);
@@ -50,7 +50,7 @@ function endSessionListener(details, endTime, beginTime) {
         name: name,
         user: "John",
         navigationType: "leave :(",
-        moar: { date: beginTime, eventDetails: details },
+        details: { date: beginTime, eventDetails: details },
       });
 
       chrome.webNavigation.onCompleted.removeListener((details) =>
@@ -78,7 +78,7 @@ function userOnSite(details) {
         name: name,
         user: "John",
         navigationType: "Start",
-        moar: { date: new Date(), eventDetails: details },
+        details: { date: new Date(), eventDetails: details },
       };
 
       logEvent(logInfo);
@@ -98,7 +98,7 @@ function userLeftSite(details) {
         name: currentName,
         user: "John",
         navigationType: "left the site",
-        moar: { date: new Date(), eventDetails: details },
+        details: { date: new Date(), eventDetails: details },
       };
       logEvent(logInfo);
 
@@ -112,6 +112,8 @@ function userLeftSite(details) {
 
 //Trying to handle what happens when a user activates a tab.
 function userActivatesTab(details) {
+  console.log("Attempting to send message to tab: " + details.tabId);
+  console.log(details);
   chrome.tabs.sendMessage(
     details.tabId,
     { action: "returnURL" },
@@ -171,36 +173,38 @@ function parseUrlToName(url) {
 }
 
 function tabActivatedCallback(response) {
-  console.log("Getting response:");
-  console.log(response);
-  let nameOfNewTab = parseUrlToName(response.host);
-  if (!currentName) {
-    console.log(
-      "currentName is undefined, checking against list of procrastination sites"
-    );
-    //If current name IS undefined, then we MAY be arriving at a procrastination site now.
-    if (procNameList.includes(nameOfNewTab)) {
+  if (response) {
+    console.log("Getting response:");
+    console.log(response);
+    let nameOfNewTab = parseUrlToName(response.host);
+    if (!currentName) {
       console.log(
-        nameOfNewTab + " is on the list. Procrastination session started."
+        "currentName is undefined, checking against list of procrastination sites"
       );
-      //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-      addLeftSiteListeners();
-      removeOnSiteListeners();
-      logInfo("SESSIONSTART", "tab change", details);
-      currentName = nameOfNewTab;
-    }
-  } else {
-    console.log(
-      "currentName is defined, checking against activated tab for change of active website"
-    );
-    //If current name is not "undefined", then that means our current TAB is a procrastination site.
-    if (currentName !== nameOfNewTab) {
-      console.log("currentName is not same as new tab");
-      //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-      removeLeftSiteListeners();
-      addOnSiteListeners();
-      logInfo("SESSIONEND", "tab change", details);
-      currentName = undefined;
+      //If current name IS undefined, then we MAY be arriving at a procrastination site now.
+      if (procNameList.includes(nameOfNewTab)) {
+        console.log(
+          nameOfNewTab + " is on the list. Procrastination session started."
+        );
+        //If the name of the new tab is in our procNameList, then we need to start a new proc session.
+        addLeftSiteListeners();
+        removeOnSiteListeners();
+        logInfo("SESSIONSTART", "tab change", details);
+        currentName = nameOfNewTab;
+      }
+    } else {
+      console.log(
+        "currentName is defined, checking against activated tab for change of active website"
+      );
+      //If current name is not "undefined", then that means our current TAB is a procrastination site.
+      if (currentName !== nameOfNewTab) {
+        console.log("currentName is not same as new tab");
+        //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
+        removeLeftSiteListeners();
+        addOnSiteListeners();
+        logInfo("SESSIONEND", "tab change", details);
+        currentName = undefined;
+      }
     }
   }
 }
@@ -212,6 +216,6 @@ function logInfo(tag, type, details) {
     name: currentName,
     user: "John",
     navigationType: type,
-    details: { date: new Date(), eventDetails: details },
+    details: { date: new Date().toLocaleString, eventDetails: details },
   });
 }

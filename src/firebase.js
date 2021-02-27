@@ -1,5 +1,4 @@
 import firebase from "firebase/app";
-import "firebase/auth";
 import "firebase/firebase-firestore";
 
 var firebaseConfig = {
@@ -15,26 +14,32 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-const provider = new firebase.auth.GoogleAuthProvider();
-firebase.auth().useDeviceLanguage()
-
 
 async function test() {
   const res = await db
     .collection("Users")
     .doc("johnsuserkey")
-    .set({whatever: ["One", "two", "three", "tree"]});
+    .set({ whatever: ["One", "two", "three", "tree"] });
   console.log(res);
 }
 
 async function addJohn() {
   const res = await db
-  .collection("John is awesome")
-  .doc("awesomesauce")
-  .set({john:["Why", "won't", "you", "die"]});
+    .collection("John is awesome")
+    .doc("awesomesauce")
+    .set({ john: ["Why", "won't", "you", "die"] });
   console.log(res);
 }
 
+async function addDoc(UID) {
+  const res = await db.collection("log_entries").doc(UID).set({});
+}
 
+async function addEntry(UID, entry) {
+  const ref = db.collection("log_entries").doc(UID);
+  const res = await ref.update({
+    [entry.details.date.getTime()]: entry,
+  });
+}
 
-export default {test, addJohn};
+export default { test, addJohn, addEntry, addDoc };

@@ -94,7 +94,7 @@ chrome.tabs.onActivated.addListener((details) =>
 );
 
 // First-time setup of listeners
-events.addOnSiteListeners();
+// events.addOnSiteListeners();
 
 // https://www.facebook.com/
 // https://www.youtube.com/
