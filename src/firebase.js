@@ -1,4 +1,4 @@
-import app from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firebase-firestore";
 
@@ -12,9 +12,12 @@ var firebaseConfig = {
   measurementId: "G-GNDXYW96DS",
 };
 // Initialize Firebase
-app.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
-const db = app.firestore();
+const db = firebase.firestore();
+const provider = new firebase.auth.GoogleAuthProvider();
+firebase.auth().useDeviceLanguage()
+
 
 async function test() {
   const res = await db
@@ -31,5 +34,7 @@ async function addJohn() {
   .set({john:["Why", "won't", "you", "die"]});
   console.log(res);
 }
+
+
 
 export default {test, addJohn};

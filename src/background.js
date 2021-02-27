@@ -3,8 +3,6 @@ import { logEvent } from "./logger.js";
 import events from "./eventListeners";
 import firebase from "./firebase";
 
-//firebase.test();
-firebase.addJohn();
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -88,7 +86,6 @@ function sessionLength(date1, date2, host) {
   return "You spent " + Math.floor(time / 1000) + " seconds on " + host;
 }
 
-let procNameList = ["youtube", "facebook", "reddit", "9gag"];
 
 // let currentName;
 
