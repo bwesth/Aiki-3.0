@@ -12,7 +12,6 @@ let currentName;
 function startSessionListener(details, beginTime) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
-    console.log("This is the host name: " + name);
 
     //If the host is Codecademy, we start a timer.
     //Need to find a way to change the host we're looking at.
@@ -39,8 +38,6 @@ function startSessionListener(details, beginTime) {
 //Creates a listener at the end of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
 function endSessionListener(details, endTime, beginTime) {
-  console.log("Session end listener");
-
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -67,11 +64,9 @@ function endSessionListener(details, endTime, beginTime) {
 }
 
 function userOnSite(details) {
-  console.log("User on site listener");
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
-    console.log("This is the site name: " + name);
     //If the site name is in the procUrlList, we start a timer.
     if (procNameList.includes(name)) {
       currentName = name;
@@ -90,8 +85,6 @@ function userOnSite(details) {
 }
 
 function userLeftSite(details) {
-  console.log("User left site listener");
-
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
@@ -115,8 +108,9 @@ function userLeftSite(details) {
 
 //Trying to handle what happens when a user activates a tab.
 function userActivatesTab(details) {
-  console.log("Tab activation listener");
+  // when a user switches tabs, we send a message to the content script (injection.js) to get the URL.
   chrome.tabs.sendMessage(details.tabId, { action: "returnURL" }, (response) =>
+    // The returned URL is checked for conditions in a callback.
     tabActivatedCallback(response, details)
   );
 }
@@ -147,6 +141,16 @@ function removeLeftSiteListeners() {
   );
 }
 
+function configSessionStartListeners() {
+  addLeftSiteListeners();
+  removeOnSiteListeners();
+}
+
+function configSessionEndListeners() {
+  addOnSiteListeners()
+  removeLeftSiteListeners()
+}
+
 export default {
   userActivatesTab,
   removeLeftSiteListeners,
@@ -173,9 +177,11 @@ function parseUrlToName(url) {
 }
 
 function tabActivatedCallback(response, details) {
+  // Checking for response being undefined
   if (response) {
     console.log("Getting response:");
     console.log(response);
+    // Just want the name of the website, not the scheme or any fragments.
     let nameOfNewTab = parseUrlToName(response.host);
     if (!currentName) {
       console.log(
@@ -187,8 +193,7 @@ function tabActivatedCallback(response, details) {
           nameOfNewTab + " is on the list. Procrastination session started."
         );
         //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-        addLeftSiteListeners();
-        removeOnSiteListeners();
+        configSessionStartListeners()
         logEvent({
           tag: "SESSIONSTART",
           name: "",
@@ -211,8 +216,7 @@ function tabActivatedCallback(response, details) {
       if (currentName !== nameOfNewTab) {
         console.log("currentName is not same as new tab");
         //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-        removeLeftSiteListeners();
-        addOnSiteListeners();
+        configSessionEndListeners()
         logEvent({
           tag: "SESSIONEND",
           name: "",
