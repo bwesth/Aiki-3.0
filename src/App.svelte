@@ -19,4 +19,4 @@ switch (new URL(window.location).searchParams.get("page")) {
 }
 </script>
 
-  <svelte:component this={selected} />
+<svelte:component this={selected} />
