@@ -3,57 +3,13 @@
 -->
 <h1>Aiki</h1>
 
+<h4>Trade in your procrastination time for learning!</h4>
+
+
 
 <script>
 
 </script>
 
 <style>
-.Options-header {
-  font-size: calc(10px + 2vmin);
-  text-align: end;
-  color: white;
-}
-
-.Options-subheader{
-  font-size: calc(5px + 1vmin);
-  text-align: end;
-  color: white;
-}
-
-.grid-col {
-  padding: 20px 0;
-  min-width: 560px;
-  max-width: 680px;
-  width: 100%;
-}
-
-.grid-col-title {
-  font-size: calc(10px + 1.5vmin);
-  font-weight: 400;
-  padding-bottom: 6px;
-}
-
-.grid-card {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-}
-
-.site-favicon {
-  margin-right: 10px;
-  margin-top: -2px;
-}
-
-.block-button {
-  margin-bottom: 15px;
-}
-
-.remove-button {
-  /* color: #ff7875; */
-  color: rgb(130, 130, 130);
-}
-
-.remove-button:hover {
-  /* color: #f5222d; */
-  color: rgb(28, 30, 33);
-}
 </style>

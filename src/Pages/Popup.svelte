@@ -12,18 +12,18 @@
         console.log(value);
       });
 	  console.log(list)
-    }
+  }
 
 
 /* Opens a new tab with settings page and selects it */
-function openSettingsPage () {
-  chrome.management.getSelf(result => {
-        chrome.tabs.create({
-            active: true,
-            url: result.optionsUrl
-        })
-    })
-}
+  function openSettingsPage () {
+    chrome.management.getSelf(result => {
+          chrome.tabs.create({
+              active: true,
+              url: result.optionsUrl
+          })
+      })
+  }
 
 </script>
 
@@ -91,60 +91,4 @@ function openSettingsPage () {
 </main>
 
 <style>
-.popup { text-align: center;
-  background-color: #282c34;
-  min-height: 100vh;
-  min-width: 250px;
-  padding: 5px;
-}
-
-.popup-header {
-  text-align: left;
-  font-size: calc(10px + 4vmin);
-  color: white;
-  display: flex;
-}
-
-.popup-header>* {
-  flex: 1 1 100px;
-  margin: 10px;
-}
-
-.popup-body{
-  text-align: right;
-  border-top: 1px solid gray;
-  color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.popup-body-bottom{
-  text-align: right;
-  border-top: 1px solid gray;
-  color: white;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-.popup-settings {
-  padding-top: 6px;
-}
-
-.popup-statistics-title{
-  text-align: right;
-  color: white;
-}
-
-.popup-statistics{
-  text-align: center;
-  color: greenyellow;
-}
-
-.popup-link {
-  color: #61dafb;
-}
-
-.popup-logo {
-  width: 30px;
-}
 </style>
