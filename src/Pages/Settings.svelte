@@ -1,15 +1,16 @@
 <!-- Options component used by extension when user opens options page in extension menu 
     Also opened by button in extension popup component.
 -->
-
-<Header/>
-<div class="container">
-  <SetUser/>
-  <SetTime/>
-  <SetWebsites/>
-  <Statistics/>
-</div>
-<Footer/>
+<main>
+  <Header/>
+  <div class="container">
+    <SetUser/>
+    <SetTime/>
+    <SetWebsites/>
+    <Statistics/>
+  </div>
+  <Footer/>
+</main>
 
 <script>
 import Footer from "./Components/Settings/Footer.svelte";
@@ -21,5 +22,7 @@ import Statistics from "./Components/Settings/Statistics.svelte";
 </script>
 
 <style>
-  
+  main {
+    height:100%;
+  }
 </style>
