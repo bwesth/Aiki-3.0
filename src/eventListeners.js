@@ -1,4 +1,4 @@
-import { logEvent } from "./logger.js";
+import { logEvent } from "./util/logger.js";
 
 // Need to fetch these from storage
 import {
