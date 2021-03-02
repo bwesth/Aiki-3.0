@@ -5,7 +5,7 @@
 -->
 <script>
 import Popup from './Pages/Popup.svelte'
-import Options from './Pages/Options.svelte'
+import Options from './Pages/Settings.svelte'
 
 let selected = Popup;
 
