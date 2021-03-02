@@ -27,6 +27,7 @@
         "js": ["build/injection.js"]
       }
     ],
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "content_security_policy":"script-src 'self' https://apis.google.com; object-src 'self'",
+
     "options_page": "/index.html?page=options"
   }

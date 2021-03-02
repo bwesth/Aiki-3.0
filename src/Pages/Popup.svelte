@@ -1,0 +1,77 @@
+<!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
+<script>
+/* Opens a new tab with options page and selects it */
+function background () {
+    chrome.tabs.create({
+        active: true,
+        url: "chrome-extension://hdjkcmlkbcghngeflpaggojbahhhilpd/index.html?page=options"
+    })
+}
+</script>
+
+
+
+
+<button on:click={() => background()}>Go to background</button>
+
+
+
+<style>
+.Popup {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+  min-width: 250px;
+  padding: 5px;
+}
+
+.Popup-header {
+  text-align: left;
+  font-size: calc(10px + 4vmin);
+  color: white;
+  display: flex;
+}
+
+.Popup-header>* {
+  flex: 1 1 100px;
+  margin: 10px;
+}
+
+.Popup-body{
+  text-align: right;
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Popup-body-bottom{
+  text-align: right;
+  border-top: 1px solid gray;
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.Popup-settings {
+  padding-top: 6px;
+}
+
+.Popup-statistics-title{
+  text-align: right;
+  color: white;
+}
+
+.Popup-statistics{
+  text-align: center;
+  color: greenyellow;
+}
+
+.Popup-link {
+  color: #61dafb;
+}
+
+.Popup-logo {
+  width: 30px;
+}
+</style>
