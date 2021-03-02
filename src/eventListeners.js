@@ -147,8 +147,14 @@ function configSessionStartListeners() {
 }
 
 function configSessionEndListeners() {
-  addOnSiteListeners()
-  removeLeftSiteListeners()
+  addOnSiteListeners();
+  removeLeftSiteListeners();
+}
+
+function addUnloadListener() {
+  chrome.runtime.onSuspend.addListener(() =>
+    console.log("onSuspend event occoured")
+  );
 }
 
 export default {
@@ -157,6 +163,7 @@ export default {
   addLeftSiteListeners,
   removeOnSiteListeners,
   addOnSiteListeners,
+  addUnloadListener,
 };
 
 //Helpers
@@ -193,7 +200,7 @@ function tabActivatedCallback(response, details) {
           nameOfNewTab + " is on the list. Procrastination session started."
         );
         //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-        configSessionStartListeners()
+        configSessionStartListeners();
         logEvent({
           tag: "SESSIONSTART",
           name: "",
@@ -216,7 +223,7 @@ function tabActivatedCallback(response, details) {
       if (currentName !== nameOfNewTab) {
         console.log("currentName is not same as new tab");
         //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-        configSessionEndListeners()
+        configSessionEndListeners();
         logEvent({
           tag: "SESSIONEND",
           name: "",

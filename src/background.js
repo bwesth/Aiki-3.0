@@ -3,7 +3,7 @@ import { logEvent } from "./logger.js";
 import events from "./eventListeners";
 import firebase from "./firebase";
 
-
+events.addUnloadListener();
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     alert("Hello");
@@ -85,7 +85,6 @@ function sessionLength(date1, date2, host) {
   let time = date1.getTime() - date2.getTime();
   return "You spent " + Math.floor(time / 1000) + " seconds on " + host;
 }
-
 
 // let currentName;
 
