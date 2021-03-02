@@ -1,10 +1,12 @@
 <!-- Options component used by extension when user opens options page in extension menu 
     Also opened by button in extension popup component.
 -->
-<h1> This is the options pages!</h1>
+<h1>Aiki</h1>
 
 
+<script>
 
+</script>
 
 <style>
 .Options-header {
