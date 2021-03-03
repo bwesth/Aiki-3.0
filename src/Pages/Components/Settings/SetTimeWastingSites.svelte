@@ -2,6 +2,22 @@
 
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
+
+  import browser from "webextension-polyfill";
+	import Input from './Components/Input.svelte';
+
+	let list;
+	chrome.storage.sync.get("list", function (data) {
+		list = data.list;
+		console.log(list);
+	});
+	function setList() {
+      chrome.storage.sync.set({ list: list }, function (value) {
+        console.log(value);
+      });
+	  console.log(list)
+  }
+
 </script>
 
 <h4>Set Time Wasting Sites</h4>
