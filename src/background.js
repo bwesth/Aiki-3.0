@@ -1,9 +1,9 @@
 import browser from "webextension-polyfill";
-import { logEvent } from "./logger.js";
+import { logEvent } from "./util/logger.js";
 import events from "./eventListeners";
-import firebase from "./firebase";
+import firebase from "./util/firebase";
+import storage from "./util/storage";
 
-events.addUnloadListener();
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     alert("Hello");
@@ -13,51 +13,39 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       "*://www.reddit.com/*",
       "*://www.9gag.com/*",
     ];
-    setList(urls);
+    storage.setList(urls);
   }
 });
 
-function setList(list) {
-  chrome.storage.sync.set({ list: list }, function (value) {
-    // console.log(value);
-  });
-}
+// storage.getList((list) => console.log(list));
 
-function getList() {
-  chrome.storage.sync.get("list", function (data) {
-    return data.list;
-  });
-}
 let sessionTab;
 let list;
-chrome.storage.sync.get("list", function (data) {
-  list = data.list;
-  // console.log(list);
-});
+// chrome.storage.sync.get("list", function (data) {
+//   list = data.list;
+//   // console.log(list);
+// });
 
 let redirected = false;
+// storage.setRedirectionSite("https://www.codecademy.com/")
 
-// chrome.webRequest.onBeforeRequest.addListener(
-//   function (details) {
-//     redirected = true;
-//     // console.log(getList());
-//     return {
-//       redirectUrl:
-//         // "https://app.clickup.com/4637248/v/b/li/46667048"
-//         "https://www.codecademy.com",
-//       // "https://www.sololearn.com/profile/16312476"
-//     };
-//   },
-//   {
-//     urls: [
-//       "*://www.youtube.com/*",
-//       "*://www.facebook.com/*",
-//       "*://www.reddit.com/*",
-//       "*://www.9gag.com/*",
-//     ],
-//   },
-//   ["blocking"]
-// );
+// storage.getList((list) => {
+//   storage.getRedirectionSite((site) => {
+//     chrome.webRequest.onBeforeRequest.addListener(
+//       function (details) {
+//         console.log("Redirecting");
+//         redirected = true;
+//         return {
+//           redirectUrl: site,
+//         };
+//       },
+//       {
+//         urls: list,
+//       },
+//       ["blocking"]
+//     );
+//   });
+// });
 
 //Working solution, may be a little heavy at the moment.
 //Need to find some way to remove eventlistener again. Examples in Aiki.
@@ -91,7 +79,7 @@ function sessionLength(date1, date2, host) {
 chrome.tabs.onActivated.addListener(events.userActivatesTab);
 
 // First-time setup of listeners
-// events.addOnSiteListeners();
+events.addOnSiteListeners();
 
 // https://www.facebook.com/
 // https://www.youtube.com/

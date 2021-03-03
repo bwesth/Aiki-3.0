@@ -1,4 +1,4 @@
-import { logEvent } from "./logger.js";
+import { logEvent } from "./util/logger.js";
 
 // Need to fetch these from storage
 import {
@@ -7,23 +7,21 @@ import {
 } from "./resources";
 let currentName;
 
-//Creates a listener at the start of a session that gathers all the data for us, and logs it atm.
+//A listener at the start of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
-function startSessionListener(details, beginTime) {
+function startSessionListener(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
 
     //If the host is Codecademy, we start a timer.
     //Need to find a way to change the host we're looking at.
     if ((name = redirectionTarget.name)) {
-      beginTime = new Date();
-
       logEvent({
         tag: "SESSIONSTART",
-        name: name || "",
-        user: "John",
+        name: currentName || "",
+        user: "john",
         navigationType: "dunno",
-        date: beginTime,
+        date: new Date(),
         eventDetails: details,
       });
 
@@ -35,30 +33,30 @@ function startSessionListener(details, beginTime) {
   }
 }
 
-//Creates a listener at the end of a session that gathers all the data for us, and logs it atm.
+//A listener at the end of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
-function endSessionListener(details, endTime, beginTime) {
+function endSessionListener(details) {
   if (details.frameId == "0") {
+    console.log(details);
     let name = parseUrlToName(details.url);
 
     if (name !== redirectionTarget.name) {
-      endTime = new Date();
       logEvent({
         tag: "SESSIONEND",
-        name: name || "",
-        user: "John",
+        name: currentName || "",
+        user: "john",
         navigationType: "leave :(",
-        date: beginTime,
+        date: new Date(),
         eventDetails: details,
       });
 
       chrome.webNavigation.onCompleted.removeListener((details) =>
-        endSessionListener(details, endtime)
+        endSessionListener(details)
       );
       chrome.webNavigation.onCompleted.addListener((details) =>
-        startSessionListener(details, beginTime)
+        startSessionListener(details)
       );
-      console.log(sessionLength(endTime, beginTime, name));
+      // console.log(sessionLength(endTime, name));
     }
   }
 }
@@ -66,43 +64,44 @@ function endSessionListener(details, endTime, beginTime) {
 function userOnSite(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
-
-    //If the site name is in the procUrlList, we start a timer.
-    if (procNameList.includes(name)) {
-      currentName = name;
-      logEvent({
-        tag: "SESSIONSTART",
-        name: name || "",
-        user: "John",
-        navigationType: "Start",
-        date: new Date(),
-        eventDetails: details,
-      });
-      removeOnSiteListeners();
-      addLeftSiteListeners();
-    }
+    chrome.tabs.query({ active: true }, (response) => {
+      //If the site name is in the procUrlList, we start a timer.
+      if (procNameList.includes(name) && details.tabId == response[0].id) {
+        currentName = name;
+        logEvent({
+          tag: "SESSIONSTART",
+          name: currentName || "",
+          user: "john",
+          navigationType: "Start",
+          date: new Date(),
+          eventDetails: details,
+        });
+        configSessionStartListeners();
+      }
+    });
   }
 }
 
 function userLeftSite(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
+    chrome.tabs.query({ active: true }, (response) => {
+      if (name !== currentName && details.tabId == response[0].id) {
+        //Need to add check for active tab
+        logEvent({
+          tag: "SESSIONEND",
+          name: currentName || "",
+          user: "john",
+          navigationType: "left the site",
+          date: new Date(),
+          eventDetails: details,
+        });
 
-    if (name !== currentName) {
-      logEvent({
-        tag: "SESSIONEND",
-        name: currentName || "",
-        user: "John",
-        navigationType: "left the site",
-        date: new Date(),
-        eventDetails: details,
-      });
+        configSessionEndListeners();
 
-      addOnSiteListeners();
-      removeLeftSiteListeners();
-
-      currentName = undefined;
-    }
+        currentName = undefined;
+      }
+    });
   }
 }
 
@@ -111,34 +110,26 @@ function userActivatesTab(details) {
   // when a user switches tabs, we send a message to the content script (injection.js) to get the URL.
   chrome.tabs.sendMessage(details.tabId, { action: "returnURL" }, (response) =>
     // The returned URL is checked for conditions in a callback.
-    tabActivatedCallback(response, details)
+    tabActivatedCallback(response || chrome.runtime.lastError.message, details)
   );
 }
 
 function addOnSiteListeners() {
-  chrome.webNavigation.onCompleted.addListener((details) =>
-    userOnSite(details)
-  );
+  chrome.webNavigation.onCompleted.addListener(userOnSite);
 }
 
 function removeOnSiteListeners() {
-  chrome.webNavigation.onCompleted.removeListener((details) =>
-    userOnSite(details)
-  );
+  chrome.webNavigation.onCompleted.removeListener(userOnSite);
 }
 
 function addLeftSiteListeners() {
-  chrome.tabs.onRemoved.addListener((details) => userLeftSite(details));
-  chrome.webNavigation.onCompleted.addListener((details) =>
-    userLeftSite(details)
-  );
+  chrome.tabs.onRemoved.addListener(userLeftSite);
+  chrome.webNavigation.onCompleted.addListener(userLeftSite);
 }
 
 function removeLeftSiteListeners() {
-  chrome.tabs.onRemoved.removeListener((details) => userLeftSite(details));
-  chrome.webNavigation.onCompleted.removeListener((details) =>
-    userLeftSite(details)
-  );
+  chrome.tabs.onRemoved.removeListener(userLeftSite);
+  chrome.webNavigation.onCompleted.removeListener(userLeftSite);
 }
 
 function configSessionStartListeners() {
@@ -151,11 +142,21 @@ function configSessionEndListeners() {
   removeLeftSiteListeners();
 }
 
-function addUnloadListener() {
-  chrome.runtime.onSuspend.addListener(() =>
-    console.log("onSuspend event occoured")
-  );
+function addOnWindowsCloseListener() {
+  chrome.windows.onRemoved.addListener((details) => {
+    logEvent({
+      tag: "SESSIONEND",
+      name: currentName || "",
+      user: "john",
+      navigationType: "Closed chrome window.",
+      date: new Date(),
+      eventDetails: details,
+    });
+    configSessionEndListeners();
+  });
 }
+
+addOnWindowsCloseListener();
 
 export default {
   userActivatesTab,
@@ -163,7 +164,6 @@ export default {
   addLeftSiteListeners,
   removeOnSiteListeners,
   addOnSiteListeners,
-  addUnloadListener,
 };
 
 //Helpers
@@ -184,8 +184,8 @@ function parseUrlToName(url) {
 }
 
 function tabActivatedCallback(response, details) {
-  // Checking for response being undefined
-  if (response) {
+  // This is a lot of spagetti
+  if (response.host) {
     console.log("Getting response:");
     console.log(response);
     // Just want the name of the website, not the scheme or any fragments.
@@ -203,7 +203,8 @@ function tabActivatedCallback(response, details) {
         configSessionStartListeners();
         logEvent({
           tag: "SESSIONSTART",
-          name: "",
+          name: currentName || "",
+          user: "john",
           navigationType: "tab change",
           date: new Date(),
           eventDetails: details,
@@ -219,23 +220,59 @@ function tabActivatedCallback(response, details) {
       console.log(
         "currentName is defined, checking against activated tab for change of active website"
       );
+
       //If current name is not "undefined", then that means our current TAB is a procrastination site.
       if (currentName !== nameOfNewTab) {
-        console.log("currentName is not same as new tab");
+        console.log("currentName is not same as new tab name. Ending session");
         //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
-        configSessionEndListeners();
+
+        // Need to test if the new tab is a procrastination site, then create a new session without closing the listeners
+
         logEvent({
           tag: "SESSIONEND",
-          name: "",
+          name: currentName || "",
+          user: "john",
           navigationType: "tab change",
           date: new Date(),
           eventDetails: details,
         });
-
-        currentName = undefined;
+        if (procNameList.includes(nameOfNewTab)) {
+          console.log("new tab is also a procrastination site.");
+          currentName = nameOfNewTab;
+          logEvent({
+            tag: "SESSIONSTART",
+            name: currentName || "",
+            user: "john",
+            navigationType: "tab change",
+            date: new Date(),
+            eventDetails: details,
+          });
+        } else {
+          console.log(
+            "New tab is not a new procrastination site. Not making a new session."
+          );
+          configSessionEndListeners();
+          currentName = undefined;
+        }
       } else {
         console.log("CurrentTab same as new tab, session not broken.");
       }
     }
+  } else if (currentName) {
+    console.log(
+      response.message +
+        "\nActive tab is not a website. Might be a new empty tab or similar"
+    );
+    configSessionEndListeners();
+    logEvent({
+      tag: "SESSIONEND",
+      name: currentName || "",
+      user: "john",
+      navigationType: "tab change",
+      date: new Date(),
+      eventDetails: details,
+    });
+
+    currentName = undefined;
   }
 }
