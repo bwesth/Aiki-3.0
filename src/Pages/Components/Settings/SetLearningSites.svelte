@@ -1,4 +1,4 @@
-<!-- This component is rendered as a block on the settings page for users to input their chosen learning platforms.-->
+<!-- This component is rendered as a block on the settings page for users to select their chosen learning platforms.-->
 
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
@@ -8,22 +8,25 @@ import SettingsContainer from "./SettingsContainer.svelte";
 <SettingsContainer>
     <h5>Choose the platform you wish to use to learn here:</h5>
     <hr>
-    <p><strong>NB:</strong> You can still visit these websites, we will just be tracking
-    the amount of time you spend on them.</p>
-    <!-- Bootstrap Dropdown -->
+    <p><strong>NB:</strong> You are welcome to use all of these platforms if you wish, but we will
+    only track your time on the site(s) you choose here.</p>
+
+    <!-- Bootstrap 5 Dropdown -->
+    <!-- https://getbootstrap.com/docs/5.0/forms/select/ -->
     <!-- Need to find functionality to display chosen element in dropdown window -->
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown button
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="www.scrimba.com">Scrimba.com</a>
-          <a class="dropdown-item" href="www.codecademy.com">CodeCademy.com</a>
-          <a class="dropdown-item" href="www.sololearn.com">SoloLearn.com</a>
-        </div>
-      </div>
+    <div class="container">
+      <select class="form-select" aria-label="Default select example">
+        <option selected>Choose your Platform</option>
+        <option value="1">Scrimba</option>
+        <option value="2">Codecademy</option>
+        <option value="3">Sololearn</option>
+      </select>
+    </div>
 
 </SettingsContainer>
 
 <style>
+  .container {
+    text-align: center;
+  }
 </style>

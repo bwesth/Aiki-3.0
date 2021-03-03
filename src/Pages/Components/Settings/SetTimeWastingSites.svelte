@@ -3,9 +3,6 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
 
-  import browser from "webextension-polyfill";
-	import Input from './Components/Input.svelte';
-
 	let list;
 	chrome.storage.sync.get("list", function (data) {
 		list = data.list;
