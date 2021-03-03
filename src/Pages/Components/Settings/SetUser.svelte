@@ -5,7 +5,8 @@
 
 <h4>Register UID</h4>
 <SettingsContainer>
-    <h5>Add your UID here so we can track your usage</h5>
+    <h5>Add your UID here so we can track your usage:</h5>
+    <hr>
     <p><strong>Note:</strong> Please make sure you enter the correct UID provided to you by email. If you provide the incorrect one, your
       data will become mixed up with another test participant.</p>
     <p>Secondly, please note that you may be asked to re-enter your UID if you clear your cache or browser history, in order

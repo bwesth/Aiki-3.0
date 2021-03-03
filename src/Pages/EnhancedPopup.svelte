@@ -31,64 +31,68 @@
   
   <main>
     <div class="popup">
-      <header class="popup-header">
-        <tr>
-          <td span="6">
-            <img src="images/aikido" class="popup-logo" alt="logo" />
-          </td>
-          <td>
-            Aiki
-          </td>
-        </tr>
-      </header>
-      <!-- Functionality and styling needed for all these buttons! Aiki code below. -->
-      <!-- Opens settings page -->
+      <!-- Using bootstraps flexbox rules here. -->
+      <!-- https://getbootstrap.com/docs/4.0/utilities/flex/ -->
+      <div class="d-flex flex-row justify-content-start">
+        <div class="p-2">
+          <img src='images/aikido.png' class="popupLogo" alt="logo" />
+        </div>
+        <div class="p-2">
+          <h5>Aiki</h5>
+        </div>
+      </div>
   
-      <tr class="popup-body">
-        <td span="14" class="popup-settings">
-          Settings:
-        </td>
-        <td span="10" style="textAlign: center">
-          <button type="default" 
-          on:click={openSettingsPage}>Settings</button>
-        </td>
-      </tr>
+      <hr> 
   
-      <!-- Turns extension on and off, do we want this?? -->
-      <tr class="popup-body">
-        <td span="10" >
-          Status of Extension:
-        </td>
-        <td span="10" class="popup-slider" style="textAlign: center">
-          <switch></switch>
-        </td>
-      </tr>   
-      
-      <!-- Shows total study sessions -->
-      <tr class="popup-body">
-        <td span="14" class="popup-statistics-title">
-          <h3>Total Study Sessions</h3>
-        </td>
-        <td span="10" class="popup-statistics">
-          <p>0 sessions completed</p>
-        </td>
-      </tr>
+      <!-- Opens settings page. -->
+      <div class="d-flex flex-row justify-content-center">
+        <div class="p-2">
+          <p>Settings:</p>
+        </div>
+        <div class="p-2">
+          <button type="default" class="btn btn-primary" on:click={openSettingsPage}>Click Me</button>
+        </div>
+      </div>
   
-      <!-- Shows total study time -->
-      <tr class="popup-body">
-        <td span="14" class="popup-statistics-title">
-          <h3>Total Study Time</h3>
-        </td>
-        <td span="10" class="popup-statistics">
-          <p>0 minutes studied</p>
-        </td>
-      </tr>
+      <hr>
   
-      <!-- Button allows you to continue when you finish your site -->
-      <button>Continue to /sitename</button>
+      <div class="d-flex flex-row justify-content-center">
+        <div class="p-2">
+          <p>Total Study Sessions:</p>
+        </div>
+        <div class="p-2">
+          <p class="statText">x sessions</p>
+        </div>
+      </div>
   
-      <!-- Button allows you to emergency skip to your original destination -->
-      <button>Emergency skip to /sitename</button>
+      <hr>
+  
+      <div class="d-flex flex-row justify-content-center">
+        <div class="p-2">
+          <p>Total Study Time:</p>
+        </div>
+        <div class="p-2">
+          <p class="statText">x sessions</p>
+        </div>
+      </div>
+  
+      <hr>
+  
+      <div class="d-flex flex-row justify-content-center">
+        <div class="p-2">
+          <button type="default" class="btn btn-success">Continue to Your Site</button>
+        </div>
+      </div>
+  
+      <hr>
+  
+      <div class="d-flex flex-row justify-content-center">
+        <div class="p-2">
+          <button type="default" class="btn btn-light">Emergency Skip</button>
+        </div>
+      </div>
+  
+  
     </div>
   </main>
   

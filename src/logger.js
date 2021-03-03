@@ -4,5 +4,5 @@ import firebase from "./firebase";
 
 export function logEvent(details) {
   // console.log(details);
-  firebase.addEntry("John", details);
+  //firebase.addEntry("John", details);
 }

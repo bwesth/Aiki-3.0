@@ -6,14 +6,14 @@ Other components are placed into the <slot> element of this component -->
 </div>
 
 <style>
-	.header {
-		padding: 10px;
-	}
 	.container {
 		border: 1px solid #aaa;
 		border-radius: 2px;
 		box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-		padding: 1.5em;
 		margin: 0 0 1em 0;
+		padding: 1.5em;
+		/* Aiki's sizes below, fucks up centering of elements. */
+		/* min-width: 560px;
+		max-width: 680px; */
 	}
 </style>
