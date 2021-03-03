@@ -7,9 +7,9 @@
 <style>
     footer {
         text-align: center;
-        color: #444444;
-        background-color: lightgrey;
+        color: white;
+        background-color: #282C34;;
         margin:0;
-        padding:0;
+        padding:5px;
     }
 </style>
