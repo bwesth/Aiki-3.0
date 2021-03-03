@@ -15,18 +15,37 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
+const options = {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+};
+
+async function startup(UID, entry) {
+  const res = await db
+    .collection(UID)
+    .doc(entry.date.toLocaleDateString("en-US", options))
+    .set({
+      [entry.date.getTime()]: entry,
+    });
+}
+// startup("john", { date: new Date() });
+
 async function addDoc(UID) {
-  const res = await db.collection("log_entries").doc(UID).set({});
+  const res = await db.collection(UID).doc().set({});
 }
 
-async function addEntry(UID, entry) {
-  console.log("Creating log for " + UID);
+async function addEntry(entry) {
+  console.log("Creating log for " + entry.user);
   console.log(entry);
-  const ref = db.collection("log_entries").doc(UID);
   console.log("ref created");
-  const res = await ref.update({
-    [entry.date.getTime()]: entry,
-  });
+  const res = await db
+    .collection(entry.user)
+    .doc(entry.date.toLocaleDateString("en-US", options))
+    .update({
+      [entry.date.getTime()]: entry,
+    });
 }
 
 export default { addEntry, addDoc };

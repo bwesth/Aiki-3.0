@@ -4,14 +4,13 @@ import events from "./eventListeners";
 import firebase from "./util/firebase";
 import storage from "./util/storage";
 
-events.addUnloadListener();
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     alert("Hello");
     const urls = [
       "*://www.youtube.com/*",
       "*://www.facebook.com/*",
-      "*://www.reddit*",
+      "*://www.reddit.com/*",
       "*://www.9gag.com/*",
     ];
     storage.setList(urls);
@@ -28,22 +27,23 @@ let list;
 // });
 
 let redirected = false;
+// storage.setRedirectionSite("https://www.codecademy.com/")
 
 // storage.getList((list) => {
 //   storage.getRedirectionSite((site) => {
-chrome.webRequest.onBeforeRequest.addListener(
-  function (details) {
-    console.log("Redirecting");
-    redirected = true;
-    return {
-      redirectUrl: "www.codecademy.com",
-    };
-  },
-  {
-    urls: ["*://www.facebook.com/*"],
-  },
-  ["blocking"]
-);
+//     chrome.webRequest.onBeforeRequest.addListener(
+//       function (details) {
+//         console.log("Redirecting");
+//         redirected = true;
+//         return {
+//           redirectUrl: site,
+//         };
+//       },
+//       {
+//         urls: list,
+//       },
+//       ["blocking"]
+//     );
 //   });
 // });
 
@@ -79,7 +79,7 @@ function sessionLength(date1, date2, host) {
 chrome.tabs.onActivated.addListener(events.userActivatesTab);
 
 // First-time setup of listeners
-// events.addOnSiteListeners();
+events.addOnSiteListeners();
 
 // https://www.facebook.com/
 // https://www.youtube.com/
