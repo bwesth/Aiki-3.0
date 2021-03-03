@@ -1,4 +1,4 @@
-<!-- This acts as a default container for all tabs in our settings page. 
+<!-- This acts as a default container for all blocks in our settings page. 
 Other components are placed into the <slot> element of this component -->
 
 <div class="container">

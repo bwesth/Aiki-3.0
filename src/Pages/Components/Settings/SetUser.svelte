@@ -1,4 +1,4 @@
-<!-- This component is the  -->
+<!-- This component is rendered as a block on the settings page for users to input their UID for logging purposes.-->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
 </script>
@@ -13,6 +13,7 @@
         for us to resume tracking.</p>
     <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:jhmu@itu.dk">jhmu@itu.dk</a> for assistance</p>
 
+    <hr>
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <div class="input-group mb-3">

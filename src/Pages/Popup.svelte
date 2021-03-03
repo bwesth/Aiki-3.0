@@ -1,6 +1,6 @@
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 
-<!-- The popup will only have a settings panel for the logger. -->
+<!-- To begin with, the popup will only have a settings button for the logger. -->
 <script>
   import browser from "webextension-polyfill";
 	import Input from './Components/Input.svelte';
@@ -55,45 +55,6 @@
       </div>
     </div>
 
-    <hr>
-
-    <div class="d-flex flex-row justify-content-center">
-      <div class="p-2">
-        <p>Total Study Sessions:</p>
-      </div>
-      <div class="p-2">
-        <p class="statText">x sessions</p>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="d-flex flex-row justify-content-center">
-      <div class="p-2">
-        <p>Total Study Time:</p>
-      </div>
-      <div class="p-2">
-        <p class="statText">x sessions</p>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="d-flex flex-row justify-content-center">
-      <div class="p-2">
-        <button type="default" class="btn btn-success">Continue to Your Site</button>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="d-flex flex-row justify-content-center">
-      <div class="p-2">
-        <button type="default" class="btn btn-light">Emergency Skip</button>
-      </div>
-    </div>
-
-
   </div>
 </main>
 
@@ -107,20 +68,12 @@
     width: 90%;
   }
 
-  h5 {
-    padding:10px;
-  }
-
   main {
     background-color:#282C34;
     color: white;
     text-align: center;
     height:fit-content;
     width:250px;
-  }
-
-  .statText {
-    color: greenyellow;
   }
   
 </style>

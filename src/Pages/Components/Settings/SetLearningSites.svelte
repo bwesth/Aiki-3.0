@@ -1,3 +1,5 @@
+<!-- This component is rendered as a block on the settings page for users to input their chosen learning platforms.-->
+
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
 </script>
@@ -15,9 +17,9 @@ import SettingsContainer from "./SettingsContainer.svelte";
           Dropdown button
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" href="#">Scrimba.com</a>
-          <a class="dropdown-item" href="#">CodeCademy.com</a>
-          <a class="dropdown-item" href="#">SoloLearn.com</a>
+          <a class="dropdown-item" href="www.scrimba.com">Scrimba.com</a>
+          <a class="dropdown-item" href="www.codecademy.com">CodeCademy.com</a>
+          <a class="dropdown-item" href="www.sololearn.com">SoloLearn.com</a>
         </div>
       </div>
 

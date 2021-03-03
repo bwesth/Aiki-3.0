@@ -1,6 +1,6 @@
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
+<!-- This 'enhanced' Popup has extra functionality we will launch with Aiki 3.0 -->
 
-<!-- The popup will only have a settings panel for the logger. -->
 <script>
     import browser from "webextension-polyfill";
       import Input from './Components/Input.svelte';
@@ -15,7 +15,6 @@
         });
         console.log(list)
     }
-  
   
   /* Opens a new tab with settings page and selects it */
     function openSettingsPage () {

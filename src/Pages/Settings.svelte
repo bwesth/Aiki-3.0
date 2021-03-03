@@ -1,16 +1,23 @@
-<!-- Options component used by extension when user opens options page in extension menu 
-    Also opened by button in extension popup component.-->
+<!-- This component is used by extension when user opens settings page in extension menu.
+    It is also opened by a button in extension popup component.
+    This gathers all the settings components and displays them for the user to change the behaviour
+    of the application.-->
 
-<!-- We will only use SetUser and SetWebsites for the first published application, the logger. 
+<!-- We will only use SetUser,SetWebsites and SetTime for the first published application, the logger. 
 More components will be added later. -->
 
 <main>
   <Header/>
   <div class="container">
     <SetUser/>
+  </div>
+  <div class="container">
     <SetWebsites/>
+  </div>
+  <div class="container">
     <SetTime />
   </div>
+  
   <Footer/>
 </main>
 
@@ -23,6 +30,11 @@ import SetTime from "./Components/Settings/SetLearningSites.svelte";
 </script>
 
 <style>
+  .container {
+    margin:auto;
+    padding:30px;
+  }
+
   main {
     height:100%;
   }

@@ -1,3 +1,5 @@
+<!-- This component is rendered as a block on the settings page to display a user's browsing statistics (if available).-->
+
 <script>
     import SettingsContainer from "./SettingsContainer.svelte";
 </script>

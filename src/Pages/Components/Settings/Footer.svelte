@@ -1,3 +1,5 @@
+<!-- This component is rendered as a block on the settings page as a footer.-->
+
 <script>
 
 </script>

@@ -1,3 +1,5 @@
+<!-- This component is rendered as a block on the settings page for users to input their time wasting websites.-->
+
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
 </script>
