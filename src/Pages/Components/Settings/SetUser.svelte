@@ -2,7 +2,7 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from '../../../util/storage'
-  let user;
+  $: user = undefined;
   storage.getUID(uid => user = uid)
 
   function handleClick(){
@@ -10,12 +10,18 @@
     confirmation && storage.setUID(user)
     return
   }
+
+  function resetUID() {
+    storage.setUID(undefined)
+    storage.getUID(uid => user = uid)
+  }
 </script>
 
 <h4>Register UID</h4>
 <SettingsContainer>
     {#if user}
-      <p>Registered user ID: {user}</p>  
+      <p>Registered user ID: {user}</p>
+      <button class="btn btn-danger" on:click={resetUID}>Reset user ID</button>
     {:else}
     <h5>Add your UID here so we can track your usage:</h5>
     <hr>
