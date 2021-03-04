@@ -16,8 +16,8 @@
     storage.setList(list);
   }
 
-  function addItem(item) {
-    let site = parseURL(item)
+  function addItem() {
+    let site = parseURL(addItemValue)
     //Need some defensive checking here. Is a website, empty strings, already on list, etc.
     let newList = [...list]
     newList.push(site)
@@ -48,10 +48,12 @@
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <!-- Important functionality needed here! -->
     <div class="input-group mb-3">
-      <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
-      <div class="input-group-append">
-        <button on:click={() => addItem(addItemValue)} class="btn btn-primary" type="button">Add</button>
-      </div>
+      <form on:submit|preventDefault={addItem}>
+        <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+      </form>
     </div>
 
     <!-- Insert bootstrap table thing here -->
@@ -71,7 +73,7 @@
             <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
             to certain buttons in the row. -->
             <th scope="row">{item.name}</th>
-            <td><input bind:value={item.host} /></td>
+            <td>{item.host}</td>
             <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
           </tr>
         {/each}
