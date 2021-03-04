@@ -8,12 +8,10 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     alert("Hello");
     const urls = [
-      "*://www.youtube.com/*",
-      "*://www.facebook.com/*",
-      "*://www.reddit.com/*",
-      "*://www.9gag.com/*",
+      // Default procrastination sites.
     ];
     storage.setList(urls);
+    storage.setLearningSites(["www.codecademy.com", "www.sololearn.com"]);
   }
 });
 

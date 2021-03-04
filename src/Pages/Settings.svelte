@@ -10,12 +10,8 @@
   import Header from "./Components/Settings/Header.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
-  import SetTime from "./Components/Settings/SetLearningSites.svelte";
-  import storage from "../util/storage"
-  
-  $: list = [];
-  storage.getList(data => list = data)
-  
+  import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
+
   </script>
 
 <main>
@@ -27,16 +23,10 @@
     <SetWebsites/>
   </div>
   <div class="container">
-    <SetTime />
+    <SetLearningSites />
   </div>
 
-  <div id="somethingshouldbehere">
-  {#each list as item}
-    <ul>
-      <li><p>{item}</p></li>
-    </ul>
-  {/each}
-  </div>
+
   
   <Footer/>
 </main>

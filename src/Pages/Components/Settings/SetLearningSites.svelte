@@ -2,6 +2,10 @@
 
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
+import storage from "../../../util/storage";
+
+let list = [];
+storage.getLearningSites(data => list = data)
 </script>
 
 <h4>Set Learning Sites</h4>
@@ -17,9 +21,9 @@ import SettingsContainer from "./SettingsContainer.svelte";
     <div class="container">
       <select class="form-select" aria-label="Default select example">
         <option selected>Choose your Platform</option>
-        <option value="1">Scrimba</option>
-        <option value="2">Codecademy</option>
-        <option value="3">Sololearn</option>
+        {#each list as item, index}
+          <option value={index}>{item}</option>
+        {/each}
       </select>
     </div>
 

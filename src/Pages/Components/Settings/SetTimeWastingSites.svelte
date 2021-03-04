@@ -2,18 +2,35 @@
 
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
+  import storage from "../../../util/storage"
+  
 
-	let list;
-	chrome.storage.sync.get("list", function (data) {
-		list = data.list;
-		console.log(list);
-	});
-	function setList() {
-      chrome.storage.sync.set({ list: list }, function (value) {
-        console.log(value);
-      });
-	  console.log(list)
+  $: list = [];
+  storage.getList(data => list = data);
+  let addItemValue = "";
+
+  function removeItem(index) {
+    let newList = [...list]
+    newList.splice(index, 1);
+    list = newList;
+    storage.setList(list);
   }
+
+  function addItem(item) {
+    let site = parseURL(item)
+    //Need some defensive checking here. Is a website, empty strings, already on list, etc.
+    let newList = [...list]
+    newList.push(site)
+    list = newList;
+    storage.setList(list);
+  }
+
+  function parseURL(site){
+    let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
+    let name = site.includes("www") ? site.split(".")[1] : site;
+    return {host: host, name: name}
+  }
+  // console.log(parseURL("https://www.reddit.com/r/YouShouldKnow/comments/lwv8ip/ysk_the_fcc_just_approved_a_50_a_month_subsidy/"))
 
 </script>
 
@@ -31,9 +48,9 @@
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <!-- Important functionality needed here! -->
     <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
+      <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button class="btn btn-primary" type="button">Add</button>
+        <button on:click={() => addItem(addItemValue)} class="btn btn-primary" type="button">Add</button>
       </div>
     </div>
 
@@ -49,13 +66,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
-          to certain buttons in the row. -->
-          <th scope="row">Reddit</th>
-          <td>reddit.com</td>
-          <td><button type="button" class="btn btn-danger">X</button></td>
-        </tr>
+        {#each list as item, index}
+          <tr>
+            <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
+            to certain buttons in the row. -->
+            <th scope="row">{item.name}</th>
+            <td><input bind:value={item.host} /></td>
+            <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
+          </tr>
+        {/each}
       </tbody>
     </table>
 
