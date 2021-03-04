@@ -3,28 +3,35 @@
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from '../../../util/storage'
   
-  let user, userIsRegistered; //Dunno if declaring these here wipes them when you reload page.
+  let user = "";
+  let userIsRegistered;
 
   function setup() {
-    storage.getUID(uid => user = uid);
-    if (user!==undefined) {
-      userIsRegistered = true;
-    } else {
-      userIsRegistered = false;
-    }
+    storage.getUID(uid => {
+      user = uid
+      if (user!=="") {
+        userIsRegistered = true;
+      } else {
+        userIsRegistered = false;
+      }
+    });
   }
   
-  function handleClick(){ //Working now.
+  function confirmUID(){
     const confirmation = confirm("Are you certain the user ID is correct?");
-    confirmation && storage.setUID(user);
-    userIsRegistered = true;
-    return;
+    if (confirmation) {
+      storage.setUID(user);
+      userIsRegistered = true;
+    }
   }
 
-  function resetUID(user) {
-    storage.remove(user); //Doesn't matter because we lost data when page is reset anyways.
-    userIsRegistered = false;
-    browser.runtime.reload(); //Doesn't work.
+  function resetUID() {
+    const confirmation = confirm("Are you certain you want to reset your UID?");
+    if (confirmation) {
+      storage.setUID("");
+      userIsRegistered = false;
+      user = "";
+    } 
   }
 
   //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...
@@ -36,7 +43,7 @@
 <SettingsContainer>
     {#if userIsRegistered}
       <p>Registered User ID: {user}</p>
-      <button class="btn btn-danger" on:click={resetUID(user)}>Reset User ID</button>
+      <button class="btn btn-danger" on:click={resetUID}>Reset User ID</button>
     {:else}
     <h5>Add your UID here so we can track your usage:</h5>
     <hr>
@@ -52,7 +59,7 @@
     <div class="input-group mb-3">
       <input bind:value={user} type="text" class="form-control" placeholder="Enter your UID here..." aria-label="" aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button on:click={handleClick} class="btn btn-primary" type="button">Submit</button>
+        <button on:click={confirmUID} class="btn btn-primary" type="button">Submit</button>
       </div>
     </div>
     {/if}
