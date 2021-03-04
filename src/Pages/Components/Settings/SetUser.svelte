@@ -2,26 +2,41 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from '../../../util/storage'
-  $: user = undefined;
-  storage.getUID(uid => user = uid)
+  
+  let user, userIsRegistered; //Dunno if declaring these here wipes them when you reload page.
 
-  function handleClick(){
+  function setup() {
+    storage.getUID(uid => user = uid);
+    if (user!==undefined) {
+      userIsRegistered = true;
+    } else {
+      userIsRegistered = false;
+    }
+  }
+  
+  function handleClick(){ //Working now.
     const confirmation = confirm("Are you certain the user ID is correct?");
-    confirmation && storage.setUID(user)
-    return
+    confirmation && storage.setUID(user);
+    userIsRegistered = true;
+    return;
   }
 
-  function resetUID() {
-    storage.setUID(undefined)
-    storage.getUID(uid => user = uid)
+  function resetUID(user) {
+    storage.remove(user); //Doesn't matter because we lost data when page is reset anyways.
+    userIsRegistered = false;
+    browser.runtime.reload(); //Doesn't work.
   }
+
+  //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...
+  setup();
+
 </script>
 
 <h4>Register UID</h4>
 <SettingsContainer>
-    {#if user}
-      <p>Registered user ID: {user}</p>
-      <button class="btn btn-danger" on:click={resetUID}>Reset user ID</button>
+    {#if userIsRegistered}
+      <p>Registered User ID: {user}</p>
+      <button class="btn btn-danger" on:click={resetUID(user)}>Reset User ID</button>
     {:else}
     <h5>Add your UID here so we can track your usage:</h5>
     <hr>
