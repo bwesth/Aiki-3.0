@@ -6,6 +6,12 @@ import storage from "../../../util/storage";
 
 let list = [];
 storage.getLearningSites(data => list = data)
+let selected;
+storage.getRedirectionSite(data => selected = data)
+
+function changeSite() {
+  storage.setRedirectionSite(selected)
+}
 </script>
 
 <h4>Set Learning Sites</h4>
@@ -19,12 +25,21 @@ storage.getLearningSites(data => list = data)
     <!-- https://getbootstrap.com/docs/5.0/forms/select/ -->
     <!-- Need to find functionality to display chosen element in dropdown window -->
     <div class="container">
-      <select class="form-select" aria-label="Default select example">
+      
+        <select bind:value={selected} on:change="{changeSite}">
+          {#each list as item}
+            <option value={item}>
+              {item}
+            </option>
+          {/each}
+        </select>
+      
+      <!-- <select on:change={changeSite} class="form-select" aria-label="Default select example">
         <option selected>Choose your Platform</option>
         {#each list as item, index}
           <option value={index}>{item}</option>
         {/each}
-      </select>
+      </select> -->
     </div>
 
 </SettingsContainer>

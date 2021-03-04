@@ -1,5 +1,3 @@
-import { setContext, getContext } from "svelte";
-
 const storage = chrome.storage.sync;
 
 function setList(list) {
@@ -8,32 +6,10 @@ function setList(list) {
   });
 }
 
-// export function getList() {
-//   return new Promise((resolve) => {
-//     //Any way to write this async instead?
-//     chrome.storage.sync.get("list", (result) => {
-//       console.log(result.list);
-//       resolve(result.list);
-//     });
-//   });
-// }
-
 function getList(callback) {
   console.log("Getting list of procrastination sites from storage");
   storage.get("list", (data) => callback(data.list));
 }
-
-// async function getList() {
-//   console.log("Getting list of procrastination sites from storage");
-//   let list;
-//   console.log(list);
-//   let res = await storage.get("list", async (data) => {
-//     list = data.list;
-//   });
-//   console.log(list);
-//   console.log("Returning list");
-//   return list;
-// }
 
 function setUID(uid) {
   storage.set({ uid: uid }, function (value) {
@@ -61,17 +37,11 @@ function getSiteTimeList(sites, callback) {
 }
 
 function getLearningSites(callback) {
-  console.log("Getting list of learning sites from storage");
-  storage.get("learningSites", (data) => {
-    console.log(data);
-    callback(data.learningSites);
-  });
+  storage.get("learningSites", (data) => callback(data.learningSites));
 }
 
 function setLearningSites(list) {
-  storage.set({ learningSites: list }, function (value) {
-    console.log("List of procrastination sites saved in storage");
-  });
+  storage.set({ learningSites: list });
 }
 
 function getRedirectionSite(callback) {
@@ -79,9 +49,7 @@ function getRedirectionSite(callback) {
 }
 
 function setRedirectionSite(siteName) {
-  storage.set({ redirectionSite: siteName }, () =>
-    console.log(`Redirection resource set to ${siteName}`)
-  );
+  storage.set({ redirectionSite: siteName });
 }
 
 export default {
