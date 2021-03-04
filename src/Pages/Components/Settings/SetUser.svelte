@@ -42,7 +42,8 @@
 <h4>Register UID</h4>
 <SettingsContainer>
     {#if userIsRegistered}
-      <p>Registered User ID: {user}</p>
+      <p>Registered User ID: </p>
+      <input class="form-control" type="text" placeholder={user} readonly>
       <button class="btn btn-danger" on:click={resetUID}>Reset User ID</button>
     {:else}
     <h5>Add your UID here so we can track your usage:</h5>

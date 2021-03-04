@@ -2,12 +2,10 @@ const storage = chrome.storage.sync;
 
 function setList(list) {
   storage.set({ list: list }, function (value) {
-    console.log("List of procrastination sites saved in storage");
   });
 }
 
 function getList(callback) {
-  console.log("Getting list of procrastination sites from storage");
   storage.get("list", (data) => callback(data.list));
 }
 

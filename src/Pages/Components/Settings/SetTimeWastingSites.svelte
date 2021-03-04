@@ -47,14 +47,14 @@
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <!-- Important functionality needed here! -->
-    <div class="input-group mb-3">
-      <form on:submit|preventDefault={addItem}>
+    <form on:submit|preventDefault={addItem}>
+      <div class="input-group mb-3">
         <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">Add</button>
         </div>
-      </form>
-    </div>
+      </div>
+    </form>
 
     <!-- Insert bootstrap table thing here -->
     <!-- Need to somehow create functionality tying this table to the above input. Aiki has some very impressive

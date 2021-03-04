@@ -37,15 +37,15 @@ async function addDoc(UID) {
 }
 
 async function addEntry(entry) {
-  console.log("Creating log for " + entry.user);
-  console.log(entry);
-  console.log("ref created");
   const res = await db
     .collection(entry.user)
     .doc(entry.date.toLocaleDateString("en-US", options))
-    .update({
-      [entry.date.getTime()]: entry,
-    });
+    .set(
+      {
+        [entry.date.getTime()]: entry,
+      },
+      { merge: true }
+    );
 }
 
 export default { addEntry, addDoc };
