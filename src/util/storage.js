@@ -4,13 +4,22 @@ const storage = chrome.storage.sync;
 
 function setList(list) {
   storage.set({ list: list }, function (value) {
-    console.log("List saved in storage");
+    console.log("List of procrastination sites saved in storage");
   });
 }
 
-async function getList(callback) {
-  console.log("Getting list from storage");
-  await storage.get("list", (data) => callback(data.list));
+
+// export function getList() {
+//   return new Promise(resolve => { //Any way to write this async instead?
+//     chrome.storage.sync.get("list", result => {
+//         resolve(result);
+//     });
+//   });
+// }
+
+function getList(callback) {
+  console.log("Getting list of procrastination sites from storage");
+  storage.get("list", (data) => callback(data.list));
 }
 
 function setUID(uid) {
