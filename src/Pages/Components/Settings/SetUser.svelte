@@ -52,7 +52,7 @@
       data will become mixed up with another test participant.</p>
     <p>Secondly, please note that you may be asked to re-enter your UID if you clear your cache or browser history, in order
         for us to resume tracking.</p>
-    <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:jhmu@itu.dk">jhmu@itu.dk</a> for assistance</p>
+    <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:aiki.itu.info@gmail.com">aiki.itu.info@gmail.com</a> for assistance</p>
 
     <hr>
     <!-- Bootstrap Input field. -->
