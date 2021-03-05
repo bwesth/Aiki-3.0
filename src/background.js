@@ -11,7 +11,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
       // Default procrastination sites.
     ];
     storage.setList(urls);
-    storage.setLearningSites(["www.codecademy.com", "www.sololearn.com"]);
+    storage.setLearningSites([]);
   }
 });
 
