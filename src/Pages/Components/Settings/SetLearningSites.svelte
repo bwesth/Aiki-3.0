@@ -26,6 +26,7 @@ function changeSite() {
     <!-- Need to find functionality to display chosen element in dropdown window -->
     <div class="container">
       
+        <!-- svelte-ignore a11y-no-onchange -->
         <select bind:value={selected} on:change="{changeSite}">
           {#each list as item}
             <option value={item}>
