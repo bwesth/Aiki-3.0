@@ -10,7 +10,7 @@ import Options from './Pages/Settings.svelte'
 let selected = Popup;
 
 switch (new URL(window.location).searchParams.get("page")) {
-    case "options":
+    case "settings":
         selected = Options;
         break;
     default:
@@ -19,6 +19,5 @@ switch (new URL(window.location).searchParams.get("page")) {
 }
 </script>
 
-
-<svelte:component class="thisthing" this={selected} />
+<svelte:component this={selected} />
 

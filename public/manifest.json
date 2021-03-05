@@ -1,8 +1,11 @@
   {
     "manifest_version": 2,
-    "name": "Link2",
-    "description": "Aiki Microlearning",
-    "version": "1.0.0",
+    "name": "Aiki 3",
+    "description": "Procrastination Interception Tool",
+    "version": "0.0.0.1",
+    "icons": {
+      "128": "/images/aikido.png"
+    },
     "permissions": [
       "activeTab",
       "declarativeContent",
@@ -19,7 +22,9 @@
       "persistent": true
     },
     "browser_action": {
-      "default_popup": "index.html?page=popup"
+      "default_title": "Aiki",
+      "default_popup": "index.html?page=popup",
+      "default_icon": "/images/aikido.png"
     },
     "content_scripts": [
       {
@@ -27,7 +32,7 @@
         "js": ["build/injection.js"]
       }
     ],
-    "content_security_policy":"script-src 'self' https://apis.google.com; object-src 'self'",
+    "content_security_policy":"script-src 'self' 'unsafe-eval' https://maps.googleapis.com; object-src 'self'",
 
-    "options_page": "/index.html?page=options"
+    "options_page": "/index.html?page=settings"
   }
