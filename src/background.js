@@ -80,14 +80,6 @@ chrome.tabs.onActivated.addListener(events.userActivatesTab);
 // First-time setup of listeners
 events.addOnSiteListeners();
 
-setTimeout(function () {
-  window.open(
-    "index.html?page=popup",
-    "extension_popup",
-    "width=300,height=400,status=no,scrollbars=yes,resizable=no"
-  );
-}, 5000);
-
 // https://www.facebook.com/
 // https://www.youtube.com/
 // https://www.youtube.com/watch?v=u1j1ZHnwfpU&t=590s
