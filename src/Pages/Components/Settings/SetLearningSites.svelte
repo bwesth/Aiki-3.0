@@ -31,19 +31,21 @@ function changeSite() {
     </p>
 
     <ul>
-      <li><a href="www.codecademy.com">Codecademy.com</a></li>
-      <li><a href="www.codecademy.com">Codecademy.com</a></li>
-      <li><a href="www.codecademy.com">Codecademy.com</a></li>
-      <li><a href="www.codecademy.com">Codecademy.com</a></li>
-      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+    {#each list as item}
+      <li><a href="{item}">{item}</a></li>
+    {/each}
     </ul>
 
     <p>Whenever you visit one of these sites, we will track and log the time you spend there.</p>
 
-    <h5>Choose the platform you wish to be directed to here:</h5>
+    <h5>Choose the platform you wish to be redirected to here:</h5>
     <hr>
-    <p><strong>NB:</strong> You are welcome to use all of the above platforms if you wish, but we will
-    only redirect you to this page when you procrastinate.</p>
+    <p>During phase two of the test, Aiki will begin redirecting you to one of these learning platforms
+      whenever you attempt to visit a procrastination site. You can choose which platform you wish to be
+      redirected to here:
+    </p>
+    <p><strong>NB:</strong> You are welcome to continue to use all of the above platforms if you wish, but 
+    Aiki only redirect you to this page when you procrastinate.</p>
 
     <!-- Bootstrap 5 Dropdown -->
     <!-- https://getbootstrap.com/docs/5.0/forms/select/ -->
