@@ -8,6 +8,7 @@ import { logConfigEvent } from "../../../util/logger"
 
 let list = [];
 storage.getLearningSites(data => list = data)
+
 let selected;
 storage.getRedirectionSite(data => selected = data)
 
@@ -15,39 +16,47 @@ function changeSite() {
   storage.setRedirectionSite(selected)
   logConfigEvent({
     user: "",
-    event: "User changed learning site",
+    event: "User changed redirection site",
     site: selected
   })
 }
 </script>
 
-<h4>Set Learning Sites</h4>
+<h4>Learning Sites</h4>
 <SettingsContainer>
-    <h5>Choose the platform you wish to use to learn here:</h5>
+    <h5>We can recommend these platforms for learning Python:</h5>
     <hr>
-    <p><strong>NB:</strong> You are welcome to use all of these platforms if you wish, but we will
-    only track your time on the site(s) you choose here.</p>
+    <p>For the purposes of the test we have curated a list of sites which we recommend you use to learn
+      Python. They are as follows:
+    </p>
+
+    <ul>
+      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+      <li><a href="www.codecademy.com">Codecademy.com</a></li>
+    </ul>
+
+    <p>Whenever you visit one of these sites, we will track and log the time you spend there.</p>
+
+    <h5>Choose the platform you wish to be directed to here:</h5>
+    <hr>
+    <p><strong>NB:</strong> You are welcome to use all of the above platforms if you wish, but we will
+    only redirect you to this page when you procrastinate.</p>
 
     <!-- Bootstrap 5 Dropdown -->
     <!-- https://getbootstrap.com/docs/5.0/forms/select/ -->
     <!-- Need to find functionality to display chosen element in dropdown window -->
     <div class="container">
-      
-        <!-- svelte-ignore a11y-no-onchange -->
-        <select bind:value={selected} on:change="{changeSite}">
-          {#each list as item}
-            <option value={item}>
-              {item}
-            </option>
-          {/each}
-        </select>
-      
-      <!-- <select on:change={changeSite} class="form-select" aria-label="Default select example">
-        <option selected>Choose your Platform</option>
-        {#each list as item, index}
-          <option value={index}>{item}</option>
+      <!-- svelte-ignore a11y-no-onchange -->
+      <select bind:value={selected} on:change="{changeSite}">
+        {#each list as item}
+          <option value={item}>
+            {item}
+          </option>
         {/each}
-      </select> -->
+        </select>
     </div>
 
 </SettingsContainer>
