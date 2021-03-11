@@ -3,13 +3,19 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage"
-  
+  import { logConfigEvent } from "../../../util/logger"
 
+  export let user = "";
   $: list = [];
   storage.getList(data => list = data);
   let addItemValue = "";
 
   function removeItem(index) {
+    logConfigEvent({
+      user: user,
+      event: "User removed procrastination site",
+      site: list[index]
+    })
     let newList = [...list]
     newList.splice(index, 1);
     list = newList;
@@ -23,6 +29,11 @@
     newList.push(site)
     list = newList;
     storage.setList(list);
+    logConfigEvent({
+      user: user,
+      event: "User added procrastination site",
+      site: site
+    })
   }
 
   function parseURL(site){
@@ -40,10 +51,8 @@
     <hr>
     <p>Type in pages you feel like you spend a little too much time 
       on here (e.g. facebook.com, reddit.com):</p>
-
     <p><strong>NB:</strong> You can still visit these websites, we will just be tracking
       the amount of time you spend on them.</p>
-
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <!-- Important functionality needed here! -->

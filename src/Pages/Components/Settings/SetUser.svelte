@@ -2,9 +2,10 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from '../../../util/storage'
-  
-  let user = "";
-  let userIsRegistered;
+  import { logConfigEvent } from "../../../util/logger"
+
+  export let user = "";
+  export let userIsRegistered;
 
   function setup() {
     storage.getUID(uid => {
@@ -21,6 +22,10 @@
     const confirmation = confirm("Are you certain the user ID is correct?");
     if (confirmation) {
       storage.setUID(user);
+      logConfigEvent({
+        user: user,
+        event: "Added user ID to storage"
+      })
       userIsRegistered = true;
     }
   }
@@ -28,6 +33,10 @@
   function resetUID() {
     const confirmation = confirm("Are you certain you want to reset your UID?");
     if (confirmation) {
+      logConfigEvent({
+        user: user,
+        event: "Reset user ID in storage"
+      })
       storage.setUID("");
       userIsRegistered = false;
       user = "";

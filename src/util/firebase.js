@@ -15,23 +15,6 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-const options = {
-  weekday: "long",
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-};
-
-async function startup(UID, entry) {
-  const res = await db
-    .collection(UID)
-    .doc(entry.date.toLocaleDateString("en-US", options))
-    .set({
-      [entry.date.getTime()]: entry,
-    });
-}
-// startup("john", { date: new Date() });
-
 async function addDoc(UID) {
   const res = await db.collection(UID).doc().set({});
 }
@@ -39,13 +22,54 @@ async function addDoc(UID) {
 async function addEntry(entry) {
   const res = await db
     .collection(entry.user)
-    .doc(entry.date.toLocaleDateString("en-US", options))
+    .doc(entry.date.date)
     .set(
       {
-        [entry.date.getTime()]: entry,
+        [entry.date.timestamp]: entry,
       },
       { merge: true }
     );
 }
 
-export default { addEntry, addDoc };
+async function addNavEvent(entry) {
+  const ref = await db
+    .collection("user_logs")
+    .doc(entry.user)
+    .collection("dates")
+    .doc(entry.date.date)
+    .collection("navigation_logs")
+    .doc("" + entry.date.timestamp);
+
+  // ref.set(
+  //   [{ date: entry.date },
+  //   { eventDetails: entry.eventDetails },
+  //   { name: entry.name },
+  //   { navigationType: entry.navigationType },
+  //   { tag: entry.tag },
+  //   { user: entry.user }],
+  //   { merge: true }
+  // );
+  ref.set({ date: entry.date }, { merge: true });
+  ref.set({ eventDetails: entry.eventDetails }, { merge: true });
+  ref.set({ name: entry.name }, { merge: true });
+  ref.set({ navigationType: entry.navigationType }, { merge: true });
+  ref.set({ tag: entry.tag }, { merge: true });
+  ref.set({ user: entry.user }, { merge: true });
+}
+
+async function addConfigLog(entry) {
+  const ref = await db
+  .collection("user_logs")
+  .doc(entry.user)
+  .collection("dates")
+  .doc(entry.date.date)
+  .collection("config_logs")
+  .doc("" + entry.date.timestamp);
+
+  ref.set({date: entry.date}, { merge: true });
+  ref.set({user: entry.user}, { merge: true });
+  ref.set({event: entry.event}, { merge: true });
+  entry.site && ref.set({site: entry.site}, { merge: true });
+}
+
+export default { addEntry, addNavEvent, addConfigLog };

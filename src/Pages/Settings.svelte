@@ -11,22 +11,25 @@
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
-
   
+  $: user = "";
+  $: userIsRegistered = false;
 
   </script>
 
 <main>
   <Header/>
   <div class="container">
-    <SetUser/>
+    <SetUser bind:user bind:userIsRegistered />
+  </div>
+  {#if userIsRegistered}
+  <div class="container">
+    <SetWebsites {user} />
   </div>
   <div class="container">
-    <SetWebsites/>
+    <SetLearningSites {user} />
   </div>
-  <div class="container">
-    <SetLearningSites />
-  </div>
+  {/if}
 
 
   

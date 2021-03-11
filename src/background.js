@@ -12,6 +12,7 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
     ];
     storage.setList(urls);
     storage.setLearningSites([]);
+    storage.toggleRedirections();
   }
 });
 
@@ -78,6 +79,14 @@ chrome.tabs.onActivated.addListener(events.userActivatesTab);
 
 // First-time setup of listeners
 events.addOnSiteListeners();
+
+setTimeout(function () {
+  window.open(
+    "index.html?page=popup",
+    "extension_popup",
+    "width=300,height=400,status=no,scrollbars=yes,resizable=no"
+  );
+}, 5000);
 
 // https://www.facebook.com/
 // https://www.youtube.com/

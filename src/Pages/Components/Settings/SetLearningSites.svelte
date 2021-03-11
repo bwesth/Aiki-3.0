@@ -3,6 +3,8 @@
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
 import storage from "../../../util/storage";
+import { logConfigEvent } from "../../../util/logger"
+
 
 let list = [];
 storage.getLearningSites(data => list = data)
@@ -11,6 +13,11 @@ storage.getRedirectionSite(data => selected = data)
 
 function changeSite() {
   storage.setRedirectionSite(selected)
+  logConfigEvent({
+    user: "",
+    event: "User changed learning site",
+    site: selected
+  })
 }
 </script>
 

@@ -2,6 +2,21 @@
 <!-- To begin with, the popup will only have a settings button for the logger. -->
 
 <script>
+import storage from '../util/storage'
+import {logConfigEvent} from "../util/logger"
+
+$: redirectionToggled = false;
+storage.getRedirectionToggled((toggled) => redirectionToggled = toggled)
+
+function toggleRedirection(){
+  storage.getUID((user) => logConfigEvent({
+      user: user,
+      event: `User toggled retirection ${redirectionToggled ? 'on' : "off"}`
+    })
+  )
+    storage.toggleRedirection()
+}
+
 /* Opens a new tab with settings page and selects it */
   function openSettingsPage () {
     chrome.management.getSelf(result => {
@@ -42,6 +57,10 @@
       </div>
     </div>
 
+  </div>
+  <div class="custom-control custom-switch">
+    <input bind:checked="{redirectionToggled}" on:change={toggleRedirection} type="checkbox" class="custom-control-input" id="customSwitch1">
+    <label class="custom-control-label" for="customSwitch1">Toggle Aiki redirection</label>
   </div>
 </main>
 

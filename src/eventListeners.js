@@ -6,6 +6,7 @@ let user;
 
 //A listener at the start of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
+// This is learning site listener
 function startSessionListener(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
@@ -19,7 +20,6 @@ function startSessionListener(details) {
             name: currentName || "",
             user: user,
             navigationType: "dunno",
-            date: new Date(),
             eventDetails: details,
           });
 
@@ -35,6 +35,7 @@ function startSessionListener(details) {
 
 //A listener at the end of a session that gathers all the data for us, and logs it atm.
 //Probably should split this shit up.
+// Learning site listener
 function endSessionListener(details) {
   if (details.frameId == "0") {
     console.log(details);
@@ -47,7 +48,6 @@ function endSessionListener(details) {
             name: currentName || "",
             user: user,
             navigationType: "leave :(",
-            date: new Date(),
             eventDetails: details,
           });
 
@@ -78,8 +78,7 @@ function userOnSite(details) {
               tag: "SESSIONSTART",
               name: currentName || "",
               user: user,
-              navigationType: "Start",
-              date: new Date(),
+              navigationType: "Web Navigation",
               eventDetails: details,
             });
             configSessionStartListeners();
@@ -101,13 +100,10 @@ function userLeftSite(details) {
             tag: "SESSIONEND",
             name: currentName || "",
             user: user,
-            navigationType: "left the site",
-            date: new Date(),
+            navigationType: "Web Navigation",
             eventDetails: details,
           });
-
           configSessionEndListeners();
-
           currentName = undefined;
         });
       }
@@ -159,8 +155,7 @@ function addOnWindowsCloseListener() {
         tag: "SESSIONEND",
         name: currentName || "",
         user: user,
-        navigationType: "Closed chrome window.",
-        date: new Date(),
+        navigationType: "Closed chrome window",
         eventDetails: details,
       });
       configSessionEndListeners();
@@ -215,14 +210,14 @@ function tabActivatedCallback(response, details) {
             console.log(
               nameOfNewTab + " is on the list. Procrastination session started."
             );
+            currentName = nameOfNewTab;
             //If the name of the new tab is in our procNameList, then we need to start a new proc session.
             configSessionStartListeners();
             logEvent({
               tag: "SESSIONSTART",
               name: currentName || "",
               user: user,
-              navigationType: "tab change",
-              date: new Date(),
+              navigationType: "Tab change",
               eventDetails: details,
             });
             currentName = nameOfNewTab;
@@ -252,8 +247,7 @@ function tabActivatedCallback(response, details) {
               tag: "SESSIONEND",
               name: currentName || "",
               user: user,
-              navigationType: "tab change",
-              date: new Date(),
+              navigationType: "Tab change",
               eventDetails: details,
             });
             if (list.includes(nameOfNewTab)) {
@@ -263,8 +257,7 @@ function tabActivatedCallback(response, details) {
                 tag: "SESSIONSTART",
                 name: currentName || "",
                 user: user,
-                navigationType: "tab change",
-                date: new Date(),
+                navigationType: "Tab change",
                 eventDetails: details,
               });
             } else {
@@ -289,8 +282,7 @@ function tabActivatedCallback(response, details) {
         tag: "SESSIONEND",
         name: currentName || "",
         user: user,
-        navigationType: "tab change",
-        date: new Date(),
+        navigationType: "Tab change",
         eventDetails: details,
       });
 

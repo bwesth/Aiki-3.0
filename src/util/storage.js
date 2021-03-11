@@ -1,8 +1,19 @@
 const storage = chrome.storage.sync;
 
-function setList(list) {
-  storage.set({ list: list }, function (value) {
+function toggleRedirection() {
+  storage.get("toggled", (data) => {
+    storage.set({ toggled: !data.toggled });
   });
+}
+
+function getRedirectionToggled(callback) {
+  storage.get("toggled", (data) => {
+    callback(data.toggled);
+  });
+}
+
+function setList(list) {
+  storage.set({ list: list }, function (value) {});
 }
 
 function getList(callback) {
@@ -62,4 +73,6 @@ export default {
   setRedirectionSite,
   setLearningSites,
   getLearningSites,
+  toggleRedirection,
+  getRedirectionToggled,
 };
