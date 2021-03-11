@@ -27,41 +27,42 @@ let list;
 
 let redirected = false;
 // storage.setRedirectionSite("https://www.codecademy.com/")
-
-// storage.getList((list) => {
-//   storage.getRedirectionSite((site) => {
-//     chrome.webRequest.onBeforeRequest.addListener(
-//       function (details) {
-//         console.log("Redirecting");
-//         redirected = true;
-//         return {
-//           redirectUrl: site,
-//         };
-//       },
-//       {
-//         urls: list,
-//       },
-//       ["blocking"]
-//     );
-//   });
-// });
+// storage.getList((list) => console.log(list))
+storage.getList((list) => {
+  storage.getRedirectionSite((site) => {
+    chrome.webRequest.onBeforeRequest.addListener(
+      function (details) {
+        console.log("Redirecting");
+        redirected = true;
+        return {
+          redirectUrl: "https://www.codecademy.com/",
+        };
+      },
+      {
+        urls: list.map((site) => `*://${site.host}/*`),
+      },
+      ["blocking"]
+    );
+  });
+});
 
 //Working solution, may be a little heavy at the moment.
 //Need to find some way to remove eventlistener again. Examples in Aiki.
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//   // console.log(changeInfo);
-//   if (changeInfo.status === "complete" && redirected) {
-//     sendMessage(tabId, "www.codecademy.com");
-//     redirected = false;
-//     sessionTab = tab;
-//     let host = tab.url.split("/")[2];
-//     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//       if (host == tab.url.split("/")[2]) {
-//         sendMessage(tabId, "www.codecademy.com");
-//       }
-//     });
-//   }
-// });
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  // console.log(changeInfo);
+  if (changeInfo.status === "complete" && redirected) {
+    chrome.tabs.sendMessage(tabId, { action: "redirection" });
+
+    redirected = false;
+    sessionTab = tab;
+    let host = tab.url.split("/")[2];
+    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+      if (host == tab.url.split("/")[2]) {
+        chrome.tabs.sendMessage(tabId, { action: "redirection" });
+      }
+    });
+  }
+});
 
 let beginTime;
 let endTime;

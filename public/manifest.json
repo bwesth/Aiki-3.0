@@ -29,6 +29,7 @@
     "content_scripts": [
       {
         "matches": ["https://*/*"],
+        "css": ["build/content.css"],
         "js": ["build/injection.js"]
       }
     ],

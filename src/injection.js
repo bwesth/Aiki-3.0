@@ -2,9 +2,9 @@
 import browser from "webextension-polyfill";
 
 import { AikiOverlay, Link } from "./HTMLInjection/componentBucket";
+import { renderApp } from "./content.js";
 
 // Listener for messages from background script.
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(location.host);
   console.log(request);
@@ -22,11 +22,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   function redirectRequest() {
     // console.log(request);
     // console.log(sender);
+    renderApp();
     sendResponse({ message: "Redirection successful" });
-    let aikiOverlay = AikiOverlay();
-    let link = Link();
-    aikiOverlay.appendChild(link);
-    document.body.appendChild(aikiOverlay);
+    // let aikiOverlay = AikiOverlay();
+    // let link = Link();
+    // aikiOverlay.appendChild(link);
+    // document.body.appendChild(aikiOverlay);
   }
   return true;
 });
