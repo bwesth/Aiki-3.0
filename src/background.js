@@ -32,11 +32,15 @@ storage.getList((list) => {
   storage.getRedirectionSite((site) => {
     chrome.webRequest.onBeforeRequest.addListener(
       function (details) {
-        console.log("Redirecting");
-        redirected = true;
-        return {
-          redirectUrl: "https://www.codecademy.com/",
-        };
+        storage.getRedirectionToggled((toggled) => {
+          if (toggled) {
+            console.log("Redirecting");
+            redirected = true;
+            return {
+              redirectUrl: "https://www.codecademy.com/",
+            };
+          }
+        });
       },
       {
         urls: list.map((site) => `*://${site.host}/*`),
