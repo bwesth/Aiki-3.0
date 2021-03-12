@@ -34,6 +34,7 @@
       event: "User added procrastination site",
       site: site
     })
+    document.getElementById("addItem").value = "";
   }
 
   function parseURL(site){
@@ -58,7 +59,7 @@
     <!-- Important functionality needed here! -->
     <form on:submit|preventDefault={addItem}>
       <div class="input-group mb-3">
-        <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
+        <input bind:value={addItemValue} id="addItem" type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">Add</button>
         </div>

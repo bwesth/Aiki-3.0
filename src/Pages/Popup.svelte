@@ -46,7 +46,7 @@ port.onMessage.addListener(function(msg) {
     <div class="container">
       <div class="row">
         <div class="col">
-          <img src='images/aikido.png' class="popupLogo" alt="logo" />
+          <img src='images/aikido.png' class="popupLogo" alt="logo" style="size:40px" />
         </div>
         <div class="col-6">
           <h5>Aiki</h5>
