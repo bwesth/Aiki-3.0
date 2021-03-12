@@ -4,6 +4,7 @@
 <script>
 import storage from '../util/storage'
 import {logConfigEvent} from "../util/logger"
+import listeners from "../eventListeners"
 
 $: redirectionToggled = false;
 storage.getRedirectionToggled((toggled) => redirectionToggled = toggled)
@@ -14,7 +15,9 @@ function toggleRedirection(){
       event: `User toggled retirection ${redirectionToggled ? 'on' : "off"}`
     })
   )
+  console.log("Redirection set to " + redirectionToggled)
     storage.toggleRedirection()
+    port.postMessage(`Redirection: ${redirectionToggled ? 'on' : "off"}`);
 }
 
 /* Opens a new tab with settings page and selects it */
@@ -26,6 +29,14 @@ function toggleRedirection(){
           })
       })
   }
+
+var port = chrome.extension.connect({
+    name: "Sample Communication"
+});
+
+port.onMessage.addListener(function(msg) {
+    console.log("message recieved" + msg);
+});
 </script>
 
 <main>

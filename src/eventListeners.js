@@ -165,14 +165,6 @@ function addOnWindowsCloseListener() {
 
 addOnWindowsCloseListener();
 
-export default {
-  userActivatesTab,
-  removeLeftSiteListeners,
-  addLeftSiteListeners,
-  removeOnSiteListeners,
-  addOnSiteListeners,
-};
-
 //Helpers
 
 // Rethink on how to use this inside userActivatesTab with tabActivatedCallback()
@@ -290,3 +282,99 @@ function tabActivatedCallback(response, details) {
     }
   });
 }
+
+let redirected = false;
+let site = "";
+function updateSite() {
+  storage.getRedirectionSite((storageSite) => {
+    site = storageSite;
+  });
+}
+updateSite();
+function addWebRequestListener() {
+  console.log("WebRequest listener added");
+  storage.getList((list) => {
+    const urls = list.map((site) => `*://${site.host}/*`);
+    chrome.webRequest.onBeforeRequest.addListener(
+      redirectionEventListener,
+      { urls: urls },
+      ["blocking"]
+    );
+  });
+}
+
+function removeWebRequestListener() {
+  storage.getList((list) => {
+    const urls = list.map((site) => `*://${site.host}/*`);
+    console.log("WebRequest listener removed");
+    chrome.webRequest.onBeforeRequest.removeListener(
+      redirectionEventListener,
+      { urls: urls },
+      ["blocking"]
+    );
+  });
+}
+
+function redirectionEventListener(details) {
+  console.log("Redirecting");
+  redirected = true;
+  addLearningSiteLoadedListener();
+  return {
+    redirectUrl: `https://${site}/`,
+  };
+}
+
+//Working solution, may be a little heavy at the moment.
+//Need to find some way to remove eventlistener again. Examples in Aiki.
+function addLearningSiteLoadedListener() {
+  console.log("Learning site listener added");
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
+    leaningSiteLoadedListener(tabId, changeInfo, tab)
+  );
+}
+
+function removeLearningSiteLoadedListener() {
+  console.log("Learning site listener removed");
+  chrome.tabs.onUpdated.removeListener(leaningSiteLoadedListener);
+}
+let sessionTab;
+
+function leaningSiteLoadedListener(tabId, changeInfo, tab) {
+  if (changeInfo.status === "complete" && redirected == true) {
+    chrome.tabs.sendMessage(tabId, { action: "redirection" });
+    removeLearningSiteLoadedListener();
+    sessionTab = tab;
+    redirected = false;
+    let host = tab.url.split("/")[2];
+    addUpdateListener(host);
+  }
+}
+
+function addUpdateListener(host) {
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    updateListener(tabId, changeInfo, tab, host);
+  });
+}
+
+function removeUpdateListener() {
+  chrome.tabs.onUpdated.removeListener(updateListener);
+}
+
+function updateListener(tabId, changeInfo, tab, host) {
+  if (changeInfo.status === "complete") {
+    if (host == tab.url.split("/")[2]) {
+      chrome.tabs.sendMessage(tabId, { action: "redirection" });
+    }
+  }
+}
+
+export default {
+  userActivatesTab,
+  removeLeftSiteListeners,
+  addLeftSiteListeners,
+  removeOnSiteListeners,
+  addOnSiteListeners,
+  addWebRequestListener,
+  removeWebRequestListener,
+  updateSite,
+};

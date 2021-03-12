@@ -1,7 +1,5 @@
 import browser from "webextension-polyfill";
-import { logEvent } from "./util/logger.js";
-import events from "./eventListeners";
-import firebase from "./util/firebase";
+import listeners from "./eventListeners";
 import storage from "./util/storage";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
@@ -16,85 +14,31 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
-// storage.getList((list) => console.log(list));
-
-let sessionTab;
-let list;
-// chrome.storage.sync.get("list", function (data) {
-//   list = data.list;
-//   // console.log(list);
-// });
-
-let redirected = false;
-// storage.setRedirectionSite("https://www.codecademy.com/")
-// storage.getList((list) => console.log(list))
-storage.getList((list) => {
-  storage.getRedirectionSite((site) => {
-    chrome.webRequest.onBeforeRequest.addListener(
-      function (details) {
-        storage.getRedirectionToggled((toggled) => {
-          if (toggled) {
-            console.log("Redirecting");
-            redirected = true;
-            return {
-              redirectUrl: "https://www.codecademy.com/",
-            };
-          }
-        });
-      },
-      {
-        urls: list.map((site) => `*://${site.host}/*`),
-      },
-      ["blocking"]
-    );
-  });
-});
-
-//Working solution, may be a little heavy at the moment.
-//Need to find some way to remove eventlistener again. Examples in Aiki.
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  // console.log(changeInfo);
-  if (changeInfo.status === "complete" && redirected) {
-    chrome.tabs.sendMessage(tabId, { action: "redirection" });
-
-    redirected = false;
-    sessionTab = tab;
-    let host = tab.url.split("/")[2];
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-      if (host == tab.url.split("/")[2]) {
-        chrome.tabs.sendMessage(tabId, { action: "redirection" });
-      }
-    });
-  }
-});
-
-let beginTime;
-let endTime;
-// chrome.webNavigation.onCompleted.addListener((details => startSessionListener(details, endTime, beginTime)));
-
 //Attempts to calculate the given length for a session.
 function sessionLength(date1, date2, host) {
   let time = date1.getTime() - date2.getTime();
   return "You spent " + Math.floor(time / 1000) + " seconds on " + host;
 }
 
-// let currentName;
-
-chrome.tabs.onActivated.addListener(events.userActivatesTab);
+chrome.tabs.onActivated.addListener(listeners.userActivatesTab);
 
 // First-time setup of listeners
-events.addOnSiteListeners();
+listeners.addOnSiteListeners();
+storage.getRedirectionToggled((toggled) => {
+  toggled && listeners.addWebRequestListener();
+});
 
-// https://www.facebook.com/
-// https://www.youtube.com/
-// https://www.youtube.com/watch?v=u1j1ZHnwfpU&t=590s
-// Example split URLS
-
-//When is a user on a website? What events indicate that
-//webNavigation.onCompleted - Webpage has been loaded in
-//tabs.onActivated - Tab is activated
-
-//When has a user left/entered a new a website, for whatever reason?
-//tabs.onRemoved - closed the current tab
-//webNagivation.onCompleted - user has loaded a new URL (comparison)
-//tabs.onActivated - user has chosen a new tab (comparison)
+chrome.extension.onConnect.addListener(function (port) {
+  console.log("Connected .....");
+  port.onMessage.addListener(function (msg) {
+    console.log("message recieved " + msg);
+    console.log(msg.split(": ")[1]);
+    if (msg.split(": ")[1] === "on") {
+      listeners.addWebRequestListener();
+      listeners.updateSite();
+    } else {
+      listeners.removeWebRequestListener();
+    }
+    port.postMessage("Hi Popup.js");
+  });
+});

@@ -22,7 +22,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   function redirectRequest() {
     // console.log(request);
     // console.log(sender);
-    renderApp();
+    // console.log(document.getElementsByClassName("svelte-1tky8bj"));
+    // console.log("Length: "+document.getElementsByClassName("svelte-1tky8bj").length);
+    if (document.getElementsByClassName("svelte-1tky8bj").length > 0) {
+      console.log("Already rendered");
+    } else {
+      console.log("Rendering")
+      renderApp();
+    }
     sendResponse({ message: "Redirection successful" });
     // let aikiOverlay = AikiOverlay();
     // let link = Link();
