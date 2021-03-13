@@ -18,9 +18,11 @@ function updateUser() {
   });
 }
 
+//FIXME: Need to somehow export these functions to Settings.svelte.
 updateUser();
 updateProcrastinationSites();
 
+//FIXME: In general, probably need to do a naming pass on this whole script.
 function userOnSite(details) {
   // Checking if top frame (loads of different frames load on major sites)
   if (details.frameId == "0") {
@@ -117,7 +119,8 @@ function userLeftSite(details) {
           }
         }
       });
-    }
+    } //There is no else here. If name==currentName, we do not need to do anything. 
+      //Ie: You navigated from YouTube to YouTube.
   }
 }
 
@@ -130,6 +133,9 @@ function userActivatesTab(details) {
   );
 }
 
+//Might want to export this and run it in the background.js.
+//This listener logs a session end if the current window is closed.
+//FIXME: Not checking if current session is open.
 function addOnWindowsCloseListener() {
   chrome.windows.onRemoved.addListener((details) => {
     const event = {
@@ -150,8 +156,9 @@ function addOnWindowsCloseListener() {
 
 addOnWindowsCloseListener();
 
+//FIXME: This is a lot of spagetti, need to clean this up at some point.
 function tabActivatedCallback(response, details) {
-  // This is a lot of spagetti
+  //If there's no host we probably didn't open a website. 
   if (response.host) {
     console.log("Getting response:");
     console.log(response);
@@ -198,7 +205,7 @@ function tabActivatedCallback(response, details) {
         "currentName is defined, checking against activated tab for change of active website"
       );
 
-      //If current name is not "undefined", then that means our current TAB is a procrastination site.
+      //If current name is not "undefined", then that means our NEW tab is either a proc or a prod site.
       if (currentName !== nameOfNewTab) {
         console.log("currentName is not same as new tab name. Ending session");
         //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
@@ -216,6 +223,8 @@ function tabActivatedCallback(response, details) {
         } else {
           logProcrastinationEvent(event);
         }
+        //Everything up to this point is about figuring out if we must end the current session and how.
+        //NOW we need to react based on where we ended up.
         if (procrastinationSites.includes(nameOfNewTab)) {
           console.log("new tab is also a procrastination site.");
           currentName = nameOfNewTab;
@@ -237,7 +246,7 @@ function tabActivatedCallback(response, details) {
           });
         } else {
           console.log(
-            "New tab is not a new procrastination site. Not making a new session."
+            "New tab is not a new listed site. Not making a new session."
           );
           configSessionEndListeners();
           currentName = undefined;
