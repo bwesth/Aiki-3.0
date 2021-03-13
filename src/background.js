@@ -14,7 +14,6 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
-
 // First-time setup of listeners
 chrome.tabs.onActivated.addListener(listeners.userActivatesTab);
 listeners.addOnSiteListeners();

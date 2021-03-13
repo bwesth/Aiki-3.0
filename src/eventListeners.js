@@ -1,6 +1,6 @@
-import { logEvent } from "./util/logger.js";
+import { logProcrastinationEvent, logLearningEvent } from "./util/logger.js";
 import storage from "./util/storage";
-
+import { learningSites } from "./util/constants";
 let currentName;
 
 function userOnSite(details) {
@@ -13,7 +13,20 @@ function userOnSite(details) {
         if (list.includes(name) && details.tabId == response[0].id) {
           currentName = name;
           storage.getUID((user) => {
-            logEvent({
+            logProcrastinationEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Web Navigation",
+              eventDetails: details,
+            });
+            configSessionStartListeners();
+          });
+        }
+        if (learningSites.includes(name) && details.tabId == response[0].id) {
+          currentName = name;
+          storage.getUID((user) => {
+            logLearningEvent({
               tag: "SESSIONSTART",
               name: currentName || "",
               user: user,
@@ -35,13 +48,19 @@ function userLeftSite(details) {
       if (name !== currentName && details.tabId == response[0].id) {
         //Need to add check for active tab
         storage.getUID((user) => {
-          logEvent({
+          const event = {
             tag: "SESSIONEND",
             name: currentName || "",
             user: user,
             navigationType: "Web Navigation",
             eventDetails: details,
-          });
+          };
+          if (learningSites.includes(currentName)) {
+            logLearningEvent(event);
+          } else {
+            logProcrastinationEvent(event);
+          }
+
           configSessionEndListeners();
           currentName = undefined;
         });
@@ -59,28 +78,27 @@ function userActivatesTab(details) {
   );
 }
 
-
-
 function addOnWindowsCloseListener() {
   chrome.windows.onRemoved.addListener((details) => {
     storage.getUID((user) => {
-      logEvent({
+      const event = {
         tag: "SESSIONEND",
         name: currentName || "",
         user: user,
         navigationType: "Closed chrome window",
         eventDetails: details,
-      });
+      };
+      if (learningSites.includes(currentName)) {
+        logLearningEvent(event);
+      } else {
+        logProcrastinationEvent(event);
+      }
       configSessionEndListeners();
     });
   });
 }
 
 addOnWindowsCloseListener();
-
-function parseUrlToName(url) {
-  return url.split(".")[1];
-}
 
 function tabActivatedCallback(response, details) {
   storage.getUID((user) => {
@@ -105,14 +123,24 @@ function tabActivatedCallback(response, details) {
             currentName = nameOfNewTab;
             //If the name of the new tab is in our procNameList, then we need to start a new proc session.
             configSessionStartListeners();
-            logEvent({
+            logProcrastinationEvent({
               tag: "SESSIONSTART",
               name: currentName || "",
               user: user,
               navigationType: "Tab change",
               eventDetails: details,
             });
+          } else if (learningSites.includes(nameOfNewTab)) {
+            // Learning site session
             currentName = nameOfNewTab;
+            configSessionStartListeners();
+            logLearningEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Tab change",
+              eventDetails: details,
+            });
           } else {
             console.log(
               nameOfNewTab +
@@ -135,17 +163,31 @@ function tabActivatedCallback(response, details) {
           // Need to test if the new tab is a procrastination site, then create a new session without closing the listeners
           storage.getList((procNameList) => {
             let list = procNameList.map((site) => site.name);
-            logEvent({
+            const event = {
               tag: "SESSIONEND",
               name: currentName || "",
               user: user,
               navigationType: "Tab change",
               eventDetails: details,
-            });
+            };
+            if (learningSites.includes(currentName)) {
+              logLearningEvent(event);
+            } else {
+              logProcrastinationEvent(event);
+            }
             if (list.includes(nameOfNewTab)) {
               console.log("new tab is also a procrastination site.");
               currentName = nameOfNewTab;
-              logEvent({
+              logProcrastinationEvent({
+                tag: "SESSIONSTART",
+                name: currentName || "",
+                user: user,
+                navigationType: "Tab change",
+                eventDetails: details,
+              });
+            } else if (learningSites.includes(nameOfNewTab)) {
+              currentName = nameOfNewTab;
+              logLearningEvent({
                 tag: "SESSIONSTART",
                 name: currentName || "",
                 user: user,
@@ -170,13 +212,18 @@ function tabActivatedCallback(response, details) {
           "\nActive tab is not a website. Might be a new empty tab or similar"
       );
       configSessionEndListeners();
-      logEvent({
+      const event = {
         tag: "SESSIONEND",
         name: currentName || "",
         user: user,
         navigationType: "Tab change",
         eventDetails: details,
-      });
+      };
+      if (learningSites.includes(currentName)) {
+        logLearningEvent(event);
+      } else {
+        logProcrastinationEvent(event);
+      }
       currentName = undefined;
     }
   });
@@ -217,3 +264,11 @@ export default {
   removeOnSiteListeners,
   addOnSiteListeners,
 };
+
+function parseUrlToName(url) {
+  if (url.includes("www")) {
+    return url.split(".")[1];
+  } else {
+    return url.split(".")[0];
+  }
+}

@@ -1,12 +1,17 @@
 import firebase from "./firebase";
 
-// firebase.addDoc("John");
-
-export function logEvent(details) {
+export function logProcrastinationEvent(details) {
   const entry = details;
   entry.date = makeDate();
-  firebase.addNavEvent(details);
+  firebase.addProcrastinationEvent(details);
 }
+
+export function logLearningEvent(details) {
+  const entry = details;
+  entry.date = makeDate();
+  firebase.addLearningEvent(details);
+}
+
 
 export function logConfigEvent(details) {
   const entry = details;
