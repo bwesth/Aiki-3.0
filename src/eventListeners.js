@@ -6,13 +6,13 @@ let currentName;
 let user;
 let procrastinationSites;
 
-function updateProcrastinationSites() {
+export function updateProcrastinationSites() {
   storage.getList((list) => {
     procrastinationSites = list.map((site) => site.name);
   });
 }
 
-function updateUser() {
+export function updateUser() {
   storage.getUID((uid) => {
     user = uid;
   });
