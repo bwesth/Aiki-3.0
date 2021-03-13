@@ -9,15 +9,7 @@ function userOnSite(details) {
     console.log(list);
     if (details.frameId == "0") {
       let name = parseUrlToName(details.url);
-      console.log(`User is on site: ${name}`);
-      console.log(list.includes(name));
-      chrome.tabs.query({ active: true }, (response) => {
-        console.log(list.includes(name) && details.tabId == response[0].id)
-        console.log(response[0])
-        console.log(response[0].id)
-        console.log(details.tabId)
-        //If the site name is in the procUrlList, we start a timer.
-        if (list.includes(name) && details.tabId == response[0].id) {
+        if (list.includes(name)) {
           currentName = name;
           storage.getUID((user) => {
             logProcrastinationEvent({
@@ -30,7 +22,7 @@ function userOnSite(details) {
             configSessionStartListeners();
           });
         }
-        if (learningSites.includes(name) && details.tabId == response[0].id) {
+        if (learningSites.includes(name)) {
           currentName = name;
           storage.getUID((user) => {
             logLearningEvent({
@@ -43,7 +35,6 @@ function userOnSite(details) {
             configSessionStartListeners();
           });
         }
-      });
     }
   });
 }
