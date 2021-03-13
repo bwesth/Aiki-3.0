@@ -2,67 +2,6 @@ import { logEvent } from "./util/logger.js";
 import storage from "./util/storage";
 
 let currentName;
-let user;
-
-//A listener at the start of a session that gathers all the data for us, and logs it atm.
-//Probably should split this shit up.
-// This is learning site listener
-function startSessionListener(details) {
-  if (details.frameId == "0") {
-    let name = parseUrlToName(details.url);
-
-    //If the host is the redirection target, we start a timer.
-    storage.getRedirectionSite((site) => {
-      storage.getUID((user) => {
-        if ((name = site)) {
-          logEvent({
-            tag: "SESSIONSTART",
-            name: currentName || "",
-            user: user,
-            navigationType: "dunno",
-            eventDetails: details,
-          });
-
-          chrome.webNavigation.onCompleted.addListener((details) =>
-            endSessionListener(details, endtime)
-          );
-          chrome.webNavigation.onCompleted.removeListener(startSessionListener);
-        }
-      });
-    });
-  }
-}
-
-//A listener at the end of a session that gathers all the data for us, and logs it atm.
-//Probably should split this shit up.
-// Learning site listener
-function endSessionListener(details) {
-  if (details.frameId == "0") {
-    console.log(details);
-    let name = parseUrlToName(details.url);
-    storage.getRedirectionSite((site) => {
-      storage.getUID((user) => {
-        if (name !== site) {
-          logEvent({
-            tag: "SESSIONEND",
-            name: currentName || "",
-            user: user,
-            navigationType: "leave :(",
-            eventDetails: details,
-          });
-
-          chrome.webNavigation.onCompleted.removeListener((details) =>
-            endSessionListener(details)
-          );
-          chrome.webNavigation.onCompleted.addListener((details) =>
-            startSessionListener(details)
-          );
-          // console.log(sessionLength(endTime, name));
-        }
-      });
-    });
-  }
-}
 
 function userOnSite(details) {
   storage.getList((procNameList) => {
@@ -120,33 +59,7 @@ function userActivatesTab(details) {
   );
 }
 
-function addOnSiteListeners() {
-  chrome.webNavigation.onCompleted.addListener(userOnSite);
-}
 
-function removeOnSiteListeners() {
-  chrome.webNavigation.onCompleted.removeListener(userOnSite);
-}
-
-function addLeftSiteListeners() {
-  chrome.tabs.onRemoved.addListener(userLeftSite);
-  chrome.webNavigation.onCompleted.addListener(userLeftSite);
-}
-
-function removeLeftSiteListeners() {
-  chrome.tabs.onRemoved.removeListener(userLeftSite);
-  chrome.webNavigation.onCompleted.removeListener(userLeftSite);
-}
-
-function configSessionStartListeners() {
-  addLeftSiteListeners();
-  removeOnSiteListeners();
-}
-
-function configSessionEndListeners() {
-  addOnSiteListeners();
-  removeLeftSiteListeners();
-}
 
 function addOnWindowsCloseListener() {
   chrome.windows.onRemoved.addListener((details) => {
@@ -164,19 +77,6 @@ function addOnWindowsCloseListener() {
 }
 
 addOnWindowsCloseListener();
-
-//Helpers
-
-// Rethink on how to use this inside userActivatesTab with tabActivatedCallback()
-async function sendMessage(tabId, action) {
-  console.log("Sending message to tab " + tabId);
-  console.log(action);
-  chrome.tabs.sendMessage(tabId, { action: action }, function (response) {
-    console.log("Getting response:");
-    console.log(response);
-    return response;
-  });
-}
 
 function parseUrlToName(url) {
   return url.split(".")[1];
@@ -277,95 +177,37 @@ function tabActivatedCallback(response, details) {
         navigationType: "Tab change",
         eventDetails: details,
       });
-
       currentName = undefined;
     }
   });
 }
 
-let redirected = false;
-let site = "";
-function updateSite() {
-  storage.getRedirectionSite((storageSite) => {
-    site = storageSite;
-  });
-}
-updateSite();
-function addWebRequestListener() {
-  console.log("WebRequest listener added");
-  storage.getList((list) => {
-    const urls = list.map((site) => `*://${site.host}/*`);
-    chrome.webRequest.onBeforeRequest.addListener(
-      redirectionEventListener,
-      { urls: urls },
-      ["blocking"]
-    );
-  });
+function addOnSiteListeners() {
+  chrome.webNavigation.onCompleted.addListener(userOnSite);
 }
 
-function removeWebRequestListener() {
-  storage.getList((list) => {
-    const urls = list.map((site) => `*://${site.host}/*`);
-    console.log("WebRequest listener removed");
-    chrome.webRequest.onBeforeRequest.removeListener(
-      redirectionEventListener,
-      { urls: urls },
-      ["blocking"]
-    );
-  });
+function removeOnSiteListeners() {
+  chrome.webNavigation.onCompleted.removeListener(userOnSite);
 }
 
-function redirectionEventListener(details) {
-  console.log("Redirecting");
-  redirected = true;
-  addLearningSiteLoadedListener();
-  return {
-    redirectUrl: `https://${site}/`,
-  };
+function addLeftSiteListeners() {
+  chrome.tabs.onRemoved.addListener(userLeftSite);
+  chrome.webNavigation.onCompleted.addListener(userLeftSite);
 }
 
-//Working solution, may be a little heavy at the moment.
-//Need to find some way to remove eventlistener again. Examples in Aiki.
-function addLearningSiteLoadedListener() {
-  console.log("Learning site listener added");
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
-    leaningSiteLoadedListener(tabId, changeInfo, tab)
-  );
+function removeLeftSiteListeners() {
+  chrome.tabs.onRemoved.removeListener(userLeftSite);
+  chrome.webNavigation.onCompleted.removeListener(userLeftSite);
 }
 
-function removeLearningSiteLoadedListener() {
-  console.log("Learning site listener removed");
-  chrome.tabs.onUpdated.removeListener(leaningSiteLoadedListener);
-}
-let sessionTab;
-
-function leaningSiteLoadedListener(tabId, changeInfo, tab) {
-  if (changeInfo.status === "complete" && redirected == true) {
-    chrome.tabs.sendMessage(tabId, { action: "redirection" });
-    removeLearningSiteLoadedListener();
-    sessionTab = tab;
-    redirected = false;
-    let host = tab.url.split("/")[2];
-    addUpdateListener(host);
-  }
+function configSessionStartListeners() {
+  addLeftSiteListeners();
+  removeOnSiteListeners();
 }
 
-function addUpdateListener(host) {
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    updateListener(tabId, changeInfo, tab, host);
-  });
-}
-
-function removeUpdateListener() {
-  chrome.tabs.onUpdated.removeListener(updateListener);
-}
-
-function updateListener(tabId, changeInfo, tab, host) {
-  if (changeInfo.status === "complete") {
-    if (host == tab.url.split("/")[2]) {
-      chrome.tabs.sendMessage(tabId, { action: "redirection" });
-    }
-  }
+function configSessionEndListeners() {
+  addOnSiteListeners();
+  removeLeftSiteListeners();
 }
 
 export default {
@@ -374,7 +216,4 @@ export default {
   addLeftSiteListeners,
   removeOnSiteListeners,
   addOnSiteListeners,
-  addWebRequestListener,
-  removeWebRequestListener,
-  updateSite,
 };

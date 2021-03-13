@@ -2,24 +2,6 @@
 <!-- To begin with, the popup will only have a settings button for the logger. -->
 
 <script>
-import storage from '../util/storage'
-import {logConfigEvent} from "../util/logger"
-import listeners from "../eventListeners"
-
-$: redirectionToggled = false;
-storage.getRedirectionToggled((toggled) => redirectionToggled = toggled)
-
-function toggleRedirection(){
-  storage.getUID((user) => logConfigEvent({
-      user: user,
-      event: `User toggled retirection ${redirectionToggled ? 'on' : "off"}`
-    })
-  )
-  console.log("Redirection set to " + redirectionToggled)
-    storage.toggleRedirection()
-    port.postMessage(`Redirection: ${redirectionToggled ? 'on' : "off"}`);
-}
-
 /* Opens a new tab with settings page and selects it */
   function openSettingsPage () {
     chrome.management.getSelf(result => {
@@ -29,14 +11,6 @@ function toggleRedirection(){
           })
       })
   }
-
-var port = chrome.extension.connect({
-    name: "Sample Communication"
-});
-
-port.onMessage.addListener(function(msg) {
-    console.log("message recieved" + msg);
-});
 </script>
 
 <main>
@@ -69,10 +43,7 @@ port.onMessage.addListener(function(msg) {
     </div>
 
   </div>
-  <div class="custom-control custom-switch">
-    <input bind:checked="{redirectionToggled}" on:change={toggleRedirection} type="checkbox" class="custom-control-input" id="customSwitch1">
-    <label class="custom-control-label" for="customSwitch1">Toggle Aiki redirection</label>
-  </div>
+  
 </main>
 
 <style>
