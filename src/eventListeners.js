@@ -46,23 +46,45 @@ function userLeftSite(details) {
     let name = parseUrlToName(details.url);
     chrome.tabs.query({ active: true }, (response) => {
       if (name !== currentName && details.tabId == response[0].id) {
-        //Need to add check for active tab
-        storage.getUID((user) => {
-          const event = {
-            tag: "SESSIONEND",
-            name: currentName || "",
-            user: user,
-            navigationType: "Web Navigation",
-            eventDetails: details,
-          };
-          if (learningSites.includes(currentName)) {
-            logLearningEvent(event);
-          } else {
-            logProcrastinationEvent(event);
-          }
-
-          configSessionEndListeners();
-          currentName = undefined;
+        storage.getList((procNameList) => {
+          //Need to add check for active tab
+          storage.getUID((user) => {
+            const event = {
+              tag: "SESSIONEND",
+              name: currentName || "",
+              user: user,
+              navigationType: "Web Navigation",
+              eventDetails: details,
+            };
+            if (learningSites.includes(currentName)) {
+              logLearningEvent(event);
+            } else {
+              logProcrastinationEvent(event);
+            }
+            if (learningSites.includes(name)) {
+              //New learning session initiated
+              logLearningEvent({
+                tag: "SESSIONSTART",
+                name: currentName || "",
+                user: user,
+                navigationType: "Web Navigation",
+                eventDetails: details,
+              });
+            } else if (list.includes(nameOfNewTab)) {
+              // New procrastination session initiated
+              logProcrastinationEvent({
+                tag: "SESSIONSTART",
+                name: currentName || "",
+                user: user,
+                navigationType: "Web Navigation",
+                eventDetails: details,
+              });
+            } else {
+              // Neither procrastination nor learning session, not creating session.
+              configSessionEndListeners();
+              currentName = undefined;
+            }
+          });
         });
       }
     });
