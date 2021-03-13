@@ -73,7 +73,7 @@ function userLeftSite(details) {
                 navigationType: "Web Navigation",
                 eventDetails: details,
               });
-            } else if (list.includes(nameOfNewTab)) {
+            } else if (list.includes(name)) {
               // New procrastination session initiated
               currentName = name;
               logProcrastinationEvent({
