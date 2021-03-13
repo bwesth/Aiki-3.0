@@ -25,11 +25,11 @@
 <main>
   <Header/>
   <div class="container">
-    <SetUser bind:user bind:userIsRegistered />
+    <SetUser bind:user bind:userIsRegistered {port} />
   </div>
   {#if userIsRegistered}
   <div class="container">
-    <SetWebsites {user} />
+    <SetWebsites {user} {port} />
   </div>
   <div class="container">
     <SetLearningSites {user} />

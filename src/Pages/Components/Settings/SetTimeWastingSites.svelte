@@ -5,6 +5,7 @@
   import { logConfigEvent } from "../../../util/logger"
 
   export let user = "";
+  export let port;
   $: list = [];
   storage.getList(data => list = data);
   let addItemValue = "";
@@ -20,6 +21,7 @@
     newList.splice(index, 1);
     list = newList;
     storage.setList(list);
+    port.postMessage(`Update: list`);
   }
 
   //TODO: Somehow have to call updateProcrastinationSites here...
@@ -35,6 +37,7 @@
       event: "User added procrastination site",
       site: site
     })
+    port.postMessage(`Update: list`);
     document.getElementById("addItem").value = "";
   }
 

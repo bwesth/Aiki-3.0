@@ -7,12 +7,14 @@ let user;
 let procrastinationSites;
 
 export function updateProcrastinationSites() {
+  console.log("Syncing proc list with storage");
   storage.getList((list) => {
     procrastinationSites = list.map((site) => site.name);
   });
 }
 
 export function updateUser() {
+  console.log("Syncing user with storage");
   storage.getUID((uid) => {
     user = uid;
   });
@@ -120,8 +122,8 @@ function userLeftSite(details) {
           }
         }
       });
-    } //There is no else here. If name==currentName, we do not need to do anything. 
-      //Ie: You navigated from YouTube to YouTube.
+    } //There is no else here. If name==currentName, we do not need to do anything.
+    //Ie: You navigated from YouTube to YouTube.
   }
 }
 
@@ -159,7 +161,7 @@ addOnWindowsCloseListener();
 
 //FIXME: This is a lot of spagetti, need to clean this up at some point.
 function tabActivatedCallback(response, details) {
-  //If there's no host we probably didn't open a website. 
+  //If there's no host we probably didn't open a website.
   if (response.host) {
     console.log("Getting response:");
     console.log(response);

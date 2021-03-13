@@ -6,6 +6,7 @@
 
   export let user = "";
   export let userIsRegistered;
+  export let port;
 
   function setup() {
     storage.getUID(uid => {
@@ -28,6 +29,7 @@
         event: "Added user ID to storage"
       })
       userIsRegistered = true;
+      port.postMessage(`Update: user`);
     }
   }
 
@@ -41,6 +43,7 @@
       storage.setUID("");
       userIsRegistered = false;
       user = "";
+      port.postMessage(`Update: user`);
     } 
   }
   //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...

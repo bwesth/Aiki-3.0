@@ -25,11 +25,11 @@ chrome.extension.onConnect.addListener(function (port) {
     console.log("message recieved " + msg);
     console.log(msg.split(": ")[1]);
     switch (msg.split(": ")[1]) {
-      case "update":
-        {
-          updateProcrastinationSites();
-          updateUser();
-        }
+      case "user":
+        updateUser();
+        break;
+      case "list":
+        updateProcrastinationSites();
         break;
     }
     port.postMessage("Response message");
