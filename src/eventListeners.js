@@ -65,6 +65,7 @@ function userLeftSite(details) {
             }
             if (learningSites.includes(name)) {
               //New learning session initiated
+              currentName = name;
               logLearningEvent({
                 tag: "SESSIONSTART",
                 name: currentName || "",
@@ -74,6 +75,7 @@ function userLeftSite(details) {
               });
             } else if (list.includes(nameOfNewTab)) {
               // New procrastination session initiated
+              currentName = name;
               logProcrastinationEvent({
                 tag: "SESSIONSTART",
                 name: currentName || "",
