@@ -91,7 +91,7 @@ function addOnWindowsCloseListener() {
       if (learningSites.includes(currentName)) {
         logLearningEvent(event);
       } else {
-        logProcrastinationEvent();
+        logProcrastinationEvent(event);
       }
       configSessionEndListeners();
     });
