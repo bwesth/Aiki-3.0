@@ -1,5 +1,4 @@
 <!-- This component is rendered as a block on the settings page for users to input their time wasting websites.-->
-
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage"
@@ -42,12 +41,9 @@
     let name = site.includes("www") ? site.split(".")[1] : site;
     return {host: host, name: name}
   }
-  // console.log(parseURL("https://www.reddit.com/r/YouShouldKnow/comments/lwv8ip/ysk_the_fcc_just_approved_a_50_a_month_subsidy/"))
-
 </script>
 
-<h4>Set Time Wasting Sites</h4>
-<SettingsContainer>
+<SettingsContainer headline="Set Time Wasting Sites">
     <h5>Add your Time Wasting Sites here:</h5>
     <hr>
     <p>Type in pages you feel like you spend a little too much time 

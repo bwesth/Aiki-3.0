@@ -48,8 +48,7 @@
 
 </script>
 
-<h4>Register UID</h4>
-<SettingsContainer>
+<SettingsContainer headline="Register UID">
     {#if userIsRegistered}
       <p>Registered User ID: </p>
       <input class="form-control" type="text" placeholder={user} readonly>
