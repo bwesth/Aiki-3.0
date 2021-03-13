@@ -11,6 +11,15 @@
 
   $: user = "";
   $: userIsRegistered = false;
+
+  var port = chrome.extension.connect({
+    name: "Settings Communication"
+  });
+
+  port.onMessage.addListener(function(msg) {
+      console.log("message recieved" + msg);
+  });
+
 </script>
 
 <main>
