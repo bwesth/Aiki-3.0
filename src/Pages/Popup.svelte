@@ -15,40 +15,44 @@
 
 <main>
   <div class="popup">
-    <!-- Using bootstraps grid layout here. -->
-    <!-- https://getbootstrap.com/docs/4.0/layout/grid/ -->
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <img src='images/aikido.png' class="popupLogo" alt="logo" style="size:40px" />
-        </div>
-        <div class="col-6">
-          <h5>Aiki</h5>
-        </div>
-      </div>
+    <div class="container" style="margin-top: 10px">
+      <img src='images/aikido.png' class="icon item" alt="Aiki logo"/>
+      <h5 class="header item">Aiki 3.0</h5>
     </div>
-
     <hr> 
-
-    <!-- Open settings page -->
     <div class="container">
-      <div class="row">
-        <div class="col">
-          <p>Settings:</p>
-        </div>
-        <div class="col-6">
-          <button type="default" class="btn btn-primary" on:click={openSettingsPage}>Click Me</button>
-        </div>
-      </div>
+      <h6 class="item">Settings:</h6>
+      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}>Settings</button>
     </div>
-
+    <hr>
   </div>
-  
 </main>
 
+<!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+  }
+
+  .item {
+    margin: auto auto;
+  }
+
   .popup {
     padding: 5px;
+  }
+
+  .header {
+    display: inline;
+  }
+
+  .icon {
+    height: 27px;
+    display: inline;
+    padding-right: 10px;
   }
 
   hr {
@@ -57,6 +61,7 @@
     color:gray;
     background-color:gray;
     width: 90%;
+    margin: 10px 10px;
   }
 
   main {
@@ -66,5 +71,4 @@
     height:fit-content;
     width:250px;
   }
-  
 </style>
