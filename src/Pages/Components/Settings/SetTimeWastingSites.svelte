@@ -9,6 +9,7 @@
   storage.getList(data => list = data);
   let addItemValue = "";
 
+  //TODO: Somehow have to call updateProcrastinationSites here...
   function removeItem(index) {
     logConfigEvent({
       user: user,
@@ -21,6 +22,7 @@
     storage.setList(list);
   }
 
+  //TODO: Somehow have to call updateProcrastinationSites here...
   function addItem() {
     let site = parseURL(addItemValue)
     //Need some defensive checking here. Is a website, empty strings, already on list, etc.

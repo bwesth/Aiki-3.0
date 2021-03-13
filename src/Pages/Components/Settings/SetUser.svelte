@@ -18,6 +18,7 @@
     });
   }
   
+  //TODO: Somehow have to call updateUser in the background script...
   function confirmUID(){
     const confirmation = confirm("Are you certain the user ID is correct?");
     if (confirmation) {
@@ -42,7 +43,6 @@
       user = "";
     } 
   }
-
   //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...
   setup();
 

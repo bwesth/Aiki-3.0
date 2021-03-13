@@ -19,6 +19,7 @@ function updateUser() {
 }
 
 //FIXME: Need to somehow export these functions to Settings.svelte.
+
 updateUser();
 updateProcrastinationSites();
 
