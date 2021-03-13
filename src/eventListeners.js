@@ -6,9 +6,16 @@ let currentName;
 function userOnSite(details) {
   storage.getList((procNameList) => {
     let list = procNameList.map((site) => site.name);
+    console.log(list);
     if (details.frameId == "0") {
       let name = parseUrlToName(details.url);
+      console.log(`User is on site: ${name}`);
+      console.log(list.includes(name));
       chrome.tabs.query({ active: true }, (response) => {
+        console.log(list.includes(name) && details.tabId == response[0].id)
+        console.log(response[0])
+        console.log(response[0].id)
+        console.log(details.tabId)
         //If the site name is in the procUrlList, we start a timer.
         if (list.includes(name) && details.tabId == response[0].id) {
           currentName = name;

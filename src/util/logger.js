@@ -1,19 +1,23 @@
 import firebase from "./firebase";
 
 export function logProcrastinationEvent(details) {
+  console.log("Procrastination event logging");
   const entry = details;
   entry.date = makeDate();
   firebase.addProcrastinationEvent(details);
 }
 
 export function logLearningEvent(details) {
+  console.log("Learning event logging");
+
   const entry = details;
   entry.date = makeDate();
   firebase.addLearningEvent(details);
 }
 
-
 export function logConfigEvent(details) {
+  console.log("Config event logging");
+
   const entry = details;
   entry.date = makeDate();
   firebase.addConfigLog(entry);

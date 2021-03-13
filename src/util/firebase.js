@@ -32,53 +32,69 @@ async function addEntry(entry) {
 }
 
 async function addProcrastinationEvent(entry) {
-  const ref = await db
+  const res = await db
     .collection("user_logs")
     .doc(entry.user)
     .collection("dates")
     .doc(entry.date.date)
     .collection("procrastination_site_logs")
-    .doc("" + entry.date.timestamp);
-
-  ref.set({ date: entry.date }, { merge: true });
-  ref.set({ eventDetails: entry.eventDetails }, { merge: true });
-  ref.set({ name: entry.name }, { merge: true });
-  ref.set({ navigationType: entry.navigationType }, { merge: true });
-  ref.set({ tag: entry.tag }, { merge: true });
-  ref.set({ user: entry.user }, { merge: true });
+    .doc("" + entry.date.timestamp)
+    .set(
+      {
+        date: entry.date,
+        eventDetails: entry.eventDetails,
+        name: entry.name,
+        navigationType: entry.navigationType,
+        tag: entry.tag,
+        user: entry.user,
+      },
+      { merge: true }
+    );
 }
 
-
 async function addLearningEvent(entry) {
-  const ref = await db
+  const res = await db
     .collection("user_logs")
     .doc(entry.user)
     .collection("dates")
     .doc(entry.date.date)
     .collection("learning_site_logs")
-    .doc("" + entry.date.timestamp);
-
-  ref.set({ date: entry.date }, { merge: true });
-  ref.set({ eventDetails: entry.eventDetails }, { merge: true });
-  ref.set({ name: entry.name }, { merge: true });
-  ref.set({ navigationType: entry.navigationType }, { merge: true });
-  ref.set({ tag: entry.tag }, { merge: true });
-  ref.set({ user: entry.user }, { merge: true });
+    .doc("" + entry.date.timestamp)
+    .set(
+      {
+        date: entry.date,
+        eventDetails: entry.eventDetails,
+        name: entry.name,
+        navigationType: entry.navigationType,
+        tag: entry.tag,
+        user: entry.user,
+      },
+      { merge: true }
+    );
 }
 
 async function addConfigLog(entry) {
-  const ref = await db
-  .collection("user_logs")
-  .doc(entry.user)
-  .collection("dates")
-  .doc(entry.date.date)
-  .collection("config_logs")
-  .doc("" + entry.date.timestamp);
-
-  ref.set({date: entry.date}, { merge: true });
-  ref.set({user: entry.user}, { merge: true });
-  ref.set({event: entry.event}, { merge: true });
-  entry.site && ref.set({site: entry.site}, { merge: true });
+  const res = await db
+    .collection("user_logs")
+    .doc(entry.user)
+    .collection("dates")
+    .doc(entry.date.date)
+    .collection("config_logs")
+    .doc("" + entry.date.timestamp)
+    .set(
+      {
+        date: entry.date,
+        user: entry.user,
+        event: entry.event,
+        site: entry.site ? entry.site : "",
+      },
+      { merge: true }
+    );
 }
 
-export default { addEntry, addProcrastinationEvent, addConfigLog, addLearningEvent };
+export default {
+  addEntry,
+  addProcrastinationEvent,
+  addConfigLog,
+  addLearningEvent,
+};
