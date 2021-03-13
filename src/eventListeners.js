@@ -47,6 +47,8 @@ function userLeftSite(details) {
     chrome.tabs.query({ active: true }, (response) => {
       if (name !== currentName && details.tabId == response[0].id) {
         storage.getList((procNameList) => {
+          let list = procNameList.map((site) => site.name);
+
           //Need to add check for active tab
           storage.getUID((user) => {
             const event = {
