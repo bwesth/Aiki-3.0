@@ -1,5 +1,3 @@
-import { renderApp } from "./content.js";
-
 // Listener for messages from background script.
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   console.log(location.host);

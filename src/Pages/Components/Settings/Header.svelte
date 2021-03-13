@@ -1,7 +1,5 @@
 <!-- This component is rendered as a block on the settings page as a header.-->
-
 <script>
-
 </script>
 
 <h1>Aiki</h1>

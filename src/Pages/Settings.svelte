@@ -30,9 +30,6 @@
     <SetLearningSites {user} />
   </div>
   {/if}
-
-
-  
   <Footer/>
 </main>
 
