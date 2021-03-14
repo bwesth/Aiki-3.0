@@ -2,7 +2,7 @@
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
 import storage from "../../../util/storage";
-import learningSites from "../../../util/constants";
+import { learningSites } from "../../../util/constants";
 import { logConfigEvent } from "../../../util/logger"
 
 // let list = [];
