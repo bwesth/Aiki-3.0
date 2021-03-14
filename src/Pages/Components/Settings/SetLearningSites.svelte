@@ -2,10 +2,11 @@
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
 import storage from "../../../util/storage";
+import learningSites from "../../../util/constants";
 import { logConfigEvent } from "../../../util/logger"
 
-let list = [];
-storage.getLearningSites(data => list = data)
+// let list = [];
+// storage.getLearningSites(data => list = data)
 
 let selected;
 storage.getRedirectionSite(data => selected = data)
@@ -28,8 +29,8 @@ function changeSite() {
     </p>
 
     <ul>
-    {#each list as item}
-      <li><a href="{item}">{item}</a></li>
+    {#each learningSites as site}
+      <li><a href="{site}">{site}</a></li>
     {/each}
     </ul>
 
