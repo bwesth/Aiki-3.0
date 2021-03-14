@@ -31,13 +31,11 @@ function userOnSite(details) {
   if (details.frameId == "0") {
     let name = parseUrlToName(details.url);
     // Getting list of the active tabs in each chrome window
-    chrome.tabs.query({ active: true }, (response) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
       // Just need the IDs
-      const activeTabIds = response.map((window) => window.id);
-      console.log(activeTabIds.includes(details.tabId));
       // Checking if the event tab is active in any open chrome window.
       // If not, the site was opened in a non-active widnow (like when you use middle-mouse-button)
-      if (activeTabIds.includes(details.tabId)) {
+      if (response[0].id === details.tabId) {
         if (procrastinationSites.includes(name)) {
           // Procrastination session started
           currentName = name;
@@ -75,10 +73,9 @@ function userLeftSite(details) {
     if (name !== currentName) {
       // If so, we need to add check if it the event fires in the active tab.
       // If not it is a site opened in another tab that the user is not currently on.
-      chrome.tabs.query({ active: true }, (response) => {
-        const activeTabIds = response.map((window) => window.id);
+      chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
         // This is the mentioned active tab check
-        if (activeTabIds.includes(details.tabId)) {
+        if (response[0].id === details.tabId) {
           const event = {
             tag: "SESSIONEND",
             name: currentName || "",
@@ -135,29 +132,6 @@ function userActivatesTab(details) {
     tabActivatedCallback(response || chrome.runtime.lastError.message, details)
   );
 }
-
-//Might want to export this and run it in the background.js.
-//This listener logs a session end if the current window is closed.
-//FIXME: Not checking if current session is open.
-function addOnWindowsCloseListener() {
-  chrome.windows.onRemoved.addListener((details) => {
-    const event = {
-      tag: "SESSIONEND",
-      name: currentName || "",
-      user: user,
-      navigationType: "Closed chrome window",
-      eventDetails: details,
-    };
-    if (learningSites.includes(currentName)) {
-      logLearningEvent(event);
-    } else {
-      logProcrastinationEvent(event);
-    }
-    configSessionEndListeners();
-  });
-}
-
-addOnWindowsCloseListener();
 
 //FIXME: This is a lot of spagetti, need to clean this up at some point.
 function tabActivatedCallback(response, details) {
@@ -308,6 +282,111 @@ function configSessionEndListeners() {
   removeLeftSiteListeners();
 }
 
+//Might want to export this and run it in the background.js.
+//This listener logs a session end if the current window is closed.
+//FIXME: Not checking if current session is open.
+function addOnWindowsCloseListener() {
+  chrome.windows.onRemoved.addListener((details) => {
+    const event = {
+      tag: "SESSIONEND",
+      name: currentName || "",
+      user: user,
+      navigationType: "Closed chrome window",
+      eventDetails: details,
+    };
+    if (learningSites.includes(currentName)) {
+      logLearningEvent(event);
+    } else {
+      logProcrastinationEvent(event);
+    }
+    configSessionEndListeners();
+  });
+}
+
+addOnWindowsCloseListener();
+
+chrome.windows.onFocusChanged.addListener(focusChangeCallback);
+
+function focusChangeCallback(windowId) {
+  // Don't want windows without websites
+  if (windowId > -1) {
+    // Gotta get the active tab in the now focused window
+    chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
+      let name = parseUrlToName(response[0].url);
+      if (!currentName) {
+        // No session, checking for listed sites
+        if (procrastinationSites.includes(name)) {
+          currentName = name;
+          //If the name of the new tab is in our procNameList, then we need to start a new proc session.
+          configSessionStartListeners();
+          logProcrastinationEvent({
+            tag: "SESSIONSTART",
+            name: currentName || "",
+            user: user,
+            navigationType: "Window change",
+            eventDetails: response,
+          });
+        } else if (learningSites.includes(name)) {
+          // Learning site session
+          currentName = name;
+          configSessionStartListeners();
+          logLearningEvent({
+            tag: "SESSIONSTART",
+            name: currentName || "",
+            user: user,
+            navigationType: "Window change",
+            eventDetails: response,
+          });
+        }
+      } else {
+        //If current name is not "undefined", then that means our NEW tab is either a proc or a prod site.
+        if (currentName !== name) {
+          //If currentName is not the same as the name of the NEW tab, we need to end the session of CurrentName.
+          // Need to test if the new tab is a procrastination site, then create a new session without closing the listeners
+          const event = {
+            tag: "SESSIONEND",
+            name: currentName || "",
+            user: user,
+            navigationType: "Window change",
+            eventDetails: response,
+          };
+          if (learningSites.includes(currentName)) {
+            logLearningEvent(event);
+          } else {
+            logProcrastinationEvent(event);
+          }
+          //Everything up to this point is about figuring out if we must end the current session and how.
+          //NOW we need to react based on where we ended up.
+          if (procrastinationSites.includes(name)) {
+            // New tab is also a listed site
+            currentName = name;
+            logProcrastinationEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Window change",
+              eventDetails: response,
+            });
+          } else if (learningSites.includes(name)) {
+            // New tab is also a listed site
+            currentName = name;
+            logLearningEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Window change",
+              eventDetails: response,
+            });
+          } else {
+            configSessionEndListeners();
+            currentName = undefined;
+          }
+        }
+      }
+    });
+  }
+}
+
 export default {
   userActivatesTab,
   removeLeftSiteListeners,
@@ -317,9 +396,14 @@ export default {
 };
 
 function parseUrlToName(url) {
-  if (url.includes("www")) {
-    return url.split(".")[1];
-  } else {
-    return url.split(".")[0];
+  let name = url;
+  if (url.includes("http")) {
+    name = url.split("//")[1];
   }
+  if (url.includes("www")) {
+    name = name.split(".")[1];
+  } else {
+    name = name.split(".")[0];
+  }
+  return name;
 }
