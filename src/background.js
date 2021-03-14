@@ -16,8 +16,10 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 });
 
 // First-time setup of listeners
-chrome.tabs.onActivated.addListener(listeners.userActivatesTab);
+listeners.addOnTabActivatedListener();
 listeners.addOnSiteListeners();
+listeners.addOnWindowsCloseListener();
+listeners.addWindowFocusChangeListener();
 
 chrome.extension.onConnect.addListener(function (port) {
   console.log("Connected .....");

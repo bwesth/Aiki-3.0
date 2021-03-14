@@ -282,38 +282,41 @@ function configSessionEndListeners() {
   removeLeftSiteListeners();
 }
 
+function addOnTabActivatedListener() {
+  chrome.tabs.onActivated.addListener(userActivatesTab);
+}
+
 //Might want to export this and run it in the background.js.
 //This listener logs a session end if the current window is closed.
-//FIXME: Not checking if current session is open.
 function addOnWindowsCloseListener() {
   chrome.windows.onRemoved.addListener((details) => {
     if (currentName) {
       // CurrentName is defined, session ongoing
       chrome.tabs.query({ active: true }, (response) => {
         if (!response.length > 0) {
-            const event = {
-              tag: "SESSIONEND",
-              name: currentName || "",
-              user: user,
-              navigationType: "Closed chrome window",
-              eventDetails: details,
-            };
-            if (learningSites.includes(currentName)) {
-              logLearningEvent(event);
-            } else {
-              logProcrastinationEvent(event);
-            }
-            configSessionEndListeners();
-            currentName = undefined;
+          const event = {
+            tag: "SESSIONEND",
+            name: currentName || "",
+            user: user,
+            navigationType: "Closed chrome window",
+            eventDetails: details,
+          };
+          if (learningSites.includes(currentName)) {
+            logLearningEvent(event);
+          } else {
+            logProcrastinationEvent(event);
+          }
+          configSessionEndListeners();
+          currentName = undefined;
         }
       });
     }
   });
 }
 
-addOnWindowsCloseListener();
-
-chrome.windows.onFocusChanged.addListener(focusChangeCallback);
+function addWindowFocusChangeListener() {
+  chrome.windows.onFocusChanged.addListener(focusChangeCallback);
+}
 
 function focusChangeCallback(windowId) {
   // Don't want windows without websites
@@ -401,6 +404,9 @@ export default {
   addLeftSiteListeners,
   removeOnSiteListeners,
   addOnSiteListeners,
+  addOnWindowsCloseListener,
+  addOnTabActivatedListener,
+  addWindowFocusChangeListener,
 };
 
 function parseUrlToName(url) {
