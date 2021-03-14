@@ -287,19 +287,27 @@ function configSessionEndListeners() {
 //FIXME: Not checking if current session is open.
 function addOnWindowsCloseListener() {
   chrome.windows.onRemoved.addListener((details) => {
-    const event = {
-      tag: "SESSIONEND",
-      name: currentName || "",
-      user: user,
-      navigationType: "Closed chrome window",
-      eventDetails: details,
-    };
-    if (learningSites.includes(currentName)) {
-      logLearningEvent(event);
-    } else {
-      logProcrastinationEvent(event);
+    if (currentName) {
+      // CurrentName is defined, session ongoing
+      chrome.tabs.query({ active: true }, (response) => {
+        if (!response.length > 0) {
+            const event = {
+              tag: "SESSIONEND",
+              name: currentName || "",
+              user: user,
+              navigationType: "Closed chrome window",
+              eventDetails: details,
+            };
+            if (learningSites.includes(currentName)) {
+              logLearningEvent(event);
+            } else {
+              logProcrastinationEvent(event);
+            }
+            configSessionEndListeners();
+            currentName = undefined;
+        }
+      });
     }
-    configSessionEndListeners();
   });
 }
 

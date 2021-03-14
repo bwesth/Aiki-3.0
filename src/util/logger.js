@@ -2,6 +2,7 @@ import firebase from "./firebase";
 
 export function logProcrastinationEvent(details) {
   console.log("Procrastination event logging");
+  console.log(details);
   const entry = details;
   entry.date = makeDate();
   firebase.addProcrastinationEvent(details);
@@ -9,7 +10,7 @@ export function logProcrastinationEvent(details) {
 
 export function logLearningEvent(details) {
   console.log("Learning event logging");
-
+  console.log(details);
   const entry = details;
   entry.date = makeDate();
   firebase.addLearningEvent(details);
@@ -17,7 +18,7 @@ export function logLearningEvent(details) {
 
 export function logConfigEvent(details) {
   console.log("Config event logging");
-
+  console.log(details);
   const entry = details;
   entry.date = makeDate();
   firebase.addConfigLog(entry);
