@@ -5,13 +5,12 @@ import { updateProcrastinationSites, updateUser } from "./eventListeners";
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
-    alert("Hello");
-    const urls = [
-      // Default procrastination sites.
-    ];
+    alert("Welcome to Aiki 3");
+    const urls = [];
     storage.setList(urls);
     storage.setLearningSites([]);
-    storage.toggleRedirections();
+    storage.toggleRedirection();
+    storage.setUID("");
   }
 });
 
@@ -37,3 +36,8 @@ chrome.extension.onConnect.addListener(function (port) {
     port.postMessage("Response message");
   });
 });
+
+setTimeout(() => {
+  updateProcrastinationSites();
+  updateUser();
+}, 100);

@@ -4,7 +4,7 @@ import { learningSites } from "./util/constants";
 
 let currentName;
 let user;
-let procrastinationSites;
+let procrastinationSites = [];
 
 export function updateProcrastinationSites() {
   console.log("Syncing proc list with storage");
@@ -19,11 +19,6 @@ export function updateUser() {
     user = uid;
   });
 }
-
-//FIXME: Need to somehow export these functions to Settings.svelte.
-
-updateUser();
-updateProcrastinationSites();
 
 //FIXME: In general, probably need to do a naming pass on this whole script.
 function userOnSite(details) {

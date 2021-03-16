@@ -13,7 +13,7 @@ function getRedirectionToggled(callback) {
 }
 
 function setList(list) {
-  storage.set({ list: list }, function (value) {});
+  storage.set({ list: list });
 }
 
 function getList(callback) {
