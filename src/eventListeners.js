@@ -314,6 +314,9 @@ function addWindowFocusChangeListener() {
 }
 
 function focusChangeCallback(windowId) {
+  //TODO: Trying to add a window focus fix here???
+  //TODO: chrome.windows.onFocusChanged DOES NOT FIRE as expected when tabbing off of Chrome. Issue since 2014. :P
+  
   // Don't want windows without websites
   if (windowId > -1) {
     // Gotta get the active tab in the now focused window
