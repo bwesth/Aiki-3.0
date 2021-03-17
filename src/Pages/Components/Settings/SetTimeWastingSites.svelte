@@ -25,25 +25,51 @@
   }
 
   //TODO: Somehow have to call updateProcrastinationSites here...
-  function addItem() {
+  async function addItem() {
     let site = parseURL(addItemValue)
+    if (list.find(item => item.name == site.name)) {
+      alert("Website already in list.")
+      return;
+    }
     //Need some defensive checking here. Is a website, empty strings, already on list, etc.
-    let newList = [...list]
-    newList.push(site)
-    list = newList;
-    storage.setList(list);
-    logConfigEvent({
-      user: user,
-      event: "User added procrastination site",
-      site: site
-    })
-    port.postMessage(`Update: list`);
-    document.getElementById("addItem").value = "";
+    let status = await pingSite(site.host)
+    console.log(status)
+    if (status) {
+      let newList = [...list]
+      newList.push(site)
+      list = newList;
+      storage.setList(list);
+      logConfigEvent({
+        user: user,
+        event: "User added procrastination site",
+        site: site
+      })
+      port.postMessage(`Update: list`);
+      document.getElementById("addItem").value = "";
+    } else {
+      //add rejection function here
+      alert("Website not available")
+    }
+  }
+
+  function pingSite(site) {
+    return new Promise(function (resolve, reject) {
+      var link = document.createElement('img');
+      link.src = `https://${site}/favicon.ico`
+      link.style = "display: none;"
+      link.onload = function () {
+          resolve(true);
+      };
+      link.onerror = function () {
+          resolve(false);
+      };
+      document.body.appendChild(link);
+    });
   }
 
   function parseURL(site){
     let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
-    let name = site.includes("www") ? site.split(".")[1] : site;
+    let name = site.includes("www") ? site.split(".")[1] : site.split(".")[0];
     return {host: host, name: name}
   }
 </script>
@@ -83,7 +109,7 @@
           <tr>
             <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
             to certain buttons in the row. -->
-            <th scope="row">{item.name}</th>
+            <th scope="row"><img src={`https://${item.host}/favicon.ico`} alt="Favicon">{item.name}</th>
             <td>{item.host}</td>
             <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
           </tr>
