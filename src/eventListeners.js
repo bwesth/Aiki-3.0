@@ -313,10 +313,14 @@ function addWindowFocusChangeListener() {
   chrome.windows.onFocusChanged.addListener(focusChangeCallback);
 }
 
+//Solution is to use window.focused to check if ANY window is focused.
+// setInterval(function() {
+//   chrome.windows.getCurrent(function(window) {
+//       console.log("This is the window ID: " + window.id + ", and this is whether it is focused: " + window.focused)
+//   });
+// }, 1000);
+
 function focusChangeCallback(windowId) {
-  //TODO: Trying to add a window focus fix here???
-  //TODO: chrome.windows.onFocusChanged DOES NOT FIRE as expected when tabbing off of Chrome. Issue since 2014. :P
-  
   // Don't want windows without websites
   if (windowId > -1) {
     // Gotta get the active tab in the now focused window
@@ -393,6 +397,26 @@ function focusChangeCallback(windowId) {
         }
       }
     });
+  } else {
+    //TODO: Work in progress!
+    chrome.windows.getCurrent((window)=>{
+      if (!window.focused) {
+        const event = {
+          tag: "SESSIONEND",
+          name: currentName || "",
+          user: user,
+          navigationType: "Window unfocused",
+          eventDetails: window,
+        };
+        if (learningSites.includes(currentName)) {
+          logLearningEvent(event);
+        } else {
+          logProcrastinationEvent(event);
+        }
+        configSessionEndListeners();
+        currentName = undefined;
+      }
+    })
   }
 }
 
