@@ -4,6 +4,9 @@
   import storage from '../../../util/storage'
   import { logConfigEvent } from "../../../util/logger"
 
+  import Fa from 'svelte-fa'
+  import { faUser, faUserSlash, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+
   export let user = "";
   export let userIsRegistered;
   export let port;
@@ -53,9 +56,9 @@
 
 <SettingsContainer headline="Register UID">
     {#if userIsRegistered}
-      <p>Registered User ID: </p>
+      <h5>Registered User ID:</h5>
       <input class="form-control" type="text" placeholder={user} readonly>
-      <button class="btn btn-danger" on:click={resetUID}>Reset User ID</button>
+      <button class="btn btn-danger" on:click={resetUID}><Fa icon={faUserSlash}/> Reset User ID</button>
     {:else}
     <h5>Add your UID here so we can log your activity:</h5>
     <hr>
@@ -72,7 +75,7 @@
     <div class="input-group mb-3">
       <input bind:value={user} type="text" class="form-control" placeholder="Enter your UID here..." aria-label="" aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button on:click={confirmUID} class="btn btn-primary" type="button">Submit</button>
+        <button on:click={confirmUID} class="btn btn-primary" type="button"><Fa icon={faUserPlus}/> Submit</button>
       </div>
     </div>
     {/if}

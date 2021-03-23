@@ -8,6 +8,9 @@
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
+  
+  import Fa from 'svelte-fa'
+  import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
   $: user = "";
   $: userIsRegistered = false;
@@ -37,7 +40,7 @@
     <div class="container">
       <SetWebsites {user} {port} />
     </div>
-    {/if}
+    {/if} 
     <Footer/>
   </div>
 </main>

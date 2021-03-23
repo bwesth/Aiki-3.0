@@ -4,6 +4,9 @@
   import storage from "../../../util/storage"
   import { logConfigEvent } from "../../../util/logger"
 
+  import Fa from 'svelte-fa'
+  import { faTrashAlt, faGlobe, faKeyboard } from '@fortawesome/free-solid-svg-icons'
+
   export let user = "";
   export let port;
   $: list = [];
@@ -105,9 +108,9 @@
     <table class="table">
       <thead class="thead-light ">
         <tr>
-          <th scope="col">Page Name</th>
-          <th scope="col">Page URL</th>
-          <th scope="col">Remove Site</th>
+          <th scope="col"><Fa icon={faKeyboard}/> Page Name</th>
+          <th scope="col"><Fa icon={faGlobe}/> Page URL</th>
+          <th scope="col"><Fa icon={faTrashAlt}/> Remove Site</th>
         </tr>
       </thead>
       <tbody>
@@ -124,7 +127,7 @@
               {item.host}
             </td>
             <td>
-              <button on:click={() => removeItem(index)} type="button" class="btn btn-danger">x</button>
+              <Fa icon={faTrashAlt} primaryColor="red" on:click={() => removeItem(index)}/>
             </td>
           </tr>
         {/each}
