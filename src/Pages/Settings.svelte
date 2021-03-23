@@ -8,7 +8,6 @@
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
-  import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
 
   $: user = "";
   $: userIsRegistered = false;
