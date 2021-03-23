@@ -314,10 +314,12 @@ function addWindowFocusChangeListener() {
 }
 
 setInterval(function () {
-  if (currentName) {
-    chrome.windows.getCurrent((window) => {
-      console.log(!window.focused);
+  chrome.windows.getCurrent((window) => {
+    if (currentName) {
+      // Session ongoing
       if (!window.focused) {
+        // Window not focused
+        console.log(!window.focused);
         const event = {
           tag: "SESSIONEND",
           name: currentName || "",
@@ -333,12 +335,29 @@ setInterval(function () {
         configSessionEndListeners();
         currentName = undefined;
       }
-    });
-  } else {
-    chrome.windows.getCurrent((window) => {
-      console.log(window);
-    });
-  }
+    } else {
+      // Session not going on
+      if (window.focused) {
+        // Now check for if site is in list
+        chrome.tabs.query({ active: true, currentWindow: true }, (result) => {
+          console.log(result[0].url);
+          let name = parseUrlToName(result[0].url);
+          console.log(parseUrlToName(name));
+          if (procrastinationSites.includes(name)) {
+            currentName = name;
+          //If the name of the new tab is in our procNameList, then we need to start a new proc session.
+          logProcrastinationEvent({
+            tag: "SESSIONSTART",
+            name: currentName || "",
+            user: user,
+            navigationType: "Window focused",
+            eventDetails: result,
+          });
+          }
+        });
+      }
+    }
+  });
 }, 2500);
 
 function focusChangeCallback(windowId) {
