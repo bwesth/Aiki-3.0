@@ -1,7 +1,11 @@
 import browser from "webextension-polyfill";
+
 import listeners from "./eventListeners";
 import storage from "./util/storage";
+import bstorage from "./util/browserStorage";
 import { updateProcrastinationSites, updateUser } from "./eventListeners";
+
+console.log(bstorage.getRedirectionToggled())
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
