@@ -34,7 +34,7 @@ function changeSite() {
     {/each}
     </ul>
 
-    <p>Whenever you visit one of these sites, we will track and log the time you spend there.</p>
+    <p>Whenever you visit one of these sites, we will log the amount of time you spend there.</p>
 </SettingsContainer>
 
 <style>

@@ -5,6 +5,7 @@
 <script>
   import Footer from "./Components/Settings/Footer.svelte";
   import Header from "./Components/Settings/Header.svelte";
+  import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
@@ -23,19 +24,23 @@
 </script>
 
 <main>
-  <Header/>
-  <div class="container">
-    <SetUser bind:user bind:userIsRegistered {port} />
+  <div class="flex-wrapper">
+    <Header/>
+    {#if !userIsRegistered}
+    <div class="container">
+      <Privacy />
+    </div>
+    {/if}
+    <div class="container">
+      <SetUser bind:user bind:userIsRegistered {port} />
+    </div>
+    {#if userIsRegistered}
+    <div class="container">
+      <SetWebsites {user} {port} />
+    </div>
+    {/if}
+    <Footer/>
   </div>
-  {#if userIsRegistered}
-  <div class="container">
-    <SetWebsites {user} {port} />
-  </div>
-  <div class="container">
-    <SetLearningSites {user} />
-  </div>
-  {/if}
-  <Footer/>
 </main>
 
 <style>
@@ -46,5 +51,12 @@
 
   main {
     height:100%;
+  }
+
+  .flex-wrapper {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start;
   }
 </style>

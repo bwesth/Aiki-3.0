@@ -57,13 +57,14 @@
       <input class="form-control" type="text" placeholder={user} readonly>
       <button class="btn btn-danger" on:click={resetUID}>Reset User ID</button>
     {:else}
-    <h5>Add your UID here so we can track your usage:</h5>
+    <h5>Add your UID here so we can log your activity:</h5>
     <hr>
     <p><strong>Note:</strong> Please make sure you enter the correct UID provided to you by email. If you provide the incorrect one, your
-      data will become mixed up with another test participant.</p>
+      data is likely to become mixed up with another participant.</p>
     <p>Secondly, please note that you may be asked to re-enter your UID if you clear your cache or browser history, in order
-        for us to resume tracking.</p>
-    <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:aiki.itu.info@gmail.com">aiki.itu.info@gmail.com</a> for assistance</p>
+        for us to resume logging.</p>
+    <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:aiki.itu.info@gmail.com">aiki.itu.info@gmail.com</a> 
+      for assistance</p>
 
     <hr>
     <!-- Bootstrap Input field. -->

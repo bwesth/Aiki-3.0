@@ -7,6 +7,7 @@
 <style>
     footer {
         text-align: center;
+        margin-top: auto;
         margin:0;
         bottom: 0;
         width: 100%;

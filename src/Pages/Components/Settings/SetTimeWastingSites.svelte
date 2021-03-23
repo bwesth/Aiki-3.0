@@ -75,6 +75,11 @@
     return {host: host, name: name}
   }
 
+  function firstLetterUppercase(string) 
+  {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
 </script>
 
 <SettingsContainer headline="Set Time Wasting Sites">
@@ -82,7 +87,7 @@
     <hr>
     <p>Type in pages you feel like you spend a little too much time 
       on here (e.g. www.facebook.com, www.reddit.com, 9gag.com):</p>
-    <p><strong>NB:</strong> You can still visit these websites, we will just be tracking
+    <p><strong>NB:</strong> You can still visit these websites, we will just be logging
       the amount of time you spend on them.</p>
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
@@ -104,7 +109,7 @@
         <tr>
           <th scope="col">Page Name</th>
           <th scope="col">Page URL</th>
-          <th scope="col">Remove Site from List</th>
+          <th scope="col">Remove</th>
         </tr>
       </thead>
       <tbody>
@@ -112,15 +117,16 @@
           <tr>
             <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
             to certain buttons in the row. -->
-            <th scope="row"><img 
+            <th scope="row"><img class="webFavicon"
               src={`https://${item.host}/favicon.ico`} 
               alt="Favicon" 
               on:error={(event) => event.target.remove()}
             >
-              {item.name}
+              {firstLetterUppercase(item.name)}
             </th>
+            <!-- TODO: make working HREF's here? -->
             <td>{item.host}</td>
-            <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
+            <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">x</button></td>
           </tr>
         {/each}
       </tbody>
@@ -131,4 +137,14 @@
 </SettingsContainer>
 
 <style>
+  .webFavicon {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 10px;
+  }
+
+  button {
+    width: 1em;
+    height: 1em;
+  }
 </style>
