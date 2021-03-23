@@ -51,12 +51,13 @@
 
   main {
     height:100%;
+    background-color: #f0f2f5;
   }
 
-  .flex-wrapper {
+  /* .flex-wrapper {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
   justify-content: flex-start;
-  }
+  } */
 </style>

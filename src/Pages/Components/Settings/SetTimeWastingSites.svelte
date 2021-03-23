@@ -26,9 +26,10 @@
 
   //TODO: Somehow have to call updateProcrastinationSites here...
   async function addItem() {
-    let site = parseURL(addItemValue)
+    let site = parseURL(addItemValue);
+    console.log(site);
     if (list.find(item => item.name == site.name)) {
-      alert("Website already in list.")
+      alert("Website already in list.");
       return;
     }
     //Need some defensive checking here. Is a website, empty strings, already on list, etc.
@@ -36,7 +37,7 @@
     console.log(status)
     if (status) {
       let newList = [...list]
-      newList.push(site)
+      newList.push(site);
       list = newList;
       storage.setList(list);
       logConfigEvent({
@@ -71,7 +72,7 @@
 
   function parseURL(site){
     let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
-    let name = site.includes("www") ? site.split(".")[1] : site.split(".")[0];
+    let name = host.includes("www") ? host.split(".")[1] : host.split(".")[0];
     return {host: host, name: name}
   }
 
@@ -91,7 +92,6 @@
       the amount of time you spend on them.</p>
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
-    <!-- Important functionality needed here! -->
     <form on:submit|preventDefault={addItem}>
       <div class="input-group mb-3">
         <input bind:value={addItemValue} id="addItem" type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
@@ -101,22 +101,18 @@
       </div>
     </form>
 
-    <!-- Insert bootstrap table thing here -->
-    <!-- Need to somehow create functionality tying this table to the above input. Aiki has some very impressive
-    functionality here that would be nice to mimic. -->
+    {#if list.length > 0}
     <table class="table">
       <thead class="thead-light ">
         <tr>
           <th scope="col">Page Name</th>
           <th scope="col">Page URL</th>
-          <th scope="col">Remove</th>
+          <th scope="col">Remove Site</th>
         </tr>
       </thead>
       <tbody>
         {#each list as item, index}
           <tr>
-            <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
-            to certain buttons in the row. -->
             <th scope="row"><img class="webFavicon"
               src={`https://${item.host}/favicon.ico`} 
               alt="Favicon" 
@@ -124,27 +120,45 @@
             >
               {firstLetterUppercase(item.name)}
             </th>
-            <!-- TODO: make working HREF's here? -->
-            <td>{item.host}</td>
-            <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">x</button></td>
+            <td>
+              {item.host}
+            </td>
+            <td>
+              <button on:click={() => removeItem(index)} type="button" class="btn btn-danger">x</button>
+            </td>
           </tr>
         {/each}
       </tbody>
     </table>
-
+    {/if}
     <!-- Add pagination for more than 10 sites? -->
 
 </SettingsContainer>
 
 <style>
+  thead {
+    padding: 20px;
+    color: #444;
+  }
+
+  th {
+    padding: 15px;
+    color: #444;
+  }
+
+  td {
+    padding: 15px;
+    color: #444;
+  }
+
   .webFavicon {
     width: 1.2em;
     height: 1.2em;
     margin-right: 10px;
   }
 
-  button {
-    width: 1em;
-    height: 1em;
+  .btn-danger {
+    width: 1.2em;
+    height: 1.2em;
   }
 </style>
