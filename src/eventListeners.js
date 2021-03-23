@@ -22,41 +22,43 @@ export function updateUser() {
 
 //FIXME: In general, probably need to do a naming pass on this whole script.
 function userOnSite(details) {
-  // Checking if top frame (loads of different frames load on major sites)
-  if (details.frameId == "0") {
-    let name = parseUrlToName(details.url);
-    // Getting list of the active tabs in each chrome window
-    chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
-      // Just need the IDs
-      // Checking if the event tab is active in any open chrome window.
-      // If not, the site was opened in a non-active widnow (like when you use middle-mouse-button)
-      if (response[0].id === details.tabId) {
-        if (procrastinationSites.includes(name)) {
-          // Procrastination session started
-          currentName = name;
-          logProcrastinationEvent({
-            tag: "SESSIONSTART",
-            name: currentName || "",
-            user: user,
-            navigationType: "Web Navigation",
-            eventDetails: details,
-          });
-          configSessionStartListeners();
+  if (!currentName) {
+    // Checking if top frame (loads of different frames load on major sites)
+    if (details.frameId == "0") {
+      let name = parseUrlToName(details.url);
+      // Getting list of the active tabs in each chrome window
+      chrome.tabs.query({ active: true, currentWindow: true }, (response) => {
+        // Just need the IDs
+        // Checking if the event tab is active in any open chrome window.
+        // If not, the site was opened in a non-active widnow (like when you use middle-mouse-button)
+        if (response[0].id === details.tabId) {
+          if (procrastinationSites.includes(name)) {
+            // Procrastination session started
+            currentName = name;
+            logProcrastinationEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Web Navigation",
+              eventDetails: details,
+            });
+            configSessionStartListeners();
+          }
+          if (learningSites.includes(name)) {
+            // learning session started
+            currentName = name;
+            logLearningEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Web Navigation",
+              eventDetails: details,
+            });
+            configSessionStartListeners();
+          }
         }
-        if (learningSites.includes(name)) {
-          // learning session started
-          currentName = name;
-          logLearningEvent({
-            tag: "SESSIONSTART",
-            name: currentName || "",
-            user: user,
-            navigationType: "Web Navigation",
-            eventDetails: details,
-          });
-          configSessionStartListeners();
-        }
-      }
-    });
+      });
+    }
   }
 }
 
@@ -345,14 +347,14 @@ setInterval(function () {
           console.log(parseUrlToName(name));
           if (procrastinationSites.includes(name)) {
             currentName = name;
-          //If the name of the new tab is in our procNameList, then we need to start a new proc session.
-          logProcrastinationEvent({
-            tag: "SESSIONSTART",
-            name: currentName || "",
-            user: user,
-            navigationType: "Window focused",
-            eventDetails: result,
-          });
+            //If the name of the new tab is in our procNameList, then we need to start a new proc session.
+            logProcrastinationEvent({
+              tag: "SESSIONSTART",
+              name: currentName || "",
+              user: user,
+              navigationType: "Window focused",
+              eventDetails: result,
+            });
           }
         });
       }
