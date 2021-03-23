@@ -61,7 +61,9 @@
           resolve(true);
       };
       link.onerror = function () {
-          resolve(false);
+          const confirmation = confirm(`Could not establish connection to https://${site}/\nBe sure to check the spelling.
+          \nDo you want to add it anyway?`);
+          confirmation ? resolve(true) : resolve(false);
       };
       document.body.appendChild(link);
     });
@@ -72,6 +74,7 @@
     let name = site.includes("www") ? site.split(".")[1] : site.split(".")[0];
     return {host: host, name: name}
   }
+
 </script>
 
 <SettingsContainer headline="Set Time Wasting Sites">
@@ -109,7 +112,13 @@
           <tr>
             <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
             to certain buttons in the row. -->
-            <th scope="row"><img src={`https://${item.host}/favicon.ico`} alt="Favicon">{item.name}</th>
+            <th scope="row"><img 
+              src={`https://${item.host}/favicon.ico`} 
+              alt="Favicon" 
+              on:error={(event) => event.target.remove()}
+            >
+              {item.name}
+            </th>
             <td>{item.host}</td>
             <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
           </tr>
