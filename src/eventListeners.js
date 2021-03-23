@@ -313,12 +313,33 @@ function addWindowFocusChangeListener() {
   chrome.windows.onFocusChanged.addListener(focusChangeCallback);
 }
 
-//Solution is to use window.focused to check if ANY window is focused.
-// setInterval(function() {
-//   chrome.windows.getCurrent(function(window) {
-//       console.log("This is the window ID: " + window.id + ", and this is whether it is focused: " + window.focused)
-//   });
-// }, 1000);
+setInterval(function () {
+  if (currentName) {
+    chrome.windows.getCurrent((window) => {
+      console.log(!window.focused);
+      if (!window.focused) {
+        const event = {
+          tag: "SESSIONEND",
+          name: currentName || "",
+          user: user,
+          navigationType: "Window unfocused",
+          eventDetails: window,
+        };
+        if (learningSites.includes(currentName)) {
+          logLearningEvent(event);
+        } else {
+          logProcrastinationEvent(event);
+        }
+        configSessionEndListeners();
+        currentName = undefined;
+      }
+    });
+  } else {
+    chrome.windows.getCurrent((window) => {
+      console.log(window);
+    });
+  }
+}, 2500);
 
 function focusChangeCallback(windowId) {
   // Don't want windows without websites
@@ -397,9 +418,12 @@ function focusChangeCallback(windowId) {
         }
       }
     });
-  } else {
-    //TODO: Work in progress!
-    chrome.windows.getCurrent((window)=>{
+  }
+  //TODO: Work in progress!
+  else if (currentName) {
+    setTimeout(100);
+    chrome.windows.getCurrent((window) => {
+      console.log(!window.focused);
       if (!window.focused) {
         const event = {
           tag: "SESSIONEND",
@@ -416,7 +440,7 @@ function focusChangeCallback(windowId) {
         configSessionEndListeners();
         currentName = undefined;
       }
-    })
+    });
   }
 }
 
