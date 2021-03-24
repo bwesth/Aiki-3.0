@@ -10,7 +10,7 @@ import SettingsContainer from "./SettingsContainer.svelte";
     sites. However, we will only log the time spent on each site, nothing more. We will not know what you visited on those pages, only name of 
     the root site.</p>
 
-<p><strong>For example:</strong> We will know that you spent 45 seconds on Facebook.com on Tuesday, but absolutely nothing about the content 
+<p><strong>For example:</strong> The extension logs that you spent 45 seconds on Facebook.com on Tuesday, but absolutely nothing about the content 
     of the Facebook pages you had open. We will later use this data to see if our extension helped you to procrastinate a little less.</p>
 
 <p>In an effort to increase security, we will be tying your data to a User ID (UID) which is a unique number we will use to identify you. 
