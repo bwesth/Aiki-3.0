@@ -2,6 +2,9 @@
 <!-- To begin with, the popup will only have a settings button for the logger. -->
 
 <script>
+  import Fa from 'svelte-fa'
+  import { faCog, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
+
 /* Opens a new tab with settings page and selects it */
   function openSettingsPage () {
     chrome.management.getSelf(result => {
@@ -22,7 +25,7 @@
     <hr> 
     <div class="container">
       <h6 class="item">Settings:</h6>
-      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}>Settings</button>
+      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
     </div>
     <hr>
   </div>

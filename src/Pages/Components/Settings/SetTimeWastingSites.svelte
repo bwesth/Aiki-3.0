@@ -5,7 +5,7 @@
   import { logConfigEvent } from "../../../util/logger"
 
   import Fa from 'svelte-fa'
-  import { faTrashAlt, faGlobe, faKeyboard } from '@fortawesome/free-solid-svg-icons'
+  import { faTrashAlt, faGlobe, faKeyboard, faTimes } from '@fortawesome/free-solid-svg-icons'
 
   export let user = "";
   export let port;
@@ -110,7 +110,7 @@
         <tr>
           <th scope="col"><Fa icon={faKeyboard}/> Page Name</th>
           <th scope="col"><Fa icon={faGlobe}/> Page URL</th>
-          <th scope="col"><Fa icon={faTrashAlt}/> Remove Site</th>
+          <th scope="col" style="text-align: center"><Fa icon={faTrashAlt}/> Remove Site</th>
         </tr>
       </thead>
       <tbody>
@@ -126,8 +126,10 @@
             <td>
               {item.host}
             </td>
-            <td>
-              <Fa icon={faTrashAlt} primaryColor="red" on:click={() => removeItem(index)}/>
+            <td style="text-align: center">
+              <div on:click={() => removeItem(index)}>
+                <Fa icon={faTimes} primaryColor="red"/>
+              </div>
             </td>
           </tr>
         {/each}
@@ -160,8 +162,8 @@
     margin-right: 10px;
   }
 
-  .btn-danger {
+  /* .btn-danger {
     width: 1.2em;
     height: 1.2em;
-  }
+  } */
 </style>
