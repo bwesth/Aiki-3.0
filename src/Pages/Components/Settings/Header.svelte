@@ -18,7 +18,7 @@
         background-color: #282C34;;
         margin: 0;
         padding: 0;
-        height: 6em;
+        height: 4em;
         width: 100%;
     }
 </style>

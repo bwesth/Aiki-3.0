@@ -22,5 +22,6 @@ Other components are placed into the <slot> element of this component -->
 		padding: 1.5em;
 		background-color: white;
 		color: #444;
+		width: 100%;
 	}
 </style>

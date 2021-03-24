@@ -60,7 +60,7 @@
   main {
     flex-grow: 1;
     flex-shrink: 0;
-    margin-top: 6em;
+    margin-top: 4em;
     background-color: #f0f2f5;
   }
 
