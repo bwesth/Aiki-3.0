@@ -1,3 +1,5 @@
+import browser from "webextension-polyfill";
+
 import { logProcrastinationEvent, logLearningEvent } from "./util/logger.js";
 import storage from "./util/storage";
 import { learningSites } from "./util/constants";
@@ -5,6 +7,9 @@ import { learningSites } from "./util/constants";
 let currentName;
 let user;
 let procrastinationSites = [];
+
+// browser.storage.local.set({list: ["test"]})
+// console.log("Waaaat", browser.storage.local.get("list"))
 
 export function updateProcrastinationSites() {
   console.log("Syncing proc list with storage");
