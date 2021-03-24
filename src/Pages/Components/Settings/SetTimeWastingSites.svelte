@@ -127,7 +127,7 @@
               {item.host}
             </td>
             <td style="text-align: center">
-              <div on:click={() => removeItem(index)}>
+              <div title="Remove Site" on:click={() => removeItem(index)}>
                 <Fa icon={faTimes} primaryColor="red"/>
               </div>
             </td>

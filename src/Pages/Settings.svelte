@@ -22,8 +22,7 @@
 
 </script>
 
-<div class="bigboi">
-  <div class="smolboi">
+<div class="settings">
     <Header/>
     <main>
         {#if !userIsRegistered}
@@ -40,29 +39,29 @@
         </div>
         {/if} 
     </main>
-  </div>
   <Footer/>
 </div>
 
 <style>
 
-  .bigboi {
+  .settings {
     display:flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: stretch;
     height: 100%;
     background-color: #f0f2f5;
-  }
-
-  .smolboi {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
   }
 
   .container {
     margin:auto;
     padding:30px;
+  }
+
+  main {
+    flex-grow: 1;
+    flex-shrink: 0;
+    margin-top: 6em;
+    background-color: #f0f2f5;
   }
 
 </style>

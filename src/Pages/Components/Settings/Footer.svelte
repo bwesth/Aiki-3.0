@@ -8,7 +8,7 @@
 
 <style>
     footer {
-        align-self: flex-end;
+        flex-shrink: 0;
         text-align: center;
         margin-top: auto;
         margin:0;
