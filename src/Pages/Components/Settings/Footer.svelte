@@ -8,6 +8,7 @@
 
 <style>
     footer {
+        align-self: flex-end;
         text-align: center;
         margin-top: auto;
         margin:0;

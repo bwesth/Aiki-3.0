@@ -22,41 +22,47 @@
 
 </script>
 
-<main>
-  <div class="flex-wrapper">
+<div class="bigboi">
+  <div class="smolboi">
     <Header/>
-    {#if !userIsRegistered}
-    <div class="container">
-      <Privacy />
-    </div>
-    {/if}
-    <div class="container">
-      <SetUser bind:user bind:userIsRegistered {port} />
-    </div>
-    {#if userIsRegistered}
-    <div class="container">
-      <SetWebsites {user} {port} />
-    </div>
-    {/if} 
-    <Footer/>
+    <main>
+        {#if !userIsRegistered}
+        <div class="container">
+          <Privacy />
+        </div>
+        {/if}
+        <div class="container">
+          <SetUser bind:user bind:userIsRegistered {port} />
+        </div>
+        {#if userIsRegistered}
+        <div class="container">
+          <SetWebsites {user} {port} />
+        </div>
+        {/if} 
+    </main>
   </div>
-</main>
+  <Footer/>
+</div>
 
 <style>
+
+  .bigboi {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    background-color: #f0f2f5;
+  }
+
+  .smolboi {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
   .container {
     margin:auto;
     padding:30px;
   }
 
-  main {
-    height:100%;
-    background-color: #f0f2f5;
-  }
-
-  /* .flex-wrapper {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  justify-content: flex-start;
-  } */
 </style>
