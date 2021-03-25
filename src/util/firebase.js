@@ -10,67 +10,20 @@ var firebaseConfig = {
   appId: "1:664157650460:web:244badc7671a88cf3fe9d9",
   measurementId: "G-GNDXYW96DS",
 };
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-async function addDoc(UID) {
-  const res = await db.collection(UID).doc().set({});
-}
-
-async function addEntry(entry) {
-  const res = await db
-    .collection(entry.user)
-    .doc(entry.date.date)
-    .set(
-      {
-        [entry.date.timestamp]: entry,
-      },
-      { merge: true }
-    );
-}
-
-async function addProcrastinationEvent(entry) {
+async function addLogEntry(entry) {
   const res = await db
     .collection("user_logs")
     .doc(entry.user)
     .collection("dates")
-    .doc(entry.date.date)
-    .collection("procrastination_site_logs")
+    .doc(entry.date.dateString)
+    .collection("session_logs")
     .doc("" + entry.date.timestamp)
-    .set(
-      {
-        date: entry.date,
-        eventDetails: entry.eventDetails,
-        name: entry.name,
-        navigationType: entry.navigationType,
-        tag: entry.tag,
-        user: entry.user,
-      },
-      { merge: true }
-    );
-}
-
-async function addLearningEvent(entry) {
-  const res = await db
-    .collection("user_logs")
-    .doc(entry.user)
-    .collection("dates")
-    .doc(entry.date.date)
-    .collection("learning_site_logs")
-    .doc("" + entry.date.timestamp)
-    .set(
-      {
-        date: entry.date,
-        eventDetails: entry.eventDetails,
-        name: entry.name,
-        navigationType: entry.navigationType,
-        tag: entry.tag,
-        user: entry.user,
-      },
-      { merge: true }
-    );
+    .set(entry, { merge: true });
 }
 
 async function addConfigLog(entry) {
@@ -78,7 +31,7 @@ async function addConfigLog(entry) {
     .collection("user_logs")
     .doc(entry.user)
     .collection("dates")
-    .doc(entry.date.date)
+    .doc(entry.date.dateString)
     .collection("config_logs")
     .doc("" + entry.date.timestamp)
     .set(
@@ -93,8 +46,6 @@ async function addConfigLog(entry) {
 }
 
 export default {
-  addEntry,
-  addProcrastinationEvent,
+  addLogEntry,
   addConfigLog,
-  addLearningEvent,
 };

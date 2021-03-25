@@ -17,10 +17,6 @@
     name: "Settings Communication"
   });
 
-  port.onMessage.addListener(function(msg) {
-      console.log("message recieved" + msg);
-  });
-
 </script>
 
 <div class="settings">
