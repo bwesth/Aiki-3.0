@@ -1,7 +1,7 @@
 <!-- This component is rendered as a block on the settings page for users to input their time wasting websites.-->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
-  import storage from "../../../util/storage"
+  import storage from "../../../util/browserStorage"
   import { logConfigEvent } from "../../../util/logger"
 
   import Fa from 'svelte-fa'
@@ -10,7 +10,10 @@
   export let user = "";
   export let port;
   $: list = [];
-  storage.getList(data => list = data);
+  async function setup() {
+    list = await storage.getList();
+  }
+  setup()
   let addItemValue = "";
 
   //TODO: Somehow have to call updateProcrastinationSites here...

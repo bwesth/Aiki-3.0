@@ -1,7 +1,7 @@
 <!-- This component is rendered as a block on the settings page for users to input their UID for logging purposes.-->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
-  import storage from '../../../util/storage'
+  import storage from '../../../util/browserStorage'
   import { logConfigEvent } from "../../../util/logger"
 
   import Fa from 'svelte-fa'
@@ -11,15 +11,9 @@
   export let userIsRegistered;
   export let port;
 
-  function setup() {
-    storage.getUID(uid => {
-      user = uid
-      if (user!=="") {
-        userIsRegistered = true;
-      } else {
-        userIsRegistered = false;
-      }
-    });
+  async function setup() {
+    user = await storage.getUID()
+    userIsRegistered = (user!=="") ? true : false;
   }
   
   //TODO: Somehow have to call updateUser in the background script...
