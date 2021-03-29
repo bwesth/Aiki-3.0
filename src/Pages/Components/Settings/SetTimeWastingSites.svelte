@@ -18,12 +18,12 @@
 
   //TODO: Somehow have to call updateProcrastinationSites here...
   function removeItem(index) {
-    firebase.addConfigLog({
+    firebase.addLog({
       user: user,
       event: "User removed procrastination site",
       site: list[index],
       date: makeDate()
-    })
+    }, "config")
     let newList = [...list]
     newList.splice(index, 1);
     list = newList;
@@ -45,12 +45,12 @@
       newList.push(site);
       list = newList;
       storage.setList(list);
-      firebase.addConfigLog({
+      firebase.addLog({
         user: user,
         event: "User added procrastination site",
         site: site,
         date: makeDate()
-      })
+      }, "config")
       port.postMessage(`Update: list`);
       document.getElementById("addItem").value = "";
     } else {

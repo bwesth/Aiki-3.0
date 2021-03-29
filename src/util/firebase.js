@@ -15,37 +15,29 @@ firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
 
-async function addLogEntry(entry) {
-  const res = await db
-    .collection("user_logs")
-    .doc(entry.user)
-    .collection("dates")
-    .doc(entry.date.dateString)
-    .collection("session_logs")
+async function resolveDoc(ref) {
+  const res = await ref.get();
+  const active = res.data();
+  if (!active) {
+    const res = await ref.set({ active: true }, { merge: true });
+  }
+}
+
+async function addEntry(entry, reference, type) {
+  const entryRes = await reference
+    .collection(type + "_logs")
     .doc("" + entry.date.timestamp)
     .set(entry, { merge: true });
 }
 
-async function addConfigLog(entry) {
-  const res = await db
-    .collection("user_logs")
-    .doc(entry.user)
-    .collection("dates")
-    .doc(entry.date.dateString)
-    .collection("config_logs")
-    .doc("" + entry.date.timestamp)
-    .set(
-      {
-        date: entry.date,
-        user: entry.user,
-        event: entry.event,
-        site: entry.site ? entry.site : "",
-      },
-      { merge: true }
-    );
+async function addLog(entry, type) {
+  const userRef = db.collection("user_logs").doc(entry.user);
+  resolveDoc(userRef);
+  const dateRef = userRef.collection("dates").doc(entry.date.dateString);
+  resolveDoc(dateRef);
+  addEntry(entry, dateRef, type);
 }
 
 export default {
-  addLogEntry,
-  addConfigLog,
+  addLog,
 };

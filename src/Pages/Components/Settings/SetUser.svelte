@@ -22,11 +22,11 @@
     if (confirmation) {
       storage.setUid(user);
       let date = makeDate()
-      firebase.addConfigLog({
+      firebase.addLog({
         user: user,
         event: "Added user ID to storage",
         date: date
-      })
+      }, "config")
       userIsRegistered = true;
       port.postMessage(`Update: user`);
     }
@@ -35,11 +35,11 @@
   function resetUid() {
     const confirmation = confirm("Are you certain you want to reset your UID?");
     if (confirmation) {
-      firebase.addConfigLog({
+      firebase.addLog({
         user: user,
         event: "Reset user ID in storage",
         date: makeDate()
-      })
+      }, "config")
       storage.setUid("");
       userIsRegistered = false;
       user = "";

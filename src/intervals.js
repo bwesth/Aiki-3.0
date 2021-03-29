@@ -84,8 +84,8 @@ async function syncList() {
 function storeData(data) {
   if (user) {
     const entry = { data: data, user: user, date: makeDate() };
-    console.log(entry);
-    firebase.addLogEntry(entry);
+    console.log("Logging:", entry);
+    firebase.addLog(entry, "session");
   }
 }
 
