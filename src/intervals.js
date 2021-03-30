@@ -28,7 +28,6 @@ async function counter() {
     const name = parseUrl(result[0].url).name;
     if (list.includes(name)) {
       data[name] = data[name] ? data[name] + 1 : 1;
-      console.log(data);
     }
   } else {
     data.chromeInactive++;
@@ -72,7 +71,6 @@ async function restartLogger() {
 
 async function syncUser() {
   const result = await storage.getUid();
-  console.log(result);
   user = result;
 }
 
