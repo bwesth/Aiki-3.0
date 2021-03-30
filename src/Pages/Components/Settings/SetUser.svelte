@@ -2,7 +2,8 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from '../../../util/storage'
-  import { logConfigEvent } from "../../../util/logger"
+  import firebase from '../../../util/firebase'
+  import { makeDate } from '../../../util/utilities'
 
   import Fa from 'svelte-fa'
   import { faUser, faUserSlash, faUserPlus} from '@fortawesome/free-solid-svg-icons'
@@ -11,39 +12,35 @@
   export let userIsRegistered;
   export let port;
 
-  function setup() {
-    storage.getUID(uid => {
-      user = uid
-      if (user!=="") {
-        userIsRegistered = true;
-      } else {
-        userIsRegistered = false;
-      }
-    });
+  async function setup() {
+    user = await storage.getUid()
+    userIsRegistered = (user!=="") ? true : false;
   }
   
-  //TODO: Somehow have to call updateUser in the background script...
-  function confirmUID(){
+  function confirmUid(){
     const confirmation = confirm("Are you certain the user ID is correct?");
     if (confirmation) {
-      storage.setUID(user);
-      logConfigEvent({
+      storage.setUid(user);
+      let date = makeDate()
+      firebase.addLog({
         user: user,
-        event: "Added user ID to storage"
-      })
+        event: "Added user ID to storage",
+        date: date
+      }, "config")
       userIsRegistered = true;
       port.postMessage(`Update: user`);
     }
   }
 
-  function resetUID() {
+  function resetUid() {
     const confirmation = confirm("Are you certain you want to reset your UID?");
     if (confirmation) {
-      logConfigEvent({
+      firebase.addLog({
         user: user,
-        event: "Reset user ID in storage"
-      })
-      storage.setUID("");
+        event: "Reset user ID in storage",
+        date: makeDate()
+      }, "config")
+      storage.setUid("");
       userIsRegistered = false;
       user = "";
       port.postMessage(`Update: user`);
@@ -58,7 +55,7 @@
     {#if userIsRegistered}
       <h5>Registered User ID:</h5>
       <input class="form-control" type="text" placeholder={user} readonly>
-      <button class="btn btn-danger" on:click={resetUID}><Fa icon={faUserSlash}/> Reset User ID</button>
+      <button class="btn btn-danger" on:click={resetUid}><Fa icon={faUserSlash}/> Reset User ID</button>
     {:else}
     <h5>Add your UID here so we can log your activity:</h5>
     <hr>
@@ -75,7 +72,7 @@
     <div class="input-group mb-3">
       <input bind:value={user} type="text" class="form-control" placeholder="Enter your UID here..." aria-label="" aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button on:click={confirmUID} class="btn btn-primary" type="button"><Fa icon={faUserPlus}/> Submit</button>
+        <button on:click={confirmUid} class="btn btn-primary" type="button"><Fa icon={faUserPlus}/> Submit</button>
       </div>
     </div>
     {/if}

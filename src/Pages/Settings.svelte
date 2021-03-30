@@ -3,6 +3,7 @@
   This gathers all the settings components and displays them for the user to change the behaviour
   of the application.-->
 <script>
+  import browser from "webextension-polyfill";
   import Footer from "./Components/Settings/Footer.svelte";
   import Header from "./Components/Settings/Header.svelte";
   import Privacy from "./Components/Settings/Privacy.svelte";
@@ -12,12 +13,8 @@
   $: user = "";
   $: userIsRegistered = false;
 
-  var port = chrome.extension.connect({
+  var port = browser.extension.connect({
     name: "Settings Communication"
-  });
-
-  port.onMessage.addListener(function(msg) {
-      console.log("message recieved" + msg);
   });
 
 </script>
