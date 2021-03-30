@@ -6,7 +6,7 @@
   import { makeDate } from '../../../util/utilities'
 
   import Fa from 'svelte-fa'
-  import { faUser, faUserSlash, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+  import { faUserSlash, faUserPlus} from '@fortawesome/free-solid-svg-icons'
 
   export let user = "";
   export let userIsRegistered;
@@ -18,7 +18,7 @@
   }
   
   //TODO: Somehow have to call updateUser in the background script...
-  function confirmUID(){
+  function confirmUid(){
     const confirmation = confirm("Are you certain the user ID is correct?");
     if (confirmation) {
       storage.setUid(user);
@@ -33,7 +33,7 @@
     }
   }
 
-  function resetUID() {
+  function resetUid() {
     const confirmation = confirm("Are you certain you want to reset your UID?");
     if (confirmation) {
       firebase.addLog({
