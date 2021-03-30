@@ -2,24 +2,28 @@
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage"
-  import { logConfigEvent } from "../../../util/logger"
-
+  import firebase from '../../../util/firebase'
+  import { parseUrl, makeDate } from '../../../util/utilities'
   import Fa from 'svelte-fa'
   import { faTrashAlt, faGlobe, faKeyboard, faTimes } from '@fortawesome/free-solid-svg-icons'
 
   export let user = "";
   export let port;
   $: list = [];
-  storage.getList(data => list = data);
+  async function setup() {
+    list = await storage.getList();
+  }
+  setup()
   let addItemValue = "";
 
   //TODO: Somehow have to call updateProcrastinationSites here...
   function removeItem(index) {
-    logConfigEvent({
+    firebase.addLog({
       user: user,
       event: "User removed procrastination site",
-      site: list[index]
-    })
+      site: list[index],
+      date: makeDate()
+    }, "config")
     let newList = [...list]
     newList.splice(index, 1);
     list = newList;
@@ -29,25 +33,24 @@
 
   //TODO: Somehow have to call updateProcrastinationSites here...
   async function addItem() {
-    let site = parseURL(addItemValue);
-    console.log(site);
+    let site = parseUrl(addItemValue);
     if (list.find(item => item.name == site.name)) {
       alert("Website already in list.");
       return;
     }
     //Need some defensive checking here. Is a website, empty strings, already on list, etc.
     let status = await pingSite(site.host)
-    console.log(status)
     if (status) {
       let newList = [...list]
       newList.push(site);
       list = newList;
       storage.setList(list);
-      logConfigEvent({
+      firebase.addLog({
         user: user,
         event: "User added procrastination site",
-        site: site
-      })
+        site: site,
+        date: makeDate()
+      }, "config")
       port.postMessage(`Update: list`);
       document.getElementById("addItem").value = "";
     } else {
@@ -71,12 +74,6 @@
       };
       document.body.appendChild(link);
     });
-  }
-
-  function parseURL(site){
-    let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
-    let name = host.includes("www") ? host.split(".")[1] : host.split(".")[0];
-    return {host: host, name: name}
   }
 
   function firstLetterUppercase(string) 

@@ -1,60 +1,43 @@
-const storage = chrome.storage.sync;
+import browser from "webextension-polyfill";
+const storage = browser.storage.local;
 
 function toggleRedirection() {
-  storage.get("toggled", (data) => {
-    storage.set({ toggled: !data.toggled });
-  });
+  storage
+    .get("toggled")
+    .then((data) => storage.set({ toggled: !data.toggled }));
 }
 
-function getRedirectionToggled(callback) {
-  storage.get("toggled", (data) => {
-    callback(data.toggled);
-  });
+async function getUserData(){
+  const result = await storage.get(["list", "uid"])
+  return result;
+}
+
+async function getRedirectionToggled() {
+  const result = await storage.get("toggled");
+  return result.toggled;
 }
 
 function setList(list) {
   storage.set({ list: list });
 }
 
-function getList(callback) {
-  storage.get("list", (data) => callback(data.list));
+async function getList() {
+  let result = await storage.get("list");
+  return result.list;
 }
 
-function setUID(uid) {
-  storage.set({ uid: uid }, function (value) {
-    console.log("User ID saved in storage");
-  });
+function setUid(uid) {
+  storage.set({ uid: uid });
 }
 
-function getUID(callback) {
-  storage.get("uid", (data) => callback(data.uid));
+async function getUid() {
+  let result = await storage.get("uid");
+  return result.uid;
 }
 
-function updateSiteTime(siteName, timeSpent) {
-  storage.set({ [siteName]: timeSpent }, function (value) {
-    console.log(`Time spent on ${siteName} updated to ${timeSpent}`);
-  });
-}
-
-function getSiteTime(siteName, callback) {
-  storage.get(sitename, (data) => callback(data[siteName]));
-}
-
-function getSiteTimeList(sites, callback) {
-  let list = sites.map((site) => getSiteTime(site, (data) => data));
-  callback(list);
-}
-
-function getLearningSites(callback) {
-  storage.get("learningSites", (data) => callback(data.learningSites));
-}
-
-function setLearningSites(list) {
-  storage.set({ learningSites: list });
-}
-
-function getRedirectionSite(callback) {
-  storage.get("redirectionSite", (data) => callback(data.redirectionSite));
+async function getRedirectionSite() {
+  let result = await storage.get("redirectionSite");
+  return result.redirectionSite;
 }
 
 function setRedirectionSite(siteName) {
@@ -62,17 +45,13 @@ function setRedirectionSite(siteName) {
 }
 
 export default {
+  getUserData,
   setList,
   getList,
-  setUID,
-  getUID,
-  updateSiteTime,
-  getSiteTime,
-  getSiteTimeList,
+  setUid,
+  getUid,
   getRedirectionSite,
   setRedirectionSite,
-  setLearningSites,
-  getLearningSites,
   toggleRedirection,
   getRedirectionToggled,
 };

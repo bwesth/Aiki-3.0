@@ -1,43 +1,31 @@
 import browser from "webextension-polyfill";
-import listeners from "./eventListeners";
+import intervals from "./intervals";
 import storage from "./util/storage";
-import { updateProcrastinationSites, updateUser } from "./eventListeners";
 
-chrome.runtime.onInstalled.addListener(({ reason }) => {
+browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
     alert("Welcome to Aiki 3");
     const urls = [];
     storage.setList(urls);
-    storage.setLearningSites([]);
-    storage.toggleRedirection();
-    storage.setUID("");
+    storage.setUid("");
   }
 });
 
-// First-time setup of listeners
-listeners.addOnTabActivatedListener();
-listeners.addOnSiteListeners();
-listeners.addOnWindowsCloseListener();
-listeners.addWindowFocusChangeListener();
-
-chrome.extension.onConnect.addListener(function (port) {
-  console.log("Connected .....");
+browser.extension.onConnect.addListener(function (port) {
   port.onMessage.addListener(function (msg) {
-    console.log("message recieved " + msg);
-    console.log(msg.split(": ")[1]);
     switch (msg.split(": ")[1]) {
       case "user":
-        updateUser();
+        intervals.restartLogger();
         break;
       case "list":
-        updateProcrastinationSites();
+        intervals.restartCounter();
         break;
     }
     port.postMessage("Response message");
   });
 });
 
-setTimeout(() => {
-  updateProcrastinationSites();
-  updateUser();
-}, 100);
+intervals.intervalSetup();
+intervals.startCounter();
+intervals.startLogger();
+intervals.addOnWindowsCloseListener();
