@@ -1,6 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/firebase-firestore";
-import obscureUser from './security'
+import { hash } from "./security";
 
 var firebaseConfig = {
   apiKey: "AIzaSyBY03Fx1mT9Oe2qmP4gcLJlWTF5nXVibRA",
@@ -32,7 +32,7 @@ async function addEntry(entry, reference, type) {
 }
 
 async function addLog(entry, type) {
-  entry.user = obscureUser(entry.user)
+  entry.user = hash(entry.user);
   const userRef = db.collection("user_logs").doc(entry.user);
   resolveDoc(userRef);
   const dateRef = userRef.collection("dates").doc(entry.date.dateString);
