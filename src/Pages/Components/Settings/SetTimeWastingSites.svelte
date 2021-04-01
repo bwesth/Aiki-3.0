@@ -22,6 +22,21 @@
   setup();
   let addItemValue = "";
 
+  const successTheme = {
+    "--toastBackground": "green",
+    "--toastColor": "black",
+  };
+
+  const warningTheme = {
+    "--toastBackground": "red",
+    "--toastColor": "black",
+  };
+
+  const infoTheme = {
+    "--toastBackground": "yellow",
+    "--toastColor": "black",
+  };
+
   function removeItem(index) {
     firebase.addLog(
       {
@@ -37,14 +52,7 @@
     list = newList;
     storage.setList(list);
     port.postMessage(`Update: list`);
-    toast.push("Website removed!", { theme: {
-    '--toastBackground': 'black',
-    '--toastColor': 'white',
-    '--toastContainerTop': '5rem',
-    '--toastContainerRight': 'auto',
-    '--toastContainerBottom': 'auto',
-    '--toastContainerLeft': 'auto'
-  }});
+    toast.push("Website removed!", { theme: successTheme });
   }
 
   async function addItem() {
@@ -53,7 +61,7 @@
     }
     let site = parseUrl(addItemValue);
     if (list.find((item) => item.name == site.name)) {
-      alert("Website already in list.");
+      toast.push("Website already in list.", { theme: infoTheme });
       return;
     }
     let status = await pingSite(site.host);
@@ -73,10 +81,10 @@
       );
       port.postMessage(`Update: list`);
       addItemValue = "";
-      toast.push("New Website Added!");
+      toast.push("New Website Added!", { theme: successTheme });
     } else {
       //add rejection function here
-      alert("Website not available");
+      toast.push("Website not available", { theme: infoTheme });
     }
   }
 

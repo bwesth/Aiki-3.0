@@ -17,8 +17,6 @@
   var port = browser.extension.connect({
     name: "Settings Communication",
   });
-
-  const options = {};
 </script>
 
 <div class="settings">
@@ -40,7 +38,7 @@
   </main>
   <Footer />
 </div>
-<SvelteToast {options} />
+<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
 
 <style>
   .settings {
@@ -61,5 +59,12 @@
     flex-shrink: 0;
     margin-top: 4em;
     background-color: #f0f2f5;
+  }
+
+  :root {
+    --toastContainerTop: auto;
+    --toastContainerRight: auto;
+    --toastContainerBottom: 8rem;
+    --toastContainerLeft: calc(50vw - 8rem);
   }
 </style>
