@@ -16,7 +16,6 @@
   setup()
   let addItemValue = "";
 
-  //TODO: Somehow have to call updateProcrastinationSites here...
   function removeItem(index) {
     firebase.addLog({
       user: user,
@@ -31,14 +30,16 @@
     port.postMessage(`Update: list`);
   }
 
-  //TODO: Somehow have to call updateProcrastinationSites here...
   async function addItem() {
+    if (addItemValue === "") {
+      return
+    }
     let site = parseUrl(addItemValue);
     if (list.find(item => item.name == site.name)) {
       alert("Website already in list.");
       return;
     }
-    //Need some defensive checking here. Is a website, empty strings, already on list, etc.
+  //FIXME: Not checking for empty input
     let status = await pingSite(site.host)
     if (status) {
       let newList = [...list]
