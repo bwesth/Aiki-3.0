@@ -4,9 +4,9 @@
   import storage from '../../../util/storage'
   import firebase from '../../../util/firebase'
   import { makeDate } from '../../../util/utilities'
-
   import Fa from 'svelte-fa'
   import { faUserSlash, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+  import { toast } from "@zerodevx/svelte-toast";
 
   export let user = "";
   export let userIsRegistered;
@@ -29,6 +29,7 @@
       }, "config")
       userIsRegistered = true;
       port.postMessage(`Update: user`);
+      toast.push("User registered!");
     }
   }
 
@@ -44,6 +45,7 @@
       userIsRegistered = false;
       user = "";
       port.postMessage(`Update: user`);
+      toast.push("User removed!");
     } 
   }
   //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...

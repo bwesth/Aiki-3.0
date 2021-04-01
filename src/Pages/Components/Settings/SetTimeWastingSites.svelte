@@ -37,7 +37,14 @@
     list = newList;
     storage.setList(list);
     port.postMessage(`Update: list`);
-    toast.push("Website removed!");
+    toast.push("Website removed!", { theme: {
+    '--toastBackground': 'black',
+    '--toastColor': 'white',
+    '--toastContainerTop': '5rem',
+    '--toastContainerRight': 'auto',
+    '--toastContainerBottom': 'auto',
+    '--toastContainerLeft': 'auto'
+  }});
   }
 
   async function addItem() {
