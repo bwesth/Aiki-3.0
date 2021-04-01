@@ -21,3 +21,4 @@ switch (new URL(window.location).searchParams.get("page")) {
 
 <svelte:component this={selected} />
 
+
