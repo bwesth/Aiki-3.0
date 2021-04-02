@@ -1,6 +1,5 @@
 function getCoords(id) {
     const rect = document.getElementById(id).getBoundingClientRect();
-    console.log(rect);
     return rect;
   }
 
