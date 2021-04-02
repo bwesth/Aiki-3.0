@@ -1,10 +1,7 @@
 <!-- This component is rendered as a block on the settings page as a footer.-->
-<script>
-    import Fa from 'svelte-fa'
-    import { faCopyright } from '@fortawesome/free-solid-svg-icons'
-</script>
 
-<footer>IT University of Copenhagen <Fa icon={faCopyright}/> 2021</footer>
+
+<footer>IT University of Copenhagen 2021</footer>
 
 <style>
     footer {
