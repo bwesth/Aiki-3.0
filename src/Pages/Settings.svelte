@@ -38,7 +38,7 @@
   </main>
   <Footer />
 </div>
-<SvelteToast options={{ reversed: true, intro: { y: 192 } }} />
+<SvelteToast options={{ reversed: true, intro: { x: 192 } }} />
 
 <style>
   .settings {
@@ -62,9 +62,9 @@
   }
 
   :root {
-    --toastContainerTop: auto;
+    --toastContainerTop: 0;
     --toastContainerRight: auto;
-    --toastContainerBottom: 8rem;
-    --toastContainerLeft: calc(50vw - 8rem);
+    --toastContainerBottom: auto;
+    --toastContainerLeft: 0;
   }
 </style>

@@ -12,30 +12,19 @@
     faTimes,
   } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
+  import * as themes from "./util/toastThemes";
 
   export let user = "";
   export let port;
   $: list = [];
+
+  let toastCoords = { y: "add-button", x: "site-input-container" };
+
   async function setup() {
     list = await storage.getList();
   }
   setup();
   let addItemValue = "";
-
-  const successTheme = {
-    "--toastBackground": "green",
-    "--toastColor": "black",
-  };
-
-  const warningTheme = {
-    "--toastBackground": "red",
-    "--toastColor": "black",
-  };
-
-  const infoTheme = {
-    "--toastBackground": "yellow",
-    "--toastColor": "black",
-  };
 
   function removeItem(index) {
     firebase.addLog(
@@ -52,7 +41,10 @@
     list = newList;
     storage.setList(list);
     port.postMessage(`Update: list`);
-    toast.push("Website removed!", { theme: successTheme });
+    toast.pop();
+    toast.push("Website removed!", {
+      theme: themes.successTheme(toastCoords),
+    });
   }
 
   async function addItem() {
@@ -61,7 +53,10 @@
     }
     let site = parseUrl(addItemValue);
     if (list.find((item) => item.name == site.name)) {
-      toast.push("Website already in list.", { theme: infoTheme });
+      toast.pop();
+      toast.push("Website already in list.", {
+        theme: themes.infoTheme(toastCoords),
+      });
       return;
     }
     let status = await pingSite(site.host);
@@ -81,10 +76,16 @@
       );
       port.postMessage(`Update: list`);
       addItemValue = "";
-      toast.push("New Website Added!", { theme: successTheme });
+      toast.pop();
+      toast.push("New Website Added!", {
+        theme: themes.successTheme(toastCoords),
+      });
     } else {
       //add rejection function here
-      toast.push("Website not available", { theme: infoTheme });
+      toast.pop();
+      toast.push("Website not available", {
+        theme: themes.infoTheme(toastCoords),
+      });
     }
   }
 
@@ -110,7 +111,7 @@
   }
 </script>
 
-<SettingsContainer headline="Set Time Wasting Sites">
+<SettingsContainer id="site-input-container" headline="Set Time Wasting Sites">
   <h5>Add your Time Wasting Sites here:</h5>
   <hr />
   <p>
@@ -135,7 +136,8 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button class="btn btn-primary" type="submit">Add</button>
+        <button id="add-button" class="btn btn-primary" type="submit">Add</button
+        >
       </div>
     </div>
   </form>

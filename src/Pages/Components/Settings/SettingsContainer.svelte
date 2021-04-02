@@ -2,10 +2,11 @@
 Other components are placed into the <slot> element of this component -->
 <script>
 	export let headline;
+	export let id = ""
 </script>
 
 <h4>{headline}</h4>
-<div class="container">
+<div id={id} class="container">
     <slot></slot>
 </div>
 
