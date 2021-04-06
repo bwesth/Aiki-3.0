@@ -61,17 +61,15 @@
       userIsRegistered = false;
       user = "";
       port.postMessage(`Update: user`);
-      // toast.pop()
-      // toast.push("User removed!", themes.infoTheme("user-settings", "userAddButton"));
     }
   }
-  //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...
+
   setup();
 </script>
 
-<SettingsContainer id="user-settings" headline="Register UID">
+<SettingsContainer id="user-settings" headline="Register Email">
   {#if userIsRegistered}
-    <h5>Registered User ID:</h5>
+    <h5>Registered Email:</h5>
     <input
       id="id-input-field"
       class="form-control"
@@ -80,7 +78,7 @@
       readonly
     />
     <button class="btn btn-danger" on:click={resetUid}
-      ><Fa icon={faUserSlash} /> Reset User ID</button
+      ><Fa icon={faUserSlash} /> Reset Email</button
     >
   {:else}
     <h5>Add your email here so we can log your activity:</h5>
@@ -109,7 +107,7 @@
         bind:value={user}
         type="text"
         class="form-control"
-        placeholder="Enter your UID here..."
+        placeholder="Enter your email here..."
         aria-label=""
         aria-describedby="basic-addon2"
       />
