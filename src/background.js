@@ -4,7 +4,9 @@ import storage from "./util/storage";
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
-    alert("Welcome to Aiki 3");
+    browser.tabs.create({
+      url: `chrome-extension://${browser.runtime.id}/index.html?page=settings"`
+    });
     const urls = [];
     storage.setList(urls);
     storage.setUid("");
