@@ -9,40 +9,40 @@
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
 
   $: user = "";
   $: userIsRegistered = false;
 
   var port = browser.extension.connect({
-    name: "Settings Communication"
+    name: "Settings Communication",
   });
-
 </script>
 
 <div class="settings">
-    <Header/>
-    <main>
-        {#if !userIsRegistered}
-        <div class="container">
-          <Privacy />
-        </div>
-        {/if}
-        <div class="container">
-          <SetUser bind:user bind:userIsRegistered {port} />
-        </div>
-        {#if userIsRegistered}
-        <div class="container">
-          <SetWebsites {user} {port} />
-        </div>
-        {/if} 
-    </main>
-  <Footer/>
+  <Header />
+  <main>
+    {#if !userIsRegistered}
+      <div class="container">
+        <Privacy />
+      </div>
+    {/if}
+    <div class="container">
+      <SetUser bind:user bind:userIsRegistered {port} />
+    </div>
+    {#if userIsRegistered}
+      <div class="container">
+        <SetWebsites {user} {port} />
+      </div>
+    {/if}
+  </main>
+  <Footer />
 </div>
+<SvelteToast options={{ reversed: true, intro: { x: 192 } }} />
 
 <style>
-
   .settings {
-    display:flex;
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     height: 100%;
@@ -50,8 +50,8 @@
   }
 
   .container {
-    margin:auto;
-    padding:30px;
+    margin: auto;
+    padding: 30px;
   }
 
   main {
@@ -61,4 +61,10 @@
     background-color: #f0f2f5;
   }
 
+  :root {
+    --toastContainerTop: 0;
+    --toastContainerRight: auto;
+    --toastContainerBottom: auto;
+    --toastContainerLeft: 0;
+  }
 </style>

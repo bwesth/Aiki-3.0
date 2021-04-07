@@ -32,7 +32,7 @@ async function addEntry(entry, reference, type) {
 }
 
 async function addLog(entry, type) {
-  entry.user = hash(entry.user);
+  entry.user = `${hash(entry.user)}`;
   const userRef = db.collection("user_logs").doc(entry.user);
   resolveDoc(userRef);
   const dateRef = userRef.collection("dates").doc(entry.date.dateString);
