@@ -9,7 +9,7 @@ import SettingsContainer from "./SettingsContainer.svelte";
     you add to it as procrastination sites. However, Aiki will only log the time spent (in seconds) on each 
     procrastination site, nothing more. Aiki will not know anything about any webpages you do not add to it.
     As for the the content of the pages you do add, only the name of the root site (ie: Youtube.com, 
-    Facebook.com, etc).</p>
+    Facebook.com, etc) will be logged.</p>
 
 <p><strong>For example:</strong> You added Facebook.com as a procrastination site to Aiki. You then visited 
     Facebook for 45 seconds on Tuesday. Aiki would log that you spent 45 seconds on Facebook.com on Tuesday, 
