@@ -4,14 +4,19 @@ import storage from "./util/storage";
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
-    browser.tabs.create({
-      url: `chrome-extension://${browser.runtime.id}/index.html?page=settings"`
-    });
-    const urls = [];
-    storage.setList(urls);
-    storage.setUid("");
+    setup();
   }
 });
+
+async function setup() {
+  storage.setList([]);
+  storage.setUid("");
+  const extRef = await browser.management.getSelf();
+  browser.tabs.create({
+    active: true,
+    url: extRef.optionsUrl,
+  });
+}
 
 browser.extension.onConnect.addListener(function (port) {
   port.onMessage.addListener(function (msg) {
