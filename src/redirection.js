@@ -16,9 +16,9 @@ async function createFilter() {
     return filter;
 }
 
-function myfunction () {
-    
+function redirect () {
+    location.replace("www.codecademy.com")
 }
 
-browser.webNavigation.onBeforeNavigate.addListener(myfunction, createFilter());
+browser.webNavigation.onBeforeNavigate.addListener(redirect, createFilter());
 
