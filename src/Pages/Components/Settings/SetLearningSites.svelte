@@ -5,8 +5,7 @@ import storage from "../../../util/storage";
 import { learningSites } from "../../../util/constants";
 import { logConfigEvent } from "../../../util/logger"
 
-// let list = [];
-// storage.getLearningSites(data => list = data)
+// let redirectionUri = storage.getRedirectionSite();
 
 let selected;
 storage.getRedirectionSite(data => selected = data)
@@ -31,7 +30,7 @@ function changeSite() {
 
     <ul>
     {#each learningSites as site}
-      <li><a href="{site}">{site}</a></li>
+      <li><a href="https://{site.host}">{site.name}</a></li>
     {/each}
     </ul>
 
