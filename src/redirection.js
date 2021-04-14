@@ -4,7 +4,7 @@ import browser from "webextension-polyfill";
 
 async function createFilter() {
   const procList = await storage.getList();
-
+  console.log(procList)
   let url = procList.map((item) => {
     return { hostContains: `.${item.name}.` };
   });

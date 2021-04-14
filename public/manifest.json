@@ -9,7 +9,8 @@
     "permissions": [
       "storage",
       "tabs",
-      "windows"
+      "windows",
+      "webNavigation"
     ],
     "background": {
       "scripts": ["build/background.js"],
