@@ -4,7 +4,7 @@ import browser from "webextension-polyfill";
 
 async function createFilter() {
   const procList = await storage.getList();
-  console.log(procList)
+  console.log(procList);
   let url = procList.map((item) => {
     return { hostContains: `.${item.name}.` };
   });
@@ -26,8 +26,15 @@ async function removeNavigationListener() {
   browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
-function redirect() {
-  location.replace("www.codecademy.com");
+async function redirect(details) {
+  if (details.frameId === 0) {
+    const toggled = await storage.getRedirectionToggled();
+    console.log("redirection:",toggled);
+    if (toggled) {
+      console.log(details);
+      browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
+    }
+  }
 }
 
 export default { addNavigationListener, removeNavigationListener };

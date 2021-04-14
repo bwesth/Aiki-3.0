@@ -4,11 +4,13 @@ const storage = browser.storage.local;
 function toggleRedirection() {
   storage
     .get("toggled")
-    .then((data) => storage.set({ toggled: !data.toggled }));
+    .then((data) => {
+      storage.set({ toggled: !data.toggled });
+    });
 }
 
-async function getUserData(){
-  const result = await storage.get(["list", "uid"])
+async function getUserData() {
+  const result = await storage.get(["list", "uid"]);
   return result;
 }
 

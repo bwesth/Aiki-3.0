@@ -1,8 +1,8 @@
   {
     "manifest_version": 2,
-    "name": "Aiki 3",
-    "description": "Procrastination Interception Tool",
-    "version": "0.0.0.3",
+    "name": "Aiki Phase 2",
+    "description": "Testing testing",
+    "version": "1.0.1",
     "icons": {
       "128": "/images/aikido.png"
     },

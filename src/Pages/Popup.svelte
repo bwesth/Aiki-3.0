@@ -3,7 +3,11 @@
 
 <script>
   import Fa from 'svelte-fa'
-  import { faCog } from '@fortawesome/free-solid-svg-icons'
+  import { faCog, faDotCircle } from '@fortawesome/free-solid-svg-icons'
+  import storage from '../util/storage'
+
+  $: toggled = false;
+  toggled = storage.getRedirectionToggled();
 
 /* Opens a new tab with settings page and selects it */
   function openSettingsPage () {
@@ -14,6 +18,13 @@
           })
       })
   }
+
+  //Not the best name.
+  function toggleRedirection () {
+    storage.toggleRedirection();
+    toggled = !toggled;
+  }
+
 </script>
 
 <main>
@@ -27,11 +38,10 @@
       <h6 class="item">Settings:</h6>
       <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
     </div>
+    <hr>
     <div class="container">
-      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
-    </div>
-    <div class="container">
-      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
+      <button type="default" class="btn btn-danger item" on:click={toggleRedirection}><Fa icon={faDotCircle}/> Toggle</button>
+      <p>{toggled ? "On" : "Off"}</p>
     </div>
     <hr>
   </div>
