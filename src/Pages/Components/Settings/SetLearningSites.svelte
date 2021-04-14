@@ -19,9 +19,10 @@ function changeSite() {
     site: selected
   })
 }
+
 </script>
 
-<SettingsContainer headline="Learning Sites">
+<SettingsContainer headline="Learning Site">
     <h5>We can recommend these platforms for learning Python:</h5>
     <hr>
     <p>For the purposes of the test we have curated a list of sites which we recommend you use to learn

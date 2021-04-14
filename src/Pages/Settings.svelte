@@ -10,6 +10,7 @@
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import { SvelteToast } from "@zerodevx/svelte-toast";
+import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
 
   $: user = "";
   $: userIsRegistered = false;
@@ -33,6 +34,9 @@
     {#if userIsRegistered}
       <div class="container">
         <SetWebsites {user} {port} />
+      </div>
+      <div class="container">
+        <SetLearningSites/>
       </div>
     {/if}
   </main>
