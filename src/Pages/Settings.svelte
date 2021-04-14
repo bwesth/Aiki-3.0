@@ -10,12 +10,12 @@
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import { SvelteToast } from "@zerodevx/svelte-toast";
-import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
+  import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
 
   $: user = "";
   $: userIsRegistered = false;
 
-  var port = browser.extension.connect({
+  const port = browser.extension.connect({
     name: "Settings Communication",
   });
 </script>
@@ -36,7 +36,7 @@ import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
         <SetWebsites {user} {port} />
       </div>
       <div class="container">
-        <SetLearningSites/>
+        <SetLearningSites />
       </div>
     {/if}
   </main>

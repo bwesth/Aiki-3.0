@@ -28,6 +28,8 @@ browser.extension.onConnect.addListener(function (port) {
       case "list":
         intervals.restartCounter();
         break;
+      case "continue":
+        browser.tabs.update();
     }
     port.postMessage("Response message");
   });

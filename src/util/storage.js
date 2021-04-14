@@ -2,11 +2,9 @@ import browser from "webextension-polyfill";
 const storage = browser.storage.local;
 
 function toggleRedirection() {
-  storage
-    .get("toggled")
-    .then((data) => {
-      storage.set({ toggled: !data.toggled });
-    });
+  storage.get("toggled").then((data) => {
+    storage.set({ toggled: !data.toggled });
+  });
 }
 
 async function getUserData() {
@@ -46,8 +44,24 @@ function setRedirectionSite(siteName) {
   storage.set({ redirectionSite: siteName });
 }
 
+function setOriginUrl(url) {
+  storage.set({ originUrl: url });
+}
+
+async function getOriginUrl() {
+  let result = await storage.get("originUrl");
+  return result.originUrl;
+}
+
+function removeOriginUrl() {
+  storage.remove("originUrl");
+}
+
 export default {
   getUserData,
+  setOriginUrl,
+  getOriginUrl,
+  removeOriginUrl,
   setList,
   getList,
   setUid,

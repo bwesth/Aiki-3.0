@@ -29,8 +29,9 @@ async function removeNavigationListener() {
 async function redirect(details) {
   if (details.frameId === 0) {
     const toggled = await storage.getRedirectionToggled();
-    console.log("redirection:",toggled);
+    console.log("redirection:", toggled);
     if (toggled) {
+      storage.setOriginUrl(details.url);
       console.log(details);
       browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
     }

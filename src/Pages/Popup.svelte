@@ -1,49 +1,76 @@
-<!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <!-- To begin with, the popup will only have a settings button for the logger. -->
-
 <script>
-  import Fa from 'svelte-fa'
-  import { faCog, faDotCircle } from '@fortawesome/free-solid-svg-icons'
-  import storage from '../util/storage'
+  import Fa from "svelte-fa";
+  import { faCog, faDotCircle } from "@fortawesome/free-solid-svg-icons";
+  import { parseUrl } from "../util/utilities";
+  import storage from "../util/storage";
+
+  const port = browser.extension.connect({
+    name: "Popup Communication",
+  });
+
+  function pushButton() {
+    port.postMessage("Hjaelp mig");
+  }
 
   $: toggled = false;
   toggled = storage.getRedirectionToggled();
 
-/* Opens a new tab with settings page and selects it */
-  function openSettingsPage () {
-    chrome.management.getSelf(result => {
-          chrome.tabs.create({
-              active: true,
-              url: result.optionsUrl
-          })
-      })
+  $: originUrl = "";
+  originUrl = storage.getOriginUrl();
+
+  $: siteName = parseUrl(originUrl).name;
+
+  /* Opens a new tab with settings page and selects it */
+  function openSettingsPage() {
+    chrome.management.getSelf((result) => {
+      chrome.tabs.create({
+        active: true,
+        url: result.optionsUrl,
+      });
+    });
   }
 
   //Not the best name.
-  function toggleRedirection () {
+  function toggleRedirection() {
     storage.toggleRedirection();
     toggled = !toggled;
   }
-
 </script>
+
+<!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
+
 
 <main>
   <div class="popup">
     <div class="container" style="margin-top: 10px">
-      <img src='images/aikido.png' class="icon item" alt="Aiki logo"/>
+      <img src="images/aikido.png" class="icon item" alt="Aiki logo" />
       <h5 class="header item">Aiki 3.0</h5>
     </div>
-    <hr> 
+    <hr />
     <div class="container">
       <h6 class="item">Settings:</h6>
-      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
+      <button
+        type="default"
+        class="btn btn-primary item"
+        on:click={openSettingsPage}><Fa icon={faCog} /> Settings</button
+      >
     </div>
-    <hr>
+    <hr />
     <div class="container">
-      <button type="default" class="btn btn-danger item" on:click={toggleRedirection}><Fa icon={faDotCircle}/> Toggle</button>
+      <button
+        type="default"
+        class="btn btn-danger item"
+        on:click={toggleRedirection}><Fa icon={faDotCircle} /> Toggle</button
+      >
       <p>{toggled ? "On" : "Off"}</p>
     </div>
-    <hr>
+    <hr />
+    <div class="container">
+      <button type="default" class="btn btn-secondary item"
+        ><Fa icon={faDotCircle} /> Continue to {siteName}</button
+      >
+    </div>
   </div>
 </main>
 
@@ -75,19 +102,19 @@
   }
 
   hr {
-    height:1px;
-    border-width:0;
-    color:gray;
-    background-color:gray;
+    height: 1px;
+    border-width: 0;
+    color: gray;
+    background-color: gray;
     width: 90%;
     margin: 10px 10px;
   }
 
   main {
-    background-color:#282C34;
+    background-color: #282c34;
     color: white;
     text-align: center;
-    height:fit-content;
-    width:250px;
+    height: fit-content;
+    width: 250px;
   }
 </style>
