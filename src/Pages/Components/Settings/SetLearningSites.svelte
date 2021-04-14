@@ -3,21 +3,10 @@
 import SettingsContainer from "./SettingsContainer.svelte";
 import storage from "../../../util/storage";
 import { learningSites } from "../../../util/constants";
-import { logConfigEvent } from "../../../util/logger"
-
-// let redirectionUri = storage.getRedirectionSite();
 
 let selected;
-storage.getRedirectionSite(data => selected = data)
 
-function changeSite() {
-  storage.setRedirectionSite(selected)
-  logConfigEvent({
-    user: "",
-    event: "User changed redirection site",
-    site: selected
-  })
-}
+storage.getRedirectionSite(data => selected = data)
 
 </script>
 

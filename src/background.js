@@ -1,6 +1,7 @@
 import browser from "webextension-polyfill";
 import intervals from "./intervals";
 import storage from "./util/storage";
+import redirection from "./redirection";
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -36,3 +37,4 @@ intervals.intervalSetup();
 intervals.startCounter();
 intervals.startLogger();
 intervals.addOnWindowsCloseListener();
+redirection.addNavigationListener();
