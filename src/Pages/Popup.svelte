@@ -3,7 +3,7 @@
 
 <script>
   import Fa from 'svelte-fa'
-  import { faCog, faHourglassHalf } from '@fortawesome/free-solid-svg-icons'
+  import { faCog } from '@fortawesome/free-solid-svg-icons'
 
 /* Opens a new tab with settings page and selects it */
   function openSettingsPage () {
@@ -25,6 +25,12 @@
     <hr> 
     <div class="container">
       <h6 class="item">Settings:</h6>
+      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
+    </div>
+    <div class="container">
+      <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
+    </div>
+    <div class="container">
       <button type="default" class="btn btn-primary item" on:click={openSettingsPage}><Fa icon={faCog}/> Settings</button>
     </div>
     <hr>
