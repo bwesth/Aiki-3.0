@@ -12,7 +12,7 @@
   <h5>Your Python Learning Platform:</h5>
   <hr />
 
-  <p>www.codecademy.org</p>
+  <p style="text-align:center"><a href="https://www.codecademy.com">www.codecademy.com</a></p>
 
   <h5>Set Learning Time:</h5>
   <hr />
@@ -20,43 +20,49 @@
     Choose the amount of time you want to spend learning, and how much time you
     are rewarded for doing so.
   </p>
-  <div class="d-inline-flex p-2">
-    <p>Time spent learning:</p>
-  </div>
-  <div class="d-inline-flex p-2">
-    <div class="input-group input-group-sm mb-3">
-      <input
-        type="text"
-        class="form-control"
-        aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm"
-      />
-      <div class="input-group-append">
-        <span class="input-group-text" id="inputGroup-sizing-sm"
-          ><Fa icon={faHourglassHalf} /> Seconds</span
-        >
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <p>Time spent learning:</p>
+          <p>Time you get on your procrastination sites in exchange:</p>
+        </div>
+        <div class="col-sm">
+        </div>
+        <div class="col-sm">
+
+          <div class="input-group input-group-sm mb-3">
+            <input
+              type="text"
+              class="form-control"
+              aria-label="Small"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text" id="inputGroup-sizing-sm"
+                ><Fa icon={faHourglassHalf} /> Seconds</span
+              >
+            </div>
+          </div>
+
+          <div class="input-group input-group-sm mb-3">
+            <input
+              type="text"
+              class="form-control"
+              aria-label="Small"
+              aria-describedby="inputGroup-sizing-sm"
+            />
+            <div class="input-group-append">
+              <span class="input-group-text" id="inputGroup-sizing-sm"
+                ><Fa icon={faHourglassHalf} /> Seconds</span
+              >
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
-  </div>
-  <hr />
-  <div class="d-inline-flex p-2">
-    <p>Time you get on your procrastination sites in exchange:</p>
-  </div>
-  <div class="d-inline-flex p-2">
-    <div class="input-group input-group-sm mb-3">
-      <input
-        type="text"
-        class="form-control"
-        aria-label="Small"
-        aria-describedby="inputGroup-sizing-sm"
-      />
-      <div class="input-group-append">
-        <span class="input-group-text" id="inputGroup-sizing-sm"
-          ><Fa icon={faHourglassHalf} /> Seconds</span
-        >
-      </div>
-    </div>
-  </div>
+
 </SettingsContainer>
 
 <style>
