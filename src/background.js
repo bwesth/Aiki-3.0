@@ -12,6 +12,8 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 async function setup() {
   storage.setList([]);
   storage.setUid("");
+  storage.setRedirectionTime(300);
+  storage.setRewardTime(600);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,

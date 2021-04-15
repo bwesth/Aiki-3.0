@@ -14,16 +14,16 @@
   const port = browser.extension.connect({
     name: "Popup Communication",
   });
-  
+
   $: toggled = false;
   $: siteName = "";
   $: origin = "";
 
   async function setup() {
-    toggled =  await storage.getRedirectionToggled();
+    toggled = await storage.getRedirectionToggled();
     origin = await storage.getOrigin();
   }
-  
+
   $: if (origin.url) {
     siteName = parseUrl(origin.url).name;
   }
@@ -75,25 +75,28 @@
       <h6 class="item">Toggle:</h6>
       <button
         type="default"
-        class="btn {toggled ? "btn-success" : "btn-danger"} item"
+        class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
         on:click={toggleRedirection}
         ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
       >
     </div>
     <hr />
     {#if origin.url}
-    <div class="container">
-      <button type="default" on:click={gotoOrigin} class="btn btn-success item"
-        ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
-      >
-    </div>
-    <hr />
-    <div class="container">
-      <button type="default" class="btn btn-secondary item"
-        ><Fa icon={faSkull} /> Emergency Skip!</button
-      >
-    </div>
-    <hr />
+      <div class="container">
+        <button
+          type="default"
+          on:click={gotoOrigin}
+          class="btn btn-success item"
+          ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
+        >
+      </div>
+      <hr />
+      <div class="container">
+        <button type="default" class="btn btn-secondary item"
+          ><Fa icon={faSkull} /> Emergency Skip!</button
+        >
+      </div>
+      <hr />
     {/if}
   </div>
 </main>

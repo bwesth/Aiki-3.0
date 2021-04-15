@@ -59,6 +59,24 @@ function removeOrigin() {
   storage.remove("origin");
 }
 
+function setRedirectionTime(time) {
+  storage.set({redirectionTime: time})
+}
+
+async function getRedirectionTime() {
+  result = await storage.get("redirectionTime");
+  return result.redirectionTime;
+}
+
+function setRewardTime(time) {
+  storage.set({rewardTime: time})
+}
+
+async function getRewardTime() {
+  result = await storage.get("rewardTime");
+  return result.rewardTime;
+}
+
 export default {
   getUserData,
   setOrigin,
@@ -72,4 +90,8 @@ export default {
   setRedirectionSite,
   toggleRedirection,
   getRedirectionToggled,
+  setRedirectionTime,
+  getRedirectionTime,
+  setRewardTime,
+  getRewardTime
 };
