@@ -17,7 +17,7 @@
 
   $: toggled = false;
   $: siteName = "";
-  $: origin = "";
+  $: origin = {};
 
   async function setup() {
     toggled = await storage.getRedirectionToggled();
@@ -29,7 +29,6 @@
   }
 
   function gotoOrigin() {
-    toggleRedirection();
     port.postMessage("goto: origin");
   }
 
@@ -81,7 +80,7 @@
       >
     </div>
     <hr />
-    {#if origin.url}
+    {#if siteName!==""}
       <div class="container">
         <button
           type="default"
