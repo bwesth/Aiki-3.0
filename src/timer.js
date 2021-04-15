@@ -5,7 +5,6 @@ let intervalRef;
 
 //When redirecting to learning site
 async function startLearningSession() {
-  console.log(intervalRef);
   if (intervalRef) stopBonusTime();
   const time = await storage.getRedirectionTime();
   console.log("Starting learning session for seconds: ", time);
@@ -13,6 +12,7 @@ async function startLearningSession() {
 }
 
 function startBonusTime() {
+  if (intervalRef) stopBonusTime();
   intervalRef = setInterval(incrementEarnedTime, 1000);
 }
 
@@ -22,12 +22,12 @@ function incrementEarnedTime() {
 }
 
 // When redirecting to origin site
-async function startProcrastinationSession() {
+async function startProcrastinationSession(callback) {
   stopBonusTime();
   const rewardTime = await calculateRewardTime();
   earnedTime = 0;
   console.log("Reward time: ", rewardTime);
-  setTimeout(stopPropagationSession, rewardTime);
+  setTimeout(() => stopPropagationSession(callback), rewardTime);
 }
 
 function stopBonusTime() {
@@ -35,9 +35,10 @@ function stopBonusTime() {
   intervalRef = undefined;
 }
 
-function stopPropagationSession() {
+function stopPropagationSession(callback) {
   console.log("Stopping procrastination session");
   storage.setShouldRedirect(true);
+  callback();
 }
 
 async function calculateRewardTime() {
