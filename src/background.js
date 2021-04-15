@@ -2,7 +2,7 @@ import browser from "webextension-polyfill";
 import intervals from "./intervals";
 import storage from "./util/storage";
 import redirection from "./redirection";
-import timer from "./timer";
+
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -12,11 +12,12 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 
 async function setup() {
   await storage.clearStorage();
+  storage.setShouldRedirect(true)
   storage.toggleRedirection();
   storage.setList([]);
   storage.setUid("");
   storage.setRedirectionTime(5000);
-  storage.setRewardTime(5000);
+  storage.setRewardRatio(2);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,

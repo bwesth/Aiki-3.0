@@ -2,6 +2,7 @@ import storage from "./util/storage";
 import { learningSites } from "./util/constants";
 import browser from "webextension-polyfill";
 import timer from "./timer";
+import { parseUrl } from "./util/utilities";
 
 async function createFilter() {
   const procList = await storage.getList();
@@ -22,26 +23,53 @@ async function removeNavigationListener() {
   browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
-async function redirect(details) {
-  if (details.frameId === 0) {
-    const toggled = await storage.getRedirectionToggled();
-    console.log("redirection:", toggled);
-    if (toggled) {
-      console.log("Redirection happening YO!")
-      timer.startLearningSession();
-      storage.setOrigin({ url: details.url, tabId: details.tabId });
-      browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
-    }
-  }
-}
-
 async function restartRedirectionListener() {
   await removeNavigationListener();
   addNavigationListener();
 }
 
+async function redirect(details) {
+  if (details.frameId === 0) {
+    const toggled = await storage.getRedirectionToggled();
+    const shouldRedirect = await storage.getShouldRedirect();
+    console.log(
+      "Redirection toggled?",
+      toggled,
+      "Shoud redirect?",
+      shouldRedirect
+    );
+    if (toggled && shouldRedirect) {
+      timer.startLearningSession();
+      storage.setOrigin({ url: details.url, tabId: details.tabId });
+      browser.tabs.update(details.tabId, {
+        url: `https://${learningSites[0].host}`,
+      });
+    }
+  }
+}
+
+async function checkCurrentTab() {
+  const tabs = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+  if (tabs.length > 0) {
+    const tab = tabs[0];
+    const tabSiteName = parseUrl(tab.url).name
+    const procList = await storage.getList();
+    const procListNames = procList.map(site => site.name)
+    console.log(procListNames);
+    console.log(procListNames.includes(tabSiteName));
+    if (procListNames.includes(tabSiteName)) {
+      console.log(tab)
+      redirect({frameId: 0, url: tab.url, tabId: tab.id});
+    }
+  }
+}
+
 async function gotoOrigin() {
-  timer.startProcrastinationSession()
+  await storage.setShouldRedirect(false);
+  timer.startProcrastinationSession(checkCurrentTab);
   const origin = await storage.getOrigin();
   browser.tabs.update(origin.tabId, { url: origin.url });
   storage.removeOrigin();

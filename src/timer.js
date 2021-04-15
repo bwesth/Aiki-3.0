@@ -3,18 +3,16 @@ import storage from "./util/storage";
 let earnedTime = 0;
 let intervalRef;
 
-//When redirection to learning site
+//When redirecting to learning site
 async function startLearningSession() {
+  if (intervalRef) stopBonusTime();
   const time = await storage.getRedirectionTime();
   console.log("Starting learning session for seconds: ", time);
-  setTimeout(finishLearningReq, time);
-}
-
-function finishLearningReq() {
-  startBonusTime();
+  setTimeout(startBonusTime, time);
 }
 
 function startBonusTime() {
+  if (intervalRef) stopBonusTime();
   intervalRef = setInterval(incrementEarnedTime, 1000);
 }
 
@@ -23,25 +21,31 @@ function incrementEarnedTime() {
   console.log("Earned time: ", earnedTime);
 }
 
-// When redirection to origin site
-
-function startProcrastinationSession() {
-  storage.toggleRedirection();
+// When redirecting to origin site
+async function startProcrastinationSession(callback) {
   stopBonusTime();
-  rewardCountdown();
+  const rewardTime = await calculateRewardTime();
+  earnedTime = 0;
+  console.log("Reward time: ", rewardTime);
+  setTimeout(() => stopPropagationSession(callback), rewardTime);
 }
 
 function stopBonusTime() {
   clearInterval(intervalRef);
+  intervalRef = undefined;
 }
 
-async function rewardCountdown() {
-  const rewardtime = await storage.getRewardTime();
-  console.log("Reward time from storage: ", rewardtime);
-  const finalRewardTime = rewardtime + earnedTime * 1000;
-  console.log("Calculated final reward time: ", finalRewardTime);
-  earnedTime = 0;
-  setTimeout(storage.toggleRedirection, finalRewardTime);
+function stopPropagationSession(callback) {
+  console.log("Stopping procrastination session");
+  storage.setShouldRedirect(true);
+  callback();
+}
+
+async function calculateRewardTime() {
+  const rewardRatio = await storage.getRewardRatio();
+  const redirectionTime = await storage.getRedirectionTime();
+  let rewardTime = rewardRatio * (earnedTime * 1000 + redirectionTime);
+  return Math.floor(rewardTime);
 }
 
 export default {
