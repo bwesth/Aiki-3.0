@@ -44,11 +44,11 @@ function setRedirectionSite(siteName) {
   storage.set({ redirectionSite: siteName });
 }
 
-function setOriginUrl(url) {
+function setOrigin(url) {
   storage.set({ originUrl: url });
 }
 
-async function getOriginUrl() {
+async function getOrigin() {
   let result = await storage.get("originUrl");
   return result.originUrl;
 }
@@ -59,8 +59,8 @@ function removeOriginUrl() {
 
 export default {
   getUserData,
-  setOriginUrl,
-  getOriginUrl,
+  setOrigin,
+  getOrigin,
   removeOriginUrl,
   setList,
   getList,

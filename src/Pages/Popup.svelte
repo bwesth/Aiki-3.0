@@ -15,17 +15,21 @@
     name: "Popup Communication",
   });
 
-  function pushButton() {
-    port.postMessage("Hjaelp mig");
+  function gotoOrigin() {
+    toggleRedirection()
+    port.postMessage("goto: origin");
   }
 
   $: toggled = false;
   toggled = storage.getRedirectionToggled();
 
-  $: originUrl = "";
-  originUrl = storage.getOriginUrl();
+  $: origin = "";
+  origin = storage.getOrigin();
 
-  $: siteName = parseUrl(originUrl).name;
+  $: siteName = "";
+  $: if (origin.url) {
+    siteName = parseUrl(origin.url).name;
+  }
 
   /* Opens a new tab with settings page and selects it */
   function openSettingsPage() {
@@ -39,6 +43,7 @@
 
   //Not the best name.
   function toggleRedirection() {
+    console.log(toggled);
     storage.toggleRedirection();
     toggled = !toggled;
   }
@@ -67,22 +72,26 @@
       <button
         type="default"
         class="btn btn-danger item"
-        on:click={toggleRedirection}><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
+        on:click={toggleRedirection}
+        ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
       >
     </div>
     <hr />
-    <div class="container">
-      <button type="default" class="btn btn-success item"
-        ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
-      >
-    </div>
-    <hr />
-    <div class="container">
-      <button type="default" class="btn btn-secondary item"
-        ><Fa icon={faSkull} /> Emergency Skip!</button
-      >
-    </div>
-    <hr />
+      <div class="container">
+        <button
+          type="default"
+          on:click={gotoOrigin}
+          class="btn btn-success item"
+          ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
+        >
+      </div>
+      <hr />
+      <div class="container">
+        <button type="default" class="btn btn-secondary item"
+          ><Fa icon={faSkull} /> Emergency Skip!</button
+        >
+      </div>
+      <hr />
   </div>
 </main>
 

@@ -4,20 +4,16 @@ import browser from "webextension-polyfill";
 
 async function createFilter() {
   const procList = await storage.getList();
-  console.log(procList);
-  let url = procList.map((item) => {
+  const url = procList.map((item) => {
     return { hostContains: `.${item.name}.` };
   });
-
-  const filter = {
-    url: url,
-  };
-
+  const filter = { url: url };
   return filter;
 }
 
 async function addNavigationListener() {
   const filter = await createFilter();
+  console.log(filter)
   browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
 }
 
@@ -31,11 +27,16 @@ async function redirect(details) {
     const toggled = await storage.getRedirectionToggled();
     console.log("redirection:", toggled);
     if (toggled) {
-      storage.setOriginUrl(details.url);
+      storage.setOrigin({ url: details.url, tabId: details.tabId });
       console.log(details);
       browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
     }
   }
 }
 
-export default { addNavigationListener, removeNavigationListener };
+async function gotoOrigin() {
+  const origin = await storage.getOrigin();
+  browser.tabs.update(origin.tabId, { url: origin.url });
+}
+
+export default { addNavigationListener, removeNavigationListener, gotoOrigin };
