@@ -6,6 +6,7 @@
   import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
   // let selected;
   // storage.getRedirectionSite((data) => (selected = data));
+  // TODO: add storage logic to time settings
 </script>
 
 <SettingsContainer headline="Learning Site">

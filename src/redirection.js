@@ -67,6 +67,8 @@ async function checkCurrentTab() {
   }
 }
 
+// TODO: Add tab change listener
+
 async function gotoOrigin() {
   await storage.setShouldRedirect(false);
   timer.startProcrastinationSession(checkCurrentTab);
