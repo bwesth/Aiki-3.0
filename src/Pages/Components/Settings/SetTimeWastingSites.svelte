@@ -193,6 +193,7 @@
   }
 
   td {
+    font-family: "Lucida Console", "Courier New", monospace;
     padding: 15px;
     color: #444;
   }
