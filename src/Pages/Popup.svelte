@@ -14,21 +14,23 @@
   const port = browser.extension.connect({
     name: "Popup Communication",
   });
-
-  function gotoOrigin() {
-    toggleRedirection()
-    port.postMessage("goto: origin");
-  }
-
+  
   $: toggled = false;
-  toggled = storage.getRedirectionToggled();
-
-  $: origin = "";
-  origin = storage.getOrigin();
-
   $: siteName = "";
+  $: origin = "";
+
+  async function setup() {
+    toggled =  await storage.getRedirectionToggled();
+    origin = await storage.getOrigin();
+  }
+  
   $: if (origin.url) {
     siteName = parseUrl(origin.url).name;
+  }
+
+  function gotoOrigin() {
+    toggleRedirection();
+    port.postMessage("goto: origin");
   }
 
   /* Opens a new tab with settings page and selects it */
@@ -43,14 +45,16 @@
 
   //Not the best name.
   function toggleRedirection() {
-    console.log(toggled);
+    console.log("Toggled before ", toggled);
     storage.toggleRedirection();
     toggled = !toggled;
+    console.log("Toggled after ", toggled);
   }
+
+  setup();
 </script>
 
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
-
 <main>
   <div class="popup">
     <div class="container" style="margin-top: 10px">
@@ -71,27 +75,26 @@
       <h6 class="item">Toggle:</h6>
       <button
         type="default"
-        class="btn btn-danger item"
+        class="btn {toggled ? "btn-success" : "btn-danger"} item"
         on:click={toggleRedirection}
         ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
       >
     </div>
     <hr />
-      <div class="container">
-        <button
-          type="default"
-          on:click={gotoOrigin}
-          class="btn btn-success item"
-          ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
-        >
-      </div>
-      <hr />
-      <div class="container">
-        <button type="default" class="btn btn-secondary item"
-          ><Fa icon={faSkull} /> Emergency Skip!</button
-        >
-      </div>
-      <hr />
+    {#if origin.url}
+    <div class="container">
+      <button type="default" on:click={gotoOrigin} class="btn btn-success item"
+        ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
+      >
+    </div>
+    <hr />
+    <div class="container">
+      <button type="default" class="btn btn-secondary item"
+        ><Fa icon={faSkull} /> Emergency Skip!</button
+      >
+    </div>
+    <hr />
+    {/if}
   </div>
 </main>
 

@@ -14,6 +14,8 @@ async function getUserData() {
 
 async function getRedirectionToggled() {
   const result = await storage.get("toggled");
+  console.log("this is the result of getRedirectionToggled: ",result);
+  console.log("this is result.toggled ",result.toggled);
   return result.toggled;
 }
 
@@ -45,23 +47,23 @@ function setRedirectionSite(siteName) {
 }
 
 function setOrigin(url) {
-  storage.set({ originUrl: url });
+  storage.set({ origin: url });
 }
 
 async function getOrigin() {
-  let result = await storage.get("originUrl");
-  return result.originUrl;
+  let result = await storage.get("origin");
+  return result.origin;
 }
 
-function removeOriginUrl() {
-  storage.remove("originUrl");
+function removeOrigin() {
+  storage.remove("origin");
 }
 
 export default {
   getUserData,
   setOrigin,
   getOrigin,
-  removeOriginUrl,
+  removeOrigin,
   setList,
   getList,
   setUid,
