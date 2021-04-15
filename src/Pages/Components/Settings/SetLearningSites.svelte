@@ -11,9 +11,10 @@
 <SettingsContainer headline="Learning Site">
   <h5>Your Python Learning Platform:</h5>
   <hr />
-
-  <p style="text-align:center"><a href="https://www.codecademy.com">www.codecademy.com</a></p>
-
+  <div class="container">
+    <a href="https://www.codecademy.com"><button type="button" class="btn btn-dark" 
+      >www.codecademy.com</button></a>
+  </div>
   <h5>Set Learning Time:</h5>
   <hr />
   <p>
@@ -21,49 +22,49 @@
     are rewarded for doing so.
   </p>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm">
-          <p>Time spent learning:</p>
-          <p>Time you get on your procrastination sites in exchange:</p>
-        </div>
-        <div class="col-sm">
-        </div>
-        <div class="col-sm">
-
-          <div class="input-group input-group-sm mb-3">
-            <input
-              type="text"
-              class="form-control"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-            />
-            <div class="input-group-append">
-              <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} /> Seconds</span
-              >
-            </div>
+  <div>
+    <div class="row">
+      <div class="col-sm">
+        <p>Time spent learning:</p>
+        <p>Time you get on your procrastination sites in exchange:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <div class="input-group input-group-sm mb-3">
+          <input
+            type="number"
+            class="form-control"
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text" id="inputGroup-sizing-sm"
+              ><Fa icon={faHourglassHalf} /> Seconds</span
+            >
           </div>
+        </div>
 
-          <div class="input-group input-group-sm mb-3">
-            <input
-              type="text"
-              class="form-control"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-            />
-            <div class="input-group-append">
-              <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} /> Seconds</span
-              >
-            </div>
+        <div class="input-group input-group-sm mb-3">
+          <input
+            type="number"
+            class="form-control"
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text" id="inputGroup-sizing-sm"
+              ><Fa icon={faHourglassHalf} /> Seconds</span
+            >
           </div>
-
         </div>
       </div>
     </div>
-
+  </div>
 </SettingsContainer>
 
 <style>
+  .container {
+    text-align: center;
+    padding: 15px;
+  }
 </style>

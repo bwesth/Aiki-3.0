@@ -3,9 +3,14 @@
 </script>
 
 <SettingsContainer headline="Your Statistics">
- <p>Hello.</p>
+  <p>Here's a scientific breakdown of your time online:</p>
+  <img src="images/piechart.png" alt="pieboi" />
 </SettingsContainer>
 
 <style>
-
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
 </style>

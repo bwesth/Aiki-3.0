@@ -9,6 +9,7 @@
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
+  import Statistics from "./Components/Settings/Statistics.svelte";
   import { SvelteToast } from "@zerodevx/svelte-toast";
   import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
 
@@ -37,6 +38,9 @@
       </div>
       <div class="container">
         <SetLearningSites />
+      </div>
+      <div class="container">
+        <Statistics />
       </div>
     {/if}
   </main>
