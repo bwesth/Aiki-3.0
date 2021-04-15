@@ -22,26 +22,27 @@ async function removeNavigationListener() {
   browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
-async function redirect(details) {
-  if (details.frameId === 0) {
-    const toggled = await storage.getRedirectionToggled();
-    console.log("redirection:", toggled);
-    if (toggled) {
-      console.log("Redirection happening YO!")
-      timer.startLearningSession();
-      storage.setOrigin({ url: details.url, tabId: details.tabId });
-      browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
-    }
-  }
-}
-
 async function restartRedirectionListener() {
   await removeNavigationListener();
   addNavigationListener();
 }
 
+async function redirect(details) {
+  if (details.frameId === 0) {
+    const toggled = await storage.getRedirectionToggled();
+    const shouldRedirect = await storage.getShouldRedirect();
+    console.log(toggled, shouldRedirect);
+    if (toggled && shouldRedirect) {
+      timer.startLearningSession();
+      storage.setOrigin({ url: details.url, tabId: details.tabId });
+      browser.tabs.update(details.tabId, { url: `https://${learningSites[0].host}` });
+    }
+  }
+}
+
 async function gotoOrigin() {
-  timer.startProcrastinationSession()
+  await storage.setShouldRedirect(false);
+  timer.startProcrastinationSession();
   const origin = await storage.getOrigin();
   browser.tabs.update(origin.tabId, { url: origin.url });
   storage.removeOrigin();

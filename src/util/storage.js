@@ -18,8 +18,6 @@ async function getUserData() {
 
 async function getRedirectionToggled() {
   const result = await storage.get("toggled");
-  console.log("this is the result of getRedirectionToggled: ",result);
-  console.log("this is result.toggled ",result.toggled);
   return result.toggled;
 }
 
@@ -69,21 +67,31 @@ function setRedirectionTime(time) {
 
 async function getRedirectionTime() {
   const result = await storage.get("redirectionTime");
-  console.log("This is the redirection time: ", result.redirectionTime)
   return result.redirectionTime;
 }
 
-function setRewardTime(time) {
+function setRewardRatio(time) {
   storage.set({rewardTime: time})
 }
 
-async function getRewardTime() {
+async function getRewardRatio() {
   const result = await storage.get("rewardTime");
-  console.log("This is the reward time: ", result.redirectionTime)
   return result.rewardTime;
 }
 
+async function setShouldRedirect(boolean) {
+  console.log("Should redirect set to: ", boolean)
+  storage.set({shouldRedirect: boolean})
+}
+
+async function getShouldRedirect() {
+  const result = await storage.get("shouldRedirect")
+  return result.shouldRedirect
+}
+
 export default {
+  setShouldRedirect,
+  getShouldRedirect,
   clearStorage,
   getUserData,
   setOrigin,
@@ -99,6 +107,6 @@ export default {
   getRedirectionToggled,
   setRedirectionTime,
   getRedirectionTime,
-  setRewardTime,
-  getRewardTime
+  setRewardRatio,
+  getRewardRatio
 };
