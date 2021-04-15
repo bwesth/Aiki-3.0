@@ -35,7 +35,6 @@ browser.extension.onConnect.addListener(function (port) {
         redirection.restartRedirectionListener();
         break;
       case "origin":
-        timer.startLearningSession();
         redirection.gotoOrigin();
     }
     port.postMessage("Response message");
@@ -46,3 +45,4 @@ intervals.intervalSetup();
 intervals.startCounter();
 intervals.startLogger();
 intervals.addOnWindowsCloseListener();
+redirection.addNavigationListener();

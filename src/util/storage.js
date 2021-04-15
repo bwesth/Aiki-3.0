@@ -69,6 +69,7 @@ function setRedirectionTime(time) {
 
 async function getRedirectionTime() {
   const result = await storage.get("redirectionTime");
+  console.log("This is the redirection time: ", result.redirectionTime)
   return result.redirectionTime;
 }
 
@@ -78,6 +79,7 @@ function setRewardTime(time) {
 
 async function getRewardTime() {
   const result = await storage.get("rewardTime");
+  console.log("This is the reward time: ", result.redirectionTime)
   return result.rewardTime;
 }
 

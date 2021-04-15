@@ -1,6 +1,7 @@
 import storage from "./util/storage";
 import { learningSites } from "./util/constants";
 import browser from "webextension-polyfill";
+import timer from "./timer";
 
 async function createFilter() {
   const procList = await storage.getList();
@@ -26,6 +27,8 @@ async function redirect(details) {
     const toggled = await storage.getRedirectionToggled();
     console.log("redirection:", toggled);
     if (toggled) {
+      console.log("Redirection happening YO!")
+      timer.startLearningSession();
       storage.setOrigin({ url: details.url, tabId: details.tabId });
       browser.tabs.update(details.tabId, { url: "https://www.codecademy.com" });
     }
@@ -38,6 +41,7 @@ async function restartRedirectionListener() {
 }
 
 async function gotoOrigin() {
+  timer.startProcrastinationSession()
   const origin = await storage.getOrigin();
   browser.tabs.update(origin.tabId, { url: origin.url });
   storage.removeOrigin();
