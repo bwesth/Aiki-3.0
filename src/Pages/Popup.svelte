@@ -24,8 +24,10 @@
     origin = await storage.getOrigin();
   }
 
-  $: if (origin.url) {
-    siteName = parseUrl(origin.url).name;
+  $: if (origin) {
+    if (origin.url) {
+      siteName = parseUrl(origin.url).name;
+    }
   }
 
   function gotoOrigin() {
@@ -33,12 +35,11 @@
   }
 
   /* Opens a new tab with settings page and selects it */
-  function openSettingsPage() {
-    chrome.management.getSelf((result) => {
-      chrome.tabs.create({
-        active: true,
-        url: result.optionsUrl,
-      });
+  async function openSettingsPage() {
+    const extRef = await browser.management.getSelf();
+    browser.tabs.create({
+      active: true,
+      url: extRef.optionsUrl,
     });
   }
 
@@ -80,7 +81,7 @@
       >
     </div>
     <hr />
-    {#if siteName!==""}
+    {#if siteName !== ""}
       <div class="container">
         <button
           type="default"

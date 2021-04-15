@@ -11,6 +11,8 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 });
 
 async function setup() {
+  await storage.clearStorage();
+  storage.toggleRedirection();
   storage.setList([]);
   storage.setUid("");
   storage.setRedirectionTime(5000);
@@ -30,6 +32,7 @@ browser.extension.onConnect.addListener(function (port) {
         break;
       case "list":
         intervals.restartCounter();
+        redirection.restartRedirectionListener();
         break;
       case "origin":
         timer.startLearningSession();
@@ -43,4 +46,3 @@ intervals.intervalSetup();
 intervals.startCounter();
 intervals.startLogger();
 intervals.addOnWindowsCloseListener();
-redirection.addNavigationListener();

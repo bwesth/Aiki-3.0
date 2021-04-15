@@ -1,6 +1,10 @@
 import browser from "webextension-polyfill";
 const storage = browser.storage.local;
 
+function clearStorage(){
+  storage.clear();
+}
+
 function toggleRedirection() {
   storage.get("toggled").then((data) => {
     storage.set({ toggled: !data.toggled });
@@ -24,7 +28,7 @@ function setList(list) {
 }
 
 async function getList() {
-  let result = await storage.get("list");
+  const result = await storage.get("list");
   return result.list;
 }
 
@@ -33,12 +37,12 @@ function setUid(uid) {
 }
 
 async function getUid() {
-  let result = await storage.get("uid");
+  const result = await storage.get("uid");
   return result.uid;
 }
 
 async function getRedirectionSite() {
-  let result = await storage.get("redirectionSite");
+  const result = await storage.get("redirectionSite");
   return result.redirectionSite;
 }
 
@@ -51,7 +55,7 @@ function setOrigin(url) {
 }
 
 async function getOrigin() {
-  let result = await storage.get("origin");
+  const result = await storage.get("origin");
   return result.origin;
 }
 
@@ -64,7 +68,7 @@ function setRedirectionTime(time) {
 }
 
 async function getRedirectionTime() {
-  result = await storage.get("redirectionTime");
+  const result = await storage.get("redirectionTime");
   return result.redirectionTime;
 }
 
@@ -73,11 +77,12 @@ function setRewardTime(time) {
 }
 
 async function getRewardTime() {
-  result = await storage.get("rewardTime");
+  const result = await storage.get("rewardTime");
   return result.rewardTime;
 }
 
 export default {
+  clearStorage,
   getUserData,
   setOrigin,
   getOrigin,
