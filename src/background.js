@@ -3,16 +3,15 @@ import intervals from "./intervals";
 import storage from "./util/storage";
 import redirection from "./redirection";
 
-
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
-    setup();
+    installationSetup();
   }
 });
 
-async function setup() {
+async function installationSetup() {
   await storage.clearStorage();
-  storage.setShouldRedirect(true)
+  storage.setShouldRedirect(true);
   storage.toggleRedirection();
   storage.setList([]);
   storage.setUid("");
@@ -25,15 +24,21 @@ async function setup() {
   });
 }
 
+function setup() {
+  intervals.intervalSetup();
+  redirection.navigationListener.start();
+  redirection.tabChangeListener.start();
+}
+
 browser.extension.onConnect.addListener(function (port) {
   port.onMessage.addListener(function (msg) {
     switch (msg.split(": ")[1]) {
       case "user":
-        intervals.restartLogger();
+        intervals.logger.restart();
         break;
       case "list":
-        intervals.restartCounter();
-        redirection.restartRedirectionListener();
+        intervals.counter.restart();
+        redirection.navigationListener.restart();
         break;
       case "origin":
         redirection.gotoOrigin();
@@ -42,8 +47,4 @@ browser.extension.onConnect.addListener(function (port) {
   });
 });
 
-intervals.intervalSetup();
-intervals.startCounter();
-intervals.startLogger();
-intervals.addOnWindowsCloseListener();
-redirection.addNavigationListener();
+setup();

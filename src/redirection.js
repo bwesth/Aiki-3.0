@@ -23,9 +23,22 @@ async function removeNavigationListener() {
   browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
-async function restartRedirectionListener() {
+async function restartNavigationListener() {
   await removeNavigationListener();
   addNavigationListener();
+}
+
+function addTabChangeListener() {
+  browser.tabs.onActivated.addListener(checkTabById);
+}
+
+function removeTabChangeListener() {
+  browser.tabs.onActivated.removeListener(checkTabById);
+}
+
+async function restartTabChangeListener() {
+  removeTabChangeListener();
+  addTabChangeListener();
 }
 
 async function redirect(details) {
@@ -55,19 +68,28 @@ async function checkCurrentTab() {
   });
   if (tabs.length > 0) {
     const tab = tabs[0];
-    const tabSiteName = parseUrl(tab.url).name
-    const procList = await storage.getList();
-    const procListNames = procList.map(site => site.name)
-    console.log(procListNames);
-    console.log(procListNames.includes(tabSiteName));
-    if (procListNames.includes(tabSiteName)) {
-      console.log(tab)
-      redirect({frameId: 0, url: tab.url, tabId: tab.id});
-    }
+    checkTab(tab);
   }
 }
 
-// TODO: Add tab change listener
+async function checkTabById({ tabId }) {
+  const tab = await browser.tabs.get(tabId);
+  console.log(tab);
+  checkTab(tab);
+}
+
+async function checkTab(tab) {
+  console.log(tab);
+  const tabSiteName = parseUrl(tab.url).name;
+  const procList = await storage.getList();
+  const procListNames = procList.map((site) => site.name);
+  console.log(procListNames);
+  console.log(procListNames.includes(tabSiteName));
+  if (procListNames.includes(tabSiteName)) {
+    console.log(tab);
+    redirect({ frameId: 0, url: tab.url, tabId: tab.id });
+  }
+}
 
 async function gotoOrigin() {
   await storage.setShouldRedirect(false);
@@ -78,8 +100,15 @@ async function gotoOrigin() {
 }
 
 export default {
-  addNavigationListener,
-  removeNavigationListener,
-  restartRedirectionListener,
+  navigationListener: {
+    start: addNavigationListener,
+    stop: removeNavigationListener,
+    restart: restartNavigationListener,
+  },
+  tabChangeListener: {
+    start: addTabChangeListener,
+    stop: removeTabChangeListener,
+    restart: restartTabChangeListener,
+  },
   gotoOrigin,
 };

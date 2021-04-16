@@ -15,6 +15,9 @@ let loggerId;
 function intervalSetup() {
   syncUser();
   syncList();
+  startCounter();
+  startLogger();
+  addOnWindowsCloseListener();
 }
 
 async function counter() {
@@ -102,9 +105,7 @@ function addOnWindowsCloseListener() {
 
 export default {
   intervalSetup,
-  startCounter,
-  startLogger,
-  restartCounter,
-  restartLogger,
+  counter: { start: startCounter, restart: restartCounter },
+  logger: { start: startLogger, restart: restartLogger },
   addOnWindowsCloseListener,
 };
