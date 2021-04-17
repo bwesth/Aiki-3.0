@@ -21,7 +21,7 @@
   let toastCoords = { y: "add-button", x: "site-input-container" };
 
   async function setup() {
-    list = await storage.getList();
+    list = await storage.list.get();
   }
   setup();
   let addItemValue = "";
@@ -39,7 +39,7 @@
     let newList = [...list];
     newList.splice(index, 1);
     list = newList;
-    storage.setList(list);
+    storage.list.set(list);
     port.postMessage(`Update: list`);
     toast.pop();
     toast.push("Website removed!", {
@@ -64,7 +64,7 @@
       let newList = [...list];
       newList.push(site);
       list = newList;
-      storage.setList(list);
+      storage.list.set(list);
       firebase.addLog(
         {
           user: user,
@@ -83,7 +83,7 @@
     } else {
       //add rejection function here
       toast.pop();
-      toast.push("Website not available", {
+      toast.push("Action canceled", {
         theme: themes.infoTheme(toastCoords),
       });
     }
@@ -91,7 +91,7 @@
 
   function pingSite(site) {
     return new Promise(function (resolve, reject) {
-      var link = document.createElement("img");
+      let link = document.createElement("img");
       link.src = `https://${site}/favicon.ico`;
       link.style = "display: none;";
       link.onload = function () {

@@ -73,12 +73,12 @@ async function restartLogger() {
 }
 
 async function syncUser() {
-  const result = await storage.getUid();
+  const result = await storage.uid.get();
   user = result;
 }
 
 async function syncList() {
-  const result = await storage.getList();
+  const result = await storage.list.get();
   list = result ? result.map((item) => item.name) : [];
 }
 

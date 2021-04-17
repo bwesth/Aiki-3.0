@@ -11,12 +11,12 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 
 async function installationSetup() {
   await storage.clearStorage();
-  storage.setShouldRedirect(true);
-  storage.toggleRedirection();
-  storage.setList([]);
-  storage.setUid("");
-  storage.setRedirectionTime(5000);
-  storage.setRewardRatio(2);
+  storage.shouldRedirect.set(true);
+  storage.redirection.toggle();
+  storage.list.set([]);
+  storage.uid.set("");
+  storage.timeSettings.redirectionTime.set(5000);
+  storage.timeSettings.rewardRatio.set(2);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,

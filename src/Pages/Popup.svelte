@@ -20,8 +20,8 @@
   $: origin = {};
 
   async function setup() {
-    toggled = await storage.getRedirectionToggled();
-    origin = await storage.getOrigin();
+    toggled = await storage.redirection.get();
+    origin = await storage.origin.get();
   }
 
   $: if (origin) {
@@ -46,7 +46,7 @@
   //Not the best name.
   function toggleRedirection() {
     console.log("Toggled before ", toggled);
-    storage.toggleRedirection();
+    storage.redirection.toggle();
     toggled = !toggled;
     console.log("Toggled after ", toggled);
   }

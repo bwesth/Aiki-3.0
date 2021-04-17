@@ -15,7 +15,7 @@
   let toastCoords = {y: "id-input-field", x: "user-settings"}
 
   async function setup() {
-    user = await storage.getUid();
+    user = await storage.uid.get();
     userIsRegistered = user !== "" ? true : false;
   }
 
@@ -24,7 +24,7 @@
       "Are you certain the provided email is correct?"
     );
     if (confirmation) {
-      storage.setUid(user);
+      storage.uid.set(user);
       let date = makeDate();
       firebase.addLog(
         {
@@ -57,7 +57,7 @@
         },
         "config"
       );
-      storage.setUid("");
+      storage.uid.set("");
       userIsRegistered = false;
       user = "";
       port.postMessage(`Update: user`);

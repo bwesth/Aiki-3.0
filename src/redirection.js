@@ -5,7 +5,7 @@ import timer from "./timer";
 import { parseUrl } from "./util/utilities";
 
 async function createFilter() {
-  const procList = await storage.getList();
+  const procList = await storage.list.get();
   const url = procList.map((item) => {
     return { hostContains: `.${item.name}.` };
   });
@@ -54,8 +54,8 @@ then updates the tab with a pre-defined learning resourse url
  */
 async function redirect(details) {
   if (details.frameId === 0) {
-    const toggled = await storage.getRedirectionToggled();
-    const shouldRedirect = await storage.getShouldRedirect();
+    const toggled = await storage.redirection.get();
+    const shouldRedirect = await storage.shouldRedirect.get();
     console.log(
       "Redirection toggled?",
       toggled,
@@ -64,7 +64,7 @@ async function redirect(details) {
     );
     if (toggled && shouldRedirect) {
       timer.startLearningSession();
-      storage.setOrigin({ url: details.url, tabId: details.tabId });
+      storage.origin.set({ url: details.url, tabId: details.tabId });
       browser.tabs.update(details.tabId, {
         url: `https://${learningSites[0].host}`,
       });
@@ -75,7 +75,7 @@ async function redirect(details) {
 /**
 @function
 @async
-@deprecated Gets currently active tab and calls checkTab on the resulting tab.
+@description Gets currently active tab and calls checkTab on the resulting tab.
  */
 async function checkCurrentTab() {
   const tabs = await browser.tabs.query({
@@ -108,7 +108,7 @@ If a tab's url is found in the list, it calls the redirect function using that t
 async function checkTab(tab) {
   console.log(tab);
   const tabSiteName = parseUrl(tab.url).name;
-  const procList = await storage.getList();
+  const procList = await storage.list.get();
   const procListNames = procList.map((site) => site.name);
   console.log(procListNames);
   console.log(procListNames.includes(tabSiteName));
@@ -127,11 +127,11 @@ The uri was saved upon redirection, and here restored in full in the same tab.
 Origin is an object of type: {integer: tabId, string: url}
 */
 async function gotoOrigin() {
-  await storage.setShouldRedirect(false);
+  await storage.shouldRedirect.set(false);
   timer.startProcrastinationSession(checkCurrentTab);
-  const origin = await storage.getOrigin();
+  const origin = await storage.origin.get();
   browser.tabs.update(origin.tabId, { url: origin.url });
-  storage.removeOrigin();
+  storage.origin.remove();
 }
 
 export default {

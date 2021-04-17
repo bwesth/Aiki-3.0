@@ -1,7 +1,7 @@
 import browser from "webextension-polyfill";
 const storage = browser.storage.local;
 
-function clearStorage(){
+function clearStorage() {
   storage.clear();
 }
 
@@ -62,7 +62,7 @@ function removeOrigin() {
 }
 
 function setRedirectionTime(time) {
-  storage.set({redirectionTime: time})
+  storage.set({ redirectionTime: time });
 }
 
 async function getRedirectionTime() {
@@ -71,7 +71,28 @@ async function getRedirectionTime() {
 }
 
 function setRewardRatio(time) {
-  storage.set({rewardTime: time})
+  storage.set({ rewardTime: time });
+}
+
+function getRewardRatio() {
+  storage.get("rewardTime");
+}
+
+function getRewardTime() {
+  storage.set("rewardTime");
+}
+
+function setRewardTime(time) {
+  storage.set({ rewardTime: time });
+}
+
+async function getUserTimes() {
+  const result = await storage.get([
+    "rewardTime",
+    "rewardRatio",
+    "redirectionTime",
+  ]);
+  return result;
 }
 
 async function getRewardRatio() {
@@ -80,33 +101,28 @@ async function getRewardRatio() {
 }
 
 async function setShouldRedirect(boolean) {
-  console.log("Should redirect set to: ", boolean)
-  storage.set({shouldRedirect: boolean})
+  console.log("Should redirect set to: ", boolean);
+  storage.set({ shouldRedirect: boolean });
 }
 
 async function getShouldRedirect() {
-  const result = await storage.get("shouldRedirect")
-  return result.shouldRedirect
+  const result = await storage.get("shouldRedirect");
+  return result.shouldRedirect;
 }
 
 export default {
-  setShouldRedirect,
-  getShouldRedirect,
+  timeSettings: {
+    getAll: getUserTimes,
+    learningTime: { get: getRedirectionTime, set: setRedirectionTime },
+    rewardTime: { get: getRewardTime, set: setRewardTime },
+    rewardRatio: { get: getRewardRatio, set: setRewardRatio },
+  },
+  shouldRedirect: { get: getShouldRedirect, set: setShouldRedirect },
   clearStorage,
   getUserData,
-  setOrigin,
-  getOrigin,
-  removeOrigin,
-  setList,
-  getList,
-  setUid,
-  getUid,
-  getRedirectionSite,
-  setRedirectionSite,
-  toggleRedirection,
-  getRedirectionToggled,
-  setRedirectionTime,
-  getRedirectionTime,
-  setRewardRatio,
-  getRewardRatio
+  origin: { get: getOrigin, set: setOrigin, remove: removeOrigin },
+  list: { set: setList, get: getList },
+  uid: { set: setUid, get: getUid },
+  redirectionSite: { get: getRedirectionSite, set: setRedirectionSite },
+  redirection: { toggle: toggleRedirection, get: getRedirectionToggled },
 };

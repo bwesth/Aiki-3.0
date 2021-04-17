@@ -7,14 +7,24 @@
   // let selected;
   // storage.getRedirectionSite((data) => (selected = data));
   // TODO: add storage logic to time settings
+  $: learningTime;
+  $: rewardTime;
+  $: rewardRatio;
+
+  function setup(){
+    
+  }
+
+
 </script>
 
 <SettingsContainer headline="Learning Site">
   <h5>Your Python Learning Platform:</h5>
   <hr />
   <div class="container">
-    <a href="https://www.codecademy.com"><button type="button" class="btn btn-dark" 
-      >www.codecademy.com</button></a>
+    <a href="https://www.codecademy.com"
+      ><button type="button" class="btn btn-dark">www.codecademy.com</button></a
+    >
   </div>
   <h5>Set Learning Time:</h5>
   <hr />

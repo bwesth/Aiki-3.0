@@ -6,7 +6,7 @@ let intervalRef;
 //When redirecting to learning site
 async function startLearningSession() {
   if (intervalRef) stopBonusTime();
-  const time = await storage.getRedirectionTime();
+  const time = await storage.timeSettings.redirectionTime.get();
   console.log("Starting learning session for seconds: ", time);
   setTimeout(startBonusTime, time);
 }
@@ -37,13 +37,13 @@ function stopBonusTime() {
 
 function stopPropagationSession(callback) {
   console.log("Stopping procrastination session");
-  storage.setShouldRedirect(true);
+  storage.shouldRedirect.set(true);
   callback();
 }
 
 async function calculateRewardTime() {
-  const rewardRatio = await storage.getRewardRatio();
-  const redirectionTime = await storage.getRedirectionTime();
+  const rewardRatio = await storage.timeSettings.rewardRatio.get();
+  const redirectionTime = await storage.timeSettings.redirectionTime.get();
   let rewardTime = rewardRatio * (earnedTime * 1000 + redirectionTime);
   return Math.floor(rewardTime);
 }
