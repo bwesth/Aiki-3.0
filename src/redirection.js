@@ -41,6 +41,17 @@ async function restartTabChangeListener() {
   addTabChangeListener();
 }
 
+/**
+@function
+@async
+@description Checks if redirection should happen, 
+then starts a learning session countdown,
+stores the origin tab and url in storage,
+then updates the tab with a pre-defined learning resourse url
+@param {object} details
+@param {string} details.url
+@param {number} details.tabId
+ */
 async function redirect(details) {
   if (details.frameId === 0) {
     const toggled = await storage.getRedirectionToggled();
@@ -61,6 +72,11 @@ async function redirect(details) {
   }
 }
 
+/**
+@function
+@async
+@deprecated Gets currently active tab and calls checkTab on the resulting tab.
+ */
 async function checkCurrentTab() {
   const tabs = await browser.tabs.query({
     active: true,
@@ -77,7 +93,18 @@ async function checkTabById({ tabId }) {
   console.log(tab);
   checkTab(tab);
 }
+// TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
 
+/** 
+@function
+@async
+@description Checks a tab against a list of websites defined as procrastination websites.
+If a tab's url is found in the list, it calls the redirect function using that tab's details.
+@param {object} tab
+@param {number} tab.frameId
+@param {string} tab.url
+@param {number} tab.id
+*/
 async function checkTab(tab) {
   console.log(tab);
   const tabSiteName = parseUrl(tab.url).name;
@@ -91,6 +118,14 @@ async function checkTab(tab) {
   }
 }
 
+/**
+@function
+@async
+@description Changes location of the tab registered as the tab 
+that triggered a redirection from procrastination to learning site.
+The uri was saved upon redirection, and here restored in full in the same tab.
+Origin is an object of type: {integer: tabId, string: url}
+*/
 async function gotoOrigin() {
   await storage.setShouldRedirect(false);
   timer.startProcrastinationSession(checkCurrentTab);
