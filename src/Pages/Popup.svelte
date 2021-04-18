@@ -11,8 +11,8 @@
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
-  /*Components import*/
-  import Progress from "./progress.svelte";
+  /* Components import */
+  import LinearProgress from "./LinearProgress.svelte";
 
   const port = browser.extension.connect({
     name: "Popup Communication",
@@ -22,6 +22,8 @@
   $: siteName = "";
   $: origin = {};
 
+  $: timeRemaining = -1;
+  $: bonusTime = -1;
 
   async function setup() {
     toggled = await storage.redirection.get();
@@ -44,7 +46,15 @@
     port.postMessage("goto: origin");
   }
 
-  
+  // Is also in <Progress>, trying something. Seems to be working. Going with Progress2. Refactor inc
+  async function getTimer() {
+    port.postMessage("get: timer");
+    port.onMessage.addListener(function (msg) {
+      timeRemaining = msg.learningTimeRemaining;
+      bonusTime = msg.earnedTime * 1000;
+    });
+  }
+  getTimer();
 
   /**
    * @async
@@ -61,10 +71,8 @@
   //Not the best name.
   //It's fine though really
   function toggleRedirection() {
-    console.log("Toggled before ", toggled);
     storage.redirection.toggle();
     toggled = !toggled;
-    console.log("Toggled after ", toggled);
   }
 
   setup();
@@ -113,7 +121,10 @@
         >
       </div>
       <hr />
-        <Progress {port} />
+      {#if timeRemaining > -1}
+        <LinearProgress {timeRemaining} {bonusTime} />
+        <hr />
+      {/if}
     {/if}
   </div>
 </main>

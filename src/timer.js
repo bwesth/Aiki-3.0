@@ -32,7 +32,6 @@ async function startProcrastinationSession(callback) {
   stopBonusTime();
   const rewardTime = await calculateRewardTime();
   earnedTime = 0;
-  console.log("Reward time: ", rewardTime);
   setTimeout(() => stopPropagationSession(callback), rewardTime);
 }
 
@@ -42,7 +41,6 @@ function stopBonusTime() {
 }
 
 function stopPropagationSession(callback) {
-  console.log("Stopping procrastination session");
   storage.shouldRedirect.set(true);
   callback();
 }
@@ -55,7 +53,6 @@ async function calculateRewardTime() {
 }
 
 function getTime() {
-  console.log("Bonus: ",earnedTime, "Remaining: ", learningTimeRemaining)
   return { earnedTime: earnedTime, learningTimeRemaining: learningTimeRemaining };
 }
 

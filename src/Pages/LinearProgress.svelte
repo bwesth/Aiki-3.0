@@ -1,10 +1,10 @@
 <script>
+  /* Wow. This really needs to be refactored. */
   import { tweened } from "svelte/motion";
   import { linear } from "svelte/easing";
 
-  export let port;
-  $: timeRemaining = 0;
-  $: bonusTime = 0;
+  export let timeRemaining = 0;
+  export let bonusTime = 0;
 
   console.log("Remaining: ", timeRemaining, "bonus: ", bonusTime);
 
@@ -13,16 +13,8 @@
     duration: timeRemaining,
   });
 
-  //Needs quite a rethink
-  async function getTimer() {
-    port.postMessage("get: timer");
-    port.onMessage.addListener(function (msg) {
-      timeRemaining = msg.learningTimeRemaining;
-      bonusTime = msg.earnedTime;
-      progress.set(0, { duration: timeRemaining });
-      handleTimers();
-    });
-  }
+  progress.set(0, { duration: timeRemaining });
+  handleTimers();
 
   /* Conditional is redundant here, same effect without */
   function handleTimers() {
@@ -38,7 +30,6 @@
     setInterval(() => bonusTime += 1000, 1000);
   }
 
-  getTimer();
 
   //   const bonus = tweened(0, {
   //     easing: linear,

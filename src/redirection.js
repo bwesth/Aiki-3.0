@@ -56,12 +56,6 @@ async function redirect(details) {
   if (details.frameId === 0) {
     const toggled = await storage.redirection.get();
     const shouldRedirect = await storage.shouldRedirect.get();
-    console.log(
-      "Redirection toggled?",
-      toggled,
-      "Shoud redirect?",
-      shouldRedirect
-    );
     if (toggled && shouldRedirect) {
       timer.startLearningSession();
       storage.origin.set({ url: details.url, tabId: details.tabId });
@@ -90,7 +84,6 @@ async function checkCurrentTab() {
 
 async function checkTabById({ tabId }) {
   const tab = await browser.tabs.get(tabId);
-  console.log(tab);
   checkTab(tab);
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
@@ -106,14 +99,10 @@ If a tab's url is found in the list, it calls the redirect function using that t
 @param {number} tab.id
 */
 async function checkTab(tab) {
-  console.log(tab);
   const tabSiteName = parseUrl(tab.url).name;
   const procList = await storage.list.get();
   const procListNames = procList.map((site) => site.name);
-  console.log(procListNames);
-  console.log(procListNames.includes(tabSiteName));
   if (procListNames.includes(tabSiteName)) {
-    console.log(tab);
     redirect({ frameId: 0, url: tab.url, tabId: tab.id });
   }
 }

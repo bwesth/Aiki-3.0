@@ -94,7 +94,6 @@ async function getUserTimes() {
     "rewardRatio",
     "learningTime",
   ]);
-  console.log(result);
   return result;
 }
 
