@@ -3,14 +3,17 @@
   This gathers all the settings components and displays them for the user to change the behaviour
   of the application.-->
 <script>
+  /*Functional and module imports*/
   import browser from "webextension-polyfill";
+  import { SvelteToast } from "@zerodevx/svelte-toast";
+
+  /*Components import*/
   import Footer from "./Components/Settings/Footer.svelte";
   import Header from "./Components/Settings/Header.svelte";
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import Statistics from "./Components/Settings/Statistics.svelte";
-  import { SvelteToast } from "@zerodevx/svelte-toast";
   import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
 
   $: user = "";

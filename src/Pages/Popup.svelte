@@ -1,5 +1,5 @@
-<!-- To begin with, the popup will only have a settings button for the logger. -->
 <script>
+  /*Functional and module imports*/
   import Fa from "svelte-fa";
   import {
     faCog,
@@ -11,6 +11,9 @@
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
+  /*Components import*/
+  import Progress from "./progress.svelte";
+
   const port = browser.extension.connect({
     name: "Popup Communication",
   });
@@ -18,6 +21,7 @@
   $: toggled = false;
   $: siteName = "";
   $: origin = {};
+
 
   async function setup() {
     toggled = await storage.redirection.get();
@@ -30,11 +34,22 @@
     }
   }
 
+  /**
+   * @function
+   * @description Sends a message to the background script for intepretation.
+   * Background script will initiate a tab update on the tab that triggered a redirection,
+   * restoring the origin uri.
+   */
   function gotoOrigin() {
     port.postMessage("goto: origin");
   }
 
-  /* Opens a new tab with settings page and selects it */
+  
+
+  /**
+   * @async
+   * @function
+   * @description Opens a new tab in browser with settings page and selects it */
   async function openSettingsPage() {
     const extRef = await browser.management.getSelf();
     browser.tabs.create({
@@ -44,6 +59,7 @@
   }
 
   //Not the best name.
+  //It's fine though really
   function toggleRedirection() {
     console.log("Toggled before ", toggled);
     storage.redirection.toggle();
@@ -97,6 +113,7 @@
         >
       </div>
       <hr />
+        <Progress {port} />
     {/if}
   </div>
 </main>

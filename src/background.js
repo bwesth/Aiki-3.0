@@ -2,6 +2,7 @@ import browser from "webextension-polyfill";
 import intervals from "./intervals";
 import storage from "./util/storage";
 import redirection from "./redirection";
+import timer from "./timer";
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -15,7 +16,8 @@ async function installationSetup() {
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.timeSettings.redirectionTime.set(5000);
+  storage.timeSettings.learningTime.set(5000);
+  storage.timeSettings.rewardTime.set(5000);
   storage.timeSettings.rewardRatio.set(2);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
@@ -42,8 +44,11 @@ browser.extension.onConnect.addListener(function (port) {
         break;
       case "origin":
         redirection.gotoOrigin();
+        break;
+      case "timer":
+        port.postMessage(timer.getTime());
+        break;
     }
-    port.postMessage("Response message");
   });
 });
 

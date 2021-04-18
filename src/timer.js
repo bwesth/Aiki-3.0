@@ -1,19 +1,25 @@
 import storage from "./util/storage";
 
 let earnedTime = 0;
-let intervalRef;
+let learningTimeRemaining = 0;
+let bonusTimeIntervalRef;
+let learningTimeCountdownRef;
 
 //When redirecting to learning site
 async function startLearningSession() {
-  if (intervalRef) stopBonusTime();
-  const time = await storage.timeSettings.redirectionTime.get();
+  if (bonusTimeIntervalRef) stopBonusTime();
+  const time = await storage.timeSettings.learningTime.get();
   console.log("Starting learning session for seconds: ", time);
+  learningTimeRemaining = time;
+  learningTimeCountdownRef = setInterval(() => (learningTimeRemaining -= 1000), 1000);
   setTimeout(startBonusTime, time);
 }
 
 function startBonusTime() {
-  if (intervalRef) stopBonusTime();
-  intervalRef = setInterval(incrementEarnedTime, 1000);
+  if (bonusTimeIntervalRef) stopBonusTime();
+  clearInterval(learningTimeCountdownRef);
+  learningTimeCountdownRef = undefined;
+  bonusTimeIntervalRef = setInterval(incrementEarnedTime, 1000);
 }
 
 function incrementEarnedTime() {
@@ -31,8 +37,8 @@ async function startProcrastinationSession(callback) {
 }
 
 function stopBonusTime() {
-  clearInterval(intervalRef);
-  intervalRef = undefined;
+  clearInterval(bonusTimeIntervalRef);
+  bonusTimeIntervalRef = undefined;
 }
 
 function stopPropagationSession(callback) {
@@ -43,12 +49,18 @@ function stopPropagationSession(callback) {
 
 async function calculateRewardTime() {
   const rewardRatio = await storage.timeSettings.rewardRatio.get();
-  const redirectionTime = await storage.timeSettings.redirectionTime.get();
-  let rewardTime = rewardRatio * (earnedTime * 1000 + redirectionTime);
+  const learningTime = await storage.timeSettings.learningTime.get();
+  let rewardTime = rewardRatio * (earnedTime * 1000 + learningTime);
   return Math.floor(rewardTime);
+}
+
+function getTime() {
+  console.log("Bonus: ",earnedTime, "Remaining: ", learningTimeRemaining)
+  return { earnedTime: earnedTime, learningTimeRemaining: learningTimeRemaining };
 }
 
 export default {
   startLearningSession,
   startProcrastinationSession,
+  getTime
 };

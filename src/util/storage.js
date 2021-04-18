@@ -61,25 +61,27 @@ function removeOrigin() {
   storage.remove("origin");
 }
 
-function setRedirectionTime(time) {
-  storage.set({ redirectionTime: time });
+async function getLearningTime() {
+  const result = await storage.get("learningTime");
+  return result.learningTime;
 }
 
-async function getRedirectionTime() {
-  const result = await storage.get("redirectionTime");
-  return result.redirectionTime;
+function setLearningTime(time) {
+  storage.set({ learningTime: time });
 }
 
-function setRewardRatio(time) {
-  storage.set({ rewardTime: time });
+async function getRewardRatio() {
+  const result = await storage.get("rewardRatio");
+  return result.rewardRatio;
 }
 
-function getRewardRatio() {
-  storage.get("rewardTime");
+function setRewardRatio(ratio) {
+  storage.set({ rewardRatio: ratio });
 }
 
-function getRewardTime() {
-  storage.set("rewardTime");
+async function getRewardTime() {
+  const result = await storage.get("rewardTime");
+  return result.rewardTime;
 }
 
 function setRewardTime(time) {
@@ -90,14 +92,10 @@ async function getUserTimes() {
   const result = await storage.get([
     "rewardTime",
     "rewardRatio",
-    "redirectionTime",
+    "learningTime",
   ]);
+  console.log(result);
   return result;
-}
-
-async function getRewardRatio() {
-  const result = await storage.get("rewardTime");
-  return result.rewardTime;
 }
 
 async function setShouldRedirect(boolean) {
@@ -113,7 +111,7 @@ async function getShouldRedirect() {
 export default {
   timeSettings: {
     getAll: getUserTimes,
-    learningTime: { get: getRedirectionTime, set: setRedirectionTime },
+    learningTime: { get: getLearningTime, set: setLearningTime },
     rewardTime: { get: getRewardTime, set: setRewardTime },
     rewardRatio: { get: getRewardRatio, set: setRewardRatio },
   },
