@@ -24,10 +24,12 @@
 
   $: timeRemaining = -1;
   $: bonusTime = -1;
+  $: learningTime = -1;
 
   async function setup() {
     toggled = await storage.redirection.get();
     origin = await storage.origin.get();
+    learningTime = await storage.timeSettings.learningTime.get()
   }
 
   $: if (origin) {
@@ -122,7 +124,7 @@
       </div>
       <hr />
       {#if timeRemaining > -1}
-        <LinearProgress {timeRemaining} {bonusTime} />
+        <LinearProgress {timeRemaining} {bonusTime} {learningTime} />
         <hr />
       {/if}
     {/if}
