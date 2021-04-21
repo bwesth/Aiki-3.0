@@ -3,7 +3,6 @@
   import { parseUrl } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
-  import badge from "../badge";
 
   /* Components import */
   import SettingsButton from "./Components/popup/SettingsButton.svelte";
@@ -45,7 +44,6 @@
    * restoring the origin uri.
    */
   function gotoOrigin() {
-    badge.remove();
     port.postMessage("goto: origin");
   }
 

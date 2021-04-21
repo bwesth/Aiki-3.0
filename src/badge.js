@@ -1,21 +1,31 @@
 import browser from "webextension-polyfill";
 
-  //Controls the badge that appears on the extension icon in the toolbar.
-  //Mostly just wrapper functions to make them a little more palatable.
+ 
+    /**
+     * @description Adds text to a badge that appears above the icon in the chrome toolbar.
+     * @param {String | number} value Should be less than 4 characters long.
+     */
   function setText(value) {
     browser.browserAction.setBadgeText({text: `${value}`});
   }
 
-  //Adjusts badge colour according to state.
+  /**
+   * @description Changes the background colour of the badge to green.
+   */
   function setBusy() {
     browser.browserAction.setBadgeBackgroundColor({color:'limegreen'});
   }
 
+    /**
+   * @description Changes the background colour of the badge to blue.
+   */
   function setDone() {
     browser.browserAction.setBadgeBackgroundColor({color:'deepskyblue'});
   }
 
-  //Mainly for readability.
+  /**
+   * @description Removes the badge from the icon entirely.
+   */
   function remove() {
     browser.browserAction.setBadgeText({text:''});
   }

@@ -5,6 +5,7 @@ let earnedTime = 0;
 let learningTimeRemaining = 0;
 let bonusTimeIntervalRef;
 let learningTimeCountdownRef;
+let learningTimeOutRef;
 
 //When redirecting to learning site
 async function startLearningSession() {
@@ -15,7 +16,13 @@ async function startLearningSession() {
   learningTimeRemaining = time;
   badge.setText(learningTimeRemaining/1000);
   learningTimeCountdownRef = setInterval(decrementLearningTime, 1000);
-  setTimeout(startBonusTime, time);
+  learningTimeOutRef = setTimeout(startBonusTime, time);
+}
+
+function stopLearningSession() {
+  clearInterval(learningTimeCountdownRef);
+  clearTimeout(learningTimeOutRef);
+  badge.remove();
 }
 
 function decrementLearningTime () {
@@ -39,6 +46,7 @@ function incrementEarnedTime() {
 
 // When redirecting to origin site
 async function startProcrastinationSession(callback) {
+  stopLearningSession();
   stopBonusTime();
   const rewardTime = await calculateRewardTime();
   earnedTime = 0;
