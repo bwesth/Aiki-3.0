@@ -3,18 +3,17 @@
   import { tweened } from "svelte/motion";
   import { linear } from "svelte/easing";
 
-  export let learningTime
   export let bonusTime
   export let percentRemaining;
   $: {
-    if (percentRemaining > 0) {
-      progress.set(learningTime/100, { duration: 0});
+    if (percentRemaining >= 0) {
+      progress.set(percentRemaining, { duration: 1000});
     }
   }
 
   const progress = tweened(percentRemaining, {
     easing: linear,
-    duration: 1000
+    duration: 0
   });
 
 
@@ -24,8 +23,9 @@
 <p>Extra {bonusTime / 1000} seconds spent learning</p>
 
 <style>
-  progress {
+    progress {
     display: block;
     width: 100%;
   }
+
 </style>

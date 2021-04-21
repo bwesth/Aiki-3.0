@@ -46,10 +46,11 @@ function stopPropagationSession(callback) {
 }
 
 async function calculateRewardTime() {
-  const rewardRatio = await storage.timeSettings.rewardRatio.get();
-  const learningTime = await storage.timeSettings.learningTime.get();
-  let rewardTime = rewardRatio * (earnedTime * 1000 + learningTime);
-  return Math.floor(rewardTime);
+  // const rewardRatio = await storage.timeSettings.rewardRatio.get();
+  // const learningTime = await storage.timeSettings.learningTime.get();
+  const rewardTime = await storage.timeSettings.rewardTime.get();
+  // let rewardTime = rewardRatio * (earnedTime * 1000 + learningTime);
+  return rewardTime;
 }
 
 function getTime() {

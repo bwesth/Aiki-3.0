@@ -1,0 +1,42 @@
+<script>
+  /* Functional and module imports */
+  import Fa from "svelte-fa";
+  import { faDotCircle } from "@fortawesome/free-solid-svg-icons";
+  import storage from "../../../util/storage";
+
+  let toggled;
+
+  async function setup() {
+    toggled = await storage.redirection.get();
+  }
+
+  function toggleRedirection() {
+    storage.redirection.toggle();
+    toggled = !toggled;
+  }
+
+  setup();
+</script>
+
+<div class="container">
+  <h6 class="item">Toggle:</h6>
+  <button
+    type="default"
+    class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
+    on:click={toggleRedirection}
+    ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
+  >
+</div>
+
+<style>
+  .container {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+  }
+
+  .item {
+    margin: auto auto;
+  }
+</style>

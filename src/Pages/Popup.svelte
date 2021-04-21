@@ -1,24 +1,20 @@
 <script>
-  /*Functional and module imports*/
-  import Fa from "svelte-fa";
-  import {
-    faCog,
-    faDotCircle,
-    faThumbsUp,
-    faSkull,
-  } from "@fortawesome/free-solid-svg-icons";
+  /* Functional and module imports */
   import { parseUrl } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
   /* Components import */
-  import LinearProgress from "./LinearProgress.svelte";
+  import SettingsButton from ".Components/popup/SettingsButton.svelte";
+  import LinearProgress from "./Components/Popup/LinearProgress.svelte";
+  import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
+  import ContinueButton from "./Components/Popup/ContinueButton.svelte";
+  import SkipButton from "./Components/Popup/SkipButton.svelte";
 
   const port = browser.extension.connect({
     name: "Popup Communication",
   });
 
-  let toggled = false;
   let siteName = "";
   let origin = {};
 
@@ -27,16 +23,9 @@
   let learningTime = -1;
   let intervalRef;
   $: canContinue = timeRemaining <= 0 ? true : false;
-  // $: {
-  //   console.log(timeRemaining);
-  //   if (timeRemaining <= 0) {
-  //     console.log("TimeRemaining", timeRemaining);
-  //     canContinue = true;
-  //   }
-  // }
 
   async function setup() {
-    toggled = await storage.redirection.get();
+    getTimer();
     origin = await storage.origin.get();
     learningTime = await storage.timeSettings.learningTime.get();
     handleTimers();
@@ -66,7 +55,6 @@
       bonusTime = msg.earnedTime * 1000;
     });
   }
-  getTimer();
 
   function handleTimers() {
     if (timeRemaining === 0) {
@@ -85,25 +73,6 @@
     setInterval(() => (bonusTime += 1000), 1000);
   }
 
-  /**
-   * @async
-   * @function
-   * @description Opens a new tab in browser with settings page and selects it */
-  async function openSettingsPage() {
-    const extRef = await browser.management.getSelf();
-    browser.tabs.create({
-      active: true,
-      url: extRef.optionsUrl,
-    });
-  }
-
-  //Not the best name.
-  //It's fine though really
-  function toggleRedirection() {
-    storage.redirection.toggle();
-    toggled = !toggled;
-  }
-
   setup();
 </script>
 
@@ -115,48 +84,24 @@
       <h5 class="header item">Aiki 3.0</h5>
     </div>
     <hr />
-    <div class="container">
-      <h6 class="item">Settings:</h6>
-      <button
-        type="default"
-        class="btn btn-primary item"
-        on:click={openSettingsPage}><Fa icon={faCog} /> Settings</button
-      >
-    </div>
+    <SettingsButton />
     <hr />
-    <div class="container">
-      <h6 class="item">Toggle:</h6>
-      <button
-        type="default"
-        class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
-        on:click={toggleRedirection}
-        ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
-      >
-    </div>
+    <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-      <div class="container">
-        <button
-          type="default"
-          on:click={gotoOrigin}
-          class="btn btn-success item"
-          ><Fa icon={faThumbsUp} /> Continue to {siteName}
-          {canContinue ? "YES" : "NO"}
-          {timeRemaining}
-          {timeRemaining > 10}
-        </button>
-      </div>
+      <LinearProgress
+        {bonusTime}
+        percentRemaining={timeRemaining / learningTime}
+      />
       <hr />
       <div class="container">
-        <button type="default" class="btn btn-secondary item"
-          ><Fa icon={faSkull} /> Emergency Skip!</button
-        >
+        {#if canContinue}
+          <ContinueButton {siteName} {gotoOrigin} />
+        {:else}
+          <SkipButton {gotoOrigin} />
+        {/if}
       </div>
       <hr />
-      <!-- {#if timeRemaining > 0} -->
-        <LinearProgress {bonusTime} {learningTime} percentRemaining={(timeRemaining / learningTime)} />
-        <hr />
-      <!-- {/if} -->
     {/if}
   </div>
 </main>
