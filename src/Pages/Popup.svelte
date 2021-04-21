@@ -18,18 +18,28 @@
     name: "Popup Communication",
   });
 
-  $: toggled = false;
-  $: siteName = "";
-  $: origin = {};
+  let toggled = false;
+  let siteName = "";
+  let origin = {};
 
-  $: timeRemaining = -1;
-  $: bonusTime = -1;
-  $: learningTime = -1;
+  let timeRemaining = -1;
+  let bonusTime = -1;
+  let learningTime = -1;
+  let intervalRef;
+  $: canContinue = timeRemaining <= 0 ? true : false;
+  // $: {
+  //   console.log(timeRemaining);
+  //   if (timeRemaining <= 0) {
+  //     console.log("TimeRemaining", timeRemaining);
+  //     canContinue = true;
+  //   }
+  // }
 
   async function setup() {
     toggled = await storage.redirection.get();
     origin = await storage.origin.get();
-    learningTime = await storage.timeSettings.learningTime.get()
+    learningTime = await storage.timeSettings.learningTime.get();
+    handleTimers();
   }
 
   $: if (origin) {
@@ -48,7 +58,7 @@
     port.postMessage("goto: origin");
   }
 
-  // Is also in <Progress>, trying something. Seems to be working. Going with Progress2. Refactor inc
+  // Is also in <Progress>, trying something. Seems to be working.
   async function getTimer() {
     port.postMessage("get: timer");
     port.onMessage.addListener(function (msg) {
@@ -57,6 +67,23 @@
     });
   }
   getTimer();
+
+  function handleTimers() {
+    if (timeRemaining === 0) {
+      initBonusTime();
+    } else {
+      intervalRef = setInterval(() => {
+        timeRemaining -= 1000;
+      }, 1000);
+      setTimeout(initBonusTime, timeRemaining);
+    }
+  }
+
+  // Maybe redundant to make a function for this
+  function initBonusTime() {
+    clearInterval(intervalRef);
+    setInterval(() => (bonusTime += 1000), 1000);
+  }
 
   /**
    * @async
@@ -113,8 +140,11 @@
           type="default"
           on:click={gotoOrigin}
           class="btn btn-success item"
-          ><Fa icon={faThumbsUp} /> Continue to {siteName}</button
-        >
+          ><Fa icon={faThumbsUp} /> Continue to {siteName}
+          {canContinue ? "YES" : "NO"}
+          {timeRemaining}
+          {timeRemaining > 10}
+        </button>
       </div>
       <hr />
       <div class="container">
@@ -123,10 +153,10 @@
         >
       </div>
       <hr />
-      {#if timeRemaining > -1}
-        <LinearProgress {timeRemaining} {bonusTime} {learningTime} />
+      <!-- {#if timeRemaining > 0} -->
+        <LinearProgress {bonusTime} {learningTime} percentRemaining={(timeRemaining / learningTime)} />
         <hr />
-      {/if}
+      <!-- {/if} -->
     {/if}
   </div>
 </main>

@@ -27,9 +27,11 @@ async function installationSetup() {
 }
 
 function setup() {
+  storage.shouldRedirect.set(true)
   intervals.intervalSetup();
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
+
 }
 
 browser.extension.onConnect.addListener(function (port) {
