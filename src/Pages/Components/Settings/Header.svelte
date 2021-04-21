@@ -1,5 +1,7 @@
-<!-- This component is rendered as a block on the settings page as a header.-->
-<script>
+<!-- 
+
+  Used in / Parent components: /src/Pages/Settings.svelte
+ --><script>
 </script>
 <header>
     <h1>Aiki<sup>3</sup></h1>

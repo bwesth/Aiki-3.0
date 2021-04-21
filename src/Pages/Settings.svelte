@@ -1,7 +1,9 @@
 <!-- This component is used by extension when user opens settings page in extension menu.
   It is also opened by a button in extension popup component.
   This gathers all the settings components and displays them for the user to change the behaviour
-  of the application.-->
+  of the application.
+  Used in / Parent components: /src/App.svelte
+-->
 <script>
   /*Functional and module imports*/
   import browser from "webextension-polyfill";

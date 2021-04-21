@@ -1,4 +1,7 @@
-<!-- This component is rendered as a block on the settings page for users to input their UID for logging purposes.-->
+<!-- This component is rendered as a block on the settings 
+  page for users to input their UID for logging purposes.
+  Used in / Parent components: /src/Pages/Settings.svelte
+-->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";
@@ -12,7 +15,7 @@
   export let user = "";
   export let userIsRegistered;
   export let port;
-  let toastCoords = {y: "id-input-field", x: "user-settings"}
+  let toastCoords = { y: "id-input-field", x: "user-settings" };
 
   async function setup() {
     user = await storage.uid.get();

@@ -1,3 +1,7 @@
+<!-- 
+
+  Used in / Parent components: /src/Pages/Popup.svelte
+ -->
 <script>
   import Fa from "svelte-fa";
   import { faSkull } from "@fortawesome/free-solid-svg-icons";

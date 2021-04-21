@@ -1,3 +1,8 @@
+<!-- 
+
+  Used in / Parent components: /src/App.svelte
+ -->
+
 <script>
   /* Functional and module imports */
   import { parseUrl } from "../util/utilities";

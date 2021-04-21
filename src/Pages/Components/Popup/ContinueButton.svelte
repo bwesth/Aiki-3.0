@@ -1,3 +1,7 @@
+<!-- 
+
+  Used in / Parent components: /src/Pages/Popup.svelte
+ -->
 <script>
   /* Functional and module imports */
   import Fa from "svelte-fa";

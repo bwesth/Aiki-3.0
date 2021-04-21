@@ -1,3 +1,7 @@
+<!-- 
+
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
 import SettingsContainer from "./SettingsContainer.svelte";
 </script>

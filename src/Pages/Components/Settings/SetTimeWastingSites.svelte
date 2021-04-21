@@ -1,4 +1,7 @@
-<!-- This component is rendered as a block on the settings page for users to input their time wasting websites.-->
+<!-- 
+
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";

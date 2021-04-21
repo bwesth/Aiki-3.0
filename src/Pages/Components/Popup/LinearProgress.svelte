@@ -1,3 +1,7 @@
+<!-- 
+
+  Used in / Parent components: /src/Pages/Popup.svelte
+ -->
 <script>
   /* Wow. This file really needs to be refactored. */
   import { tweened } from "svelte/motion";
