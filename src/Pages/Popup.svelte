@@ -5,7 +5,7 @@
   import browser from "webextension-polyfill";
 
   /* Components import */
-  import SettingsButton from ".Components/popup/SettingsButton.svelte";
+  import SettingsButton from "./Components/popup/SettingsButton.svelte";
   import LinearProgress from "./Components/Popup/LinearProgress.svelte";
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
