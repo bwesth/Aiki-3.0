@@ -1,4 +1,5 @@
 import storage from "./util/storage";
+import badge from "./badge";
 
 let earnedTime = 0;
 let learningTimeRemaining = 0;
@@ -8,15 +9,24 @@ let learningTimeCountdownRef;
 //When redirecting to learning site
 async function startLearningSession() {
   if (bonusTimeIntervalRef) stopBonusTime();
+  badge.setBusy();
   const time = await storage.timeSettings.learningTime.get();
   console.log("Starting learning session for seconds: ", time);
   learningTimeRemaining = time;
-  learningTimeCountdownRef = setInterval(() => (learningTimeRemaining -= 1000), 1000);
+  badge.setText(learningTimeRemaining/1000);
+  learningTimeCountdownRef = setInterval(decrementLearningTime, 1000);
   setTimeout(startBonusTime, time);
 }
 
+function decrementLearningTime () {
+  learningTimeRemaining -= 1000;
+  badge.setText(learningTimeRemaining/1000);
+}
+ 
 function startBonusTime() {
   if (bonusTimeIntervalRef) stopBonusTime();
+  badge.setDone();
+  badge.setText("Done");
   clearInterval(learningTimeCountdownRef);
   learningTimeCountdownRef = undefined;
   bonusTimeIntervalRef = setInterval(incrementEarnedTime, 1000);
@@ -32,7 +42,7 @@ async function startProcrastinationSession(callback) {
   stopBonusTime();
   const rewardTime = await calculateRewardTime();
   earnedTime = 0;
-  setTimeout(() => stopPropagationSession(callback), rewardTime);
+  setTimeout(() => stopProcrastinationSession(callback), rewardTime);
 }
 
 function stopBonusTime() {
@@ -40,7 +50,7 @@ function stopBonusTime() {
   bonusTimeIntervalRef = undefined;
 }
 
-function stopPropagationSession(callback) {
+function stopProcrastinationSession(callback) {
   storage.shouldRedirect.set(true);
   callback();
 }

@@ -31,7 +31,6 @@ function setup() {
   intervals.intervalSetup();
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
-
 }
 
 browser.extension.onConnect.addListener(function (port) {
