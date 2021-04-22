@@ -1,5 +1,6 @@
 import storage from "./util/storage";
 import badge from "./badge";
+import { parseTimerDown } from "./util/utilities";
 
 let earnedTime = 0;
 let learningTimeRemaining = 0;
@@ -10,11 +11,12 @@ let learningTimeOutRef;
 //When redirecting to learning site
 async function startLearningSession() {
   if (bonusTimeIntervalRef) stopBonusTime();
+  if (learningTimeCountdownRef) clearInterval(learningTimeCountdownRef);
   badge.setBusy();
   const time = await storage.timeSettings.learningTime.get();
   console.log("Starting learning session for seconds: ", time);
   learningTimeRemaining = time;
-  badge.setText(learningTimeRemaining/1000);
+  badge.setText(parseTimerDown(learningTimeRemaining));
   learningTimeCountdownRef = setInterval(decrementLearningTime, 1000);
   learningTimeOutRef = setTimeout(startBonusTime, time);
 }
@@ -27,7 +29,7 @@ function stopLearningSession() {
 
 function decrementLearningTime () {
   learningTimeRemaining -= 1000;
-  badge.setText(learningTimeRemaining/1000);
+  badge.setText(parseTimerDown(learningTimeRemaining));
 }
  
 function startBonusTime() {

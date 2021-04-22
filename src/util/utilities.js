@@ -41,7 +41,7 @@ export function parseTimerDown(milliseconds) {
     return `<1m`
   } else if (seconds >= 60) {
     let minutes = seconds/60;
-    minutes = Math.floor(minutes);
+    minutes = Math.ceil(minutes);
     return `${minutes}m`
   }
 }
