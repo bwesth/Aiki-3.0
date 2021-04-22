@@ -21,3 +21,27 @@ export function makeDate() {
     hours: date.getHours(),
   };
 }
+
+export function parseTimerUp(milliseconds) {
+  let seconds = milliseconds/1000;
+  if (seconds < 60) {
+    return `${seconds}s`
+  } else if (seconds >= 60) {
+    let minutes = seconds/60;
+    minutes = Math.floor(minutes);
+    return `${minutes}m`
+  }
+}
+
+export function parseTimerDown(milliseconds) {
+  let seconds = milliseconds/1000;
+  if (seconds <= 30) {
+    return `${seconds}s`
+  } else if (seconds > 30 && seconds < 60) {
+    return `<1m`
+  } else if (seconds >= 60) {
+    let minutes = seconds/60;
+    minutes = Math.floor(minutes);
+    return `${minutes}m`
+  }
+}
