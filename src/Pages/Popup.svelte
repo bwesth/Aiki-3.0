@@ -96,6 +96,7 @@
     {#if siteName !== ""}
       <!-- Want to break this into it's on component at some point but not sure how to handle
       variables. -->
+      <!-- <TimerDisplay /> -->
       <div class="container">
         <h6>Learning Time Left: </h6>
         <p> {parseTimerDown(timeRemaining)}</p>

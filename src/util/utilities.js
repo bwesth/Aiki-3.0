@@ -9,6 +9,10 @@ export function parseUrl(site) {
   return { host: host, name: name };
 }
 
+/**
+ * 
+ * @returns 
+ */
 export function makeDate() {
   const options = {
     weekday: "long",
