@@ -1,11 +1,11 @@
 <!-- 
-
+  This popup is displayed when the user clicks on the extension icon on the toolbar.
   Used in / Parent components: /src/App.svelte
  -->
 
 <script>
   /* Functional and module imports */
-  import { parseUrl } from "../util/utilities";
+  import { parseUrl, parseTimerUp, parseTimerDown } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 

@@ -1,3 +1,8 @@
+/**
+ * 
+ * @param {string} site 
+ * @returns An object containing the host and name of the given site.
+ */
 export function parseUrl(site) {
   let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
   let name = host.includes("www") ? host.split(".")[1] : host.split(".")[0];
@@ -22,6 +27,11 @@ export function makeDate() {
   };
 }
 
+/**
+ * Parses a given value of milliseconds into a human-readable string.
+ * @param {number} milliseconds 
+ * @returns A string value floored to the nearest minute. (eg: 1m)
+ */
 export function parseTimerUp(milliseconds) {
   let seconds = milliseconds/1000;
   if (seconds < 60) {
@@ -33,6 +43,11 @@ export function parseTimerUp(milliseconds) {
   }
 }
 
+/**
+ * Parses a given value of milliseconds into a human-readable string.
+ * @param {number} milliseconds 
+ * @returns A string value raised to the nearest minute. (eg: 1m)
+ */
 export function parseTimerDown(milliseconds) {
   let seconds = milliseconds/1000;
   if (seconds <= 30) {
