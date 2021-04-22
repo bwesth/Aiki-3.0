@@ -11,7 +11,7 @@
 
   /* Components import */
   import SettingsButton from "./Components/Popup/SettingsButton.svelte";
-  //import TimerDisplay from "./Components/Popup/TimerDisplay.svelte"
+  import TimerDisplay from "./Components/Popup/TimerDisplay.svelte"
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
@@ -25,6 +25,8 @@
 
   let timeRemaining = -1;
   let bonusTime = -1;
+  //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
+  let learningTime = -1; 
   let intervalRef;
 
   $: canContinue = timeRemaining <= 0 ? true : false;
@@ -32,6 +34,8 @@
   async function setup() {
     getTimer();
     origin = await storage.origin.get();
+    //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
+    learningTime = await storage.timeSettings.learningTime.get();
     handleTimers();
   }
 
@@ -51,7 +55,7 @@
     port.postMessage("goto: origin");
   }
 
-  // Is also in <Progress>, trying something. Seems to be working.
+  //Is also in <Progress>, trying something. Seems to be working.
   async function getTimer() {
     port.postMessage("get: timer");
     port.onMessage.addListener(function (msg) {
@@ -93,23 +97,8 @@
     <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-    <!-- Props aren't updated correctly atm. Will fix it at some point. CBA rn. -->
-        <!-- <TimerDisplay {timeRemaining} {bonusTime} />
-      <hr /> -->
-
-      <!-- Remove this code when TimeDisplay component is working. -->
-      <div class="container">
-        <h6 class="item">Learning Time Left:</h6>
-        <p>{parseTimerDownLong(timeRemaining)}</p>
-      </div>
+      <TimerDisplay {timeRemaining} {bonusTime} />
       <hr />
-      <div class="container">
-        <h6 class="item">Extra Learning Time:</h6>
-        <p>{parseTimerUpLong(bonusTime)}</p>
-      </div>
-      <hr />
-
-
       <div class="container">
         {#if canContinue}
           <ContinueButton {siteName} {gotoOrigin} />
