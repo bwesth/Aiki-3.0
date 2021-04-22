@@ -97,13 +97,13 @@
       <!-- Want to break this into it's on component at some point but not sure how to handle
       variables. -->
       <div class="container">
-        <h6>Learning Time Left:</h6>
-        <p>{parseTimerDown(timeRemaining)}</p>
+        <h6>Learning Time Left: </h6>
+        <p> {parseTimerDown(timeRemaining)}</p>
       </div>
       <hr />
       <div class="container">
-        <h6>Extra Learning Time:</h6>
-        <p>{parseTimerUp(bonusTime)}</p>
+        <h6>Extra Learning Time: </h6>
+        <p> {parseTimerUp(bonusTime)}</p>
       </div>
       <hr />
 

@@ -51,10 +51,12 @@ export function parseTimerUp(milliseconds) {
 export function parseTimerDown(milliseconds) {
   let seconds = milliseconds/1000;
   if (seconds <= 30) {
-    return `${seconds}s`
+    return `${seconds}s`;
+  } else if (seconds >= 31 && seconds <=59) {
+    return "1m";
   } else if (seconds >= 60) {
     let minutes = seconds/60;
     minutes = Math.ceil(minutes);
-    return `${minutes}m`
+    return `${minutes}m`;
   }
 }
