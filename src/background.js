@@ -28,6 +28,7 @@ async function installationSetup() {
 
 function setup() {
   storage.shouldRedirect.set(true)
+  storage.warningOption.set(true);
   intervals.intervalSetup();
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();

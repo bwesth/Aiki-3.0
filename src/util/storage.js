@@ -107,6 +107,15 @@ async function getShouldRedirect() {
   return result.shouldRedirect;
 }
 
+async function setWarningOption(state){
+  storage.set({ warningOption: state})
+}
+
+async function getWarningOption() {
+  const result = await storage.get("warningOption");
+  return result.warningOption;
+}
+
 export default {
   timeSettings: {
     getAll: getUserTimes,
@@ -122,4 +131,5 @@ export default {
   uid: { set: setUid, get: getUid },
   redirectionSite: { get: getRedirectionSite, set: setRedirectionSite },
   redirection: { toggle: toggleRedirection, get: getRedirectionToggled },
+  warningOption: { get: getWarningOption, set: setWarningOption },
 };

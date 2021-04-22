@@ -15,12 +15,20 @@ async function createFilter() {
 
 async function addNavigationListener() {
   const filter = await createFilter();
-  browser.webNavigation.onCompleted.addListener(redirect, filter);
+  const warningState = await storage.warningOption.get()
+  if (warningState) {
+    console.log(warningState,"Adding an onCompleted listener")
+    browser.webNavigation.onCompleted.addListener(redirect, filter);
+  } else {
+    console.log(warningState,"Adding an onBeforeNavigate listener")
+    browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
+  }
 }
 
 async function removeNavigationListener() {
   const filter = await createFilter();
   browser.webNavigation.onCompleted.removeListener(redirect, filter);
+  browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
 async function restartNavigationListener() {
@@ -56,12 +64,16 @@ async function redirect(details) {
     const toggled = await storage.redirection.get();
     const shouldRedirect = await storage.shouldRedirect.get();
     if (toggled && shouldRedirect) {
-      timer.startLearningSession();
-      storage.origin.set({ url: details.url, tabId: details.tabId });
-      talkToContent(details.tabId, `https://${learningSites[0].host}`);
-      // browser.tabs.update(details.tabId, {
-      //   url: `https://${learningSites[0].host}`,
-      // });
+      const warningState = await storage.warningOption.get();
+      if (warningState) {
+        talkToContent(details.tabId, `https://${learningSites[0].host}`, details.url);
+      } else {
+        timer.startLearningSession();
+        storage.origin.set({ url: details.url, tabId: details.tabId });
+        browser.tabs.update(details.tabId, {
+            url: `https://${learningSites[0].host}`,
+          });
+        }
     }
   }
 }
@@ -120,10 +132,21 @@ async function gotoOrigin() {
   storage.origin.remove();
 }
 
-function talkToContent(tabId, url) {
+async function talkToContent(tabId, url, originUrl) {
   addMessageListener();
   console.log(tabId, url);
-  browser.tabs.sendMessage(tabId, { action: "display: message", url: url });
+  const result = await browser.tabs.sendMessage(tabId, { action: "display: message", url: url });
+  console.log(result)
+  if (result.removeWarning === true) {
+    toggleWarning()
+  }
+  timer.startLearningSession();
+  storage.origin.set({ url: originUrl, tabId: tabId });
+}
+
+async function toggleWarning(){
+  await storage.warningOption.set(false)
+  restartNavigationListener()
 }
 
 function addMessageListener() {
