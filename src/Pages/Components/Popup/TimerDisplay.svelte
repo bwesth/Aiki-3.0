@@ -4,24 +4,24 @@
  -->
  <!-- Doesn't work atm, passing props down isn't reactive. -->
 <script>
-    import {parseTimerDown, parseTimerUp} from "../../../util/utilities"
+    import {parseTimerDownLong, parseTimerUpLong} from "../../../util/utilities"
     export let timeRemaining;
     export let bonusTime;
 </script>
 
       <div class="container">
         <h6 class="item">Learning Time Left:</h6>
-        <p>{parseTimerDown(timeRemaining)}</p>
+        <p class="item" style="color:limegreen">{parseTimerDownLong(timeRemaining)}</p>
       </div>
       <hr />
       <div class="container">
         <h6 class="item">Extra Learning Time:</h6>
-        <p>{parseTimerUp(bonusTime)}</p>
+        <p class="item" style="color:deepskyblue">{parseTimerUpLong(bonusTime)}</p>
       </div>
   
 <style>
     .container {
-      display: flex;
+      display: block;
       justify-content: center;
       align-content: center;
       flex-direction: row;
@@ -31,13 +31,20 @@
       margin: auto auto;
     }
 
+    p {
+        font-weight: 700;
+        padding: 10px;
+        justify-content: center;
+        align-items: center;
+    }
+
     hr {
-    height: 1px;
-    border-width: 0;
-    color: gray;
-    background-color: gray;
-    width: 90%;
-    margin: 10px 10px;
-  }
+        height: 1px;
+        border-width: 0;
+        color: gray;
+        background-color: gray;
+        width: 90%;
+        margin: 10px 10px;
+    }
 </style>
   

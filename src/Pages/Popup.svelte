@@ -75,7 +75,7 @@
     }
   }
 
-  // Maybe redundant to make a function for this
+  //Maybe redundant to make a function for this
   function initBonusTime() {
     clearInterval(intervalRef);
     setInterval(() => (bonusTime += 1000), 1000);
@@ -153,5 +153,6 @@
     text-align: center;
     height: fit-content;
     width: 250px;
+    font-size:14px;
   }
 </style>
