@@ -32,7 +32,7 @@ export function makeDate() {
 }
 
 /**
- * Parses a given value of milliseconds into a human-readable string.
+ * Parses a given value of milliseconds into a short human-readable string.
  * @param {number} milliseconds 
  * @returns A string value floored to the nearest minute. (eg: 1m)
  */
@@ -48,7 +48,23 @@ export function parseTimerUp(milliseconds) {
 }
 
 /**
- * Parses a given value of milliseconds into a human-readable string.
+ * Parses a given value of milliseconds into a long human-readable string.
+ * @param {number} milliseconds 
+ * @returns A string value floored to the nearest minute. (eg: 1 minute)
+ */
+export function parseTimerUpLong(milliseconds) {
+  let seconds = milliseconds/1000;
+  if (seconds < 60) {
+    return `${seconds} seconds`
+  } else if (seconds >= 60) {
+    let minutes = seconds/60;
+    minutes = Math.floor(minutes);
+    return `${minutes} minutes`
+  }
+}
+
+/**
+ * Parses a given value of milliseconds into a short human-readable string.
  * @param {number} milliseconds 
  * @returns A string value raised to the nearest minute. (eg: 1m)
  */
@@ -62,5 +78,21 @@ export function parseTimerDown(milliseconds) {
     let minutes = seconds/60;
     minutes = Math.ceil(minutes);
     return `${minutes}m`;
+  }
+}
+
+/**
+ * Parses a given value of milliseconds into a long human-readable string.
+ * @param {number} milliseconds 
+ * @returns A string value raised to the nearest minute. (eg: 1 minute)
+ */
+export function parseTimerDownLong(milliseconds) {
+  let seconds = milliseconds/1000;
+  if (seconds <= 60) {
+    return `${seconds} seconds`;
+  } else if (seconds >= 60) {
+    let minutes = seconds/60;
+    minutes = Math.ceil(minutes);
+    return `${minutes} minutes`;
   }
 }

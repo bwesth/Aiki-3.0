@@ -5,13 +5,13 @@
 
 <script>
   /* Functional and module imports */
-  import { parseUrl, parseTimerUp, parseTimerDown } from "../util/utilities";
+  import { parseUrl, parseTimerUpLong, parseTimerDownLong } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
   /* Components import */
-  import SettingsButton from "./Components/popup/SettingsButton.svelte";
-  //import LinearProgress from "./Components/Popup/LinearProgress.svelte";
+  import SettingsButton from "./Components/Popup/SettingsButton.svelte";
+  //import TimerDisplay from "./Components/Popup/TimerDisplay.svelte"
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
@@ -25,14 +25,13 @@
 
   let timeRemaining = -1;
   let bonusTime = -1;
-  let learningTime = -1;
   let intervalRef;
+
   $: canContinue = timeRemaining <= 0 ? true : false;
 
   async function setup() {
     getTimer();
     origin = await storage.origin.get();
-    learningTime = await storage.timeSettings.learningTime.get();
     handleTimers();
   }
 
@@ -94,19 +93,22 @@
     <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-      <!-- Want to break this into it's on component at some point but not sure how to handle
-      variables. -->
-      <!-- <TimerDisplay /> -->
+    <!-- Props aren't updated correctly atm. Will fix it at some point. CBA rn. -->
+        <!-- <TimerDisplay {timeRemaining} {bonusTime} />
+      <hr /> -->
+
+      <!-- Remove this code when TimeDisplay component is working. -->
       <div class="container">
-        <h6>Learning Time Left: </h6>
-        <p> {parseTimerDown(timeRemaining)}</p>
+        <h6 class="item">Learning Time Left:</h6>
+        <p>{parseTimerDownLong(timeRemaining)}</p>
       </div>
       <hr />
       <div class="container">
-        <h6>Extra Learning Time: </h6>
-        <p> {parseTimerUp(bonusTime)}</p>
+        <h6 class="item">Extra Learning Time:</h6>
+        <p>{parseTimerUpLong(bonusTime)}</p>
       </div>
       <hr />
+
 
       <div class="container">
         {#if canContinue}

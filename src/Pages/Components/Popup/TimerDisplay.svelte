@@ -1,20 +1,23 @@
-<!-- Want to make this into it's own component -->
-
-<!--
+<!-- 
+  Display used in the Popup to show remaining and bonus time earned during a learning session.
+  Used in / Parent components: /src/Pages/Popup.svelte
+ -->
+ <!-- Doesn't work atm, passing props down isn't reactive. -->
 <script>
     import {parseTimerDown, parseTimerUp} from "../../../util/utilities"
+    export let timeRemaining;
+    export let bonusTime;
 </script>
 
       <div class="container">
-        <h6>Learning Time Left: </h6>
-        <p> {parseTimerDown(timeRemaining)}</p>
+        <h6 class="item">Learning Time Left:</h6>
+        <p>{parseTimerDown(timeRemaining)}</p>
       </div>
       <hr />
       <div class="container">
-        <h6>Extra Learning Time: </h6>
-        <p> {parseTimerUp(bonusTime)}</p>
+        <h6 class="item">Extra Learning Time:</h6>
+        <p>{parseTimerUp(bonusTime)}</p>
       </div>
-      <hr />
   
 <style>
     .container {
@@ -27,5 +30,14 @@
     .item {
       margin: auto auto;
     }
-</style> -->
+
+    hr {
+    height: 1px;
+    border-width: 0;
+    color: gray;
+    background-color: gray;
+    width: 90%;
+    margin: 10px 10px;
+  }
+</style>
   
