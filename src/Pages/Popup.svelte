@@ -11,7 +11,7 @@
 
   /* Components import */
   import SettingsButton from "./Components/popup/SettingsButton.svelte";
-  import LinearProgress from "./Components/Popup/LinearProgress.svelte";
+  //import LinearProgress from "./Components/Popup/LinearProgress.svelte";
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
@@ -94,11 +94,19 @@
     <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-      <LinearProgress
-        {bonusTime}
-        percentRemaining={ timeRemaining / learningTime }
-      />
+      <!-- Want to break this into it's on component at some point but not sure how to handle
+      variables. -->
+      <div class="container">
+        <h6>Learning Time Left:</h6>
+        <p>{parseTimerDown(timeRemaining)}</p>
+      </div>
       <hr />
+      <div class="container">
+        <h6>Extra Learning Time:</h6>
+        <p>{parseTimerUp(bonusTime)}</p>
+      </div>
+      <hr />
+
       <div class="container">
         {#if canContinue}
           <ContinueButton {siteName} {gotoOrigin} />

@@ -1,5 +1,5 @@
 <!-- 
-
+  Button used in the Popup to toggle the redirection functionality on and off.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>

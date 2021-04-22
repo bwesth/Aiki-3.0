@@ -1,5 +1,5 @@
 <!-- 
-
+  Button used in the Popup to access the settings menu from the popup.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>
@@ -31,7 +31,7 @@
 </div>
 
 <style>
-      .container {
+  .container {
     display: flex;
     justify-content: center;
     align-content: center;
@@ -41,5 +41,4 @@
   .item {
     margin: auto auto;
   }
-
 </style>

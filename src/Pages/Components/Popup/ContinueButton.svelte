@@ -1,5 +1,5 @@
 <!-- 
-
+  Button used in the Popup to continue to origin site after successfully completing a learning session.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>

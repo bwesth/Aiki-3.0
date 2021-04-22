@@ -1,5 +1,5 @@
 <!-- 
-
+  Button used in the Popup to skip past a learning session to the origin site.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>
