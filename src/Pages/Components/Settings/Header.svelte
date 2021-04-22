@@ -1,8 +1,10 @@
 <!-- 
-
+  Header bar for the settings page.
   Used in / Parent components: /src/Pages/Settings.svelte
- --><script>
+ -->
+<script>
 </script>
+
 <header>
     <h1>Aiki<sup>3</sup></h1>
 </header>
@@ -10,6 +12,7 @@
 <style>
     header {
         display: flex;
+        z-index: 999;
         align-items: center;
         justify-content: center;
         position: fixed;
