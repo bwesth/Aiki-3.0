@@ -1,20 +1,31 @@
-// Listener for messages from background script.
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//   switch (request.action) {
-//     case "returnURL":
-//       sendResponse({ host: location.host });
-//       break;
-//     case "redirection":
-//       redirectRequest();
-//       break;
-//   }
+import browser from "webextension-polyfill";
+import { app } from "./content/bundle";
 
-//   function redirectRequest() {
-//     if (document.getElementsByClassName("svelte-1tky8bj").length > 0) {
-//     } else {
-//       renderApp();
-//     }
-//     sendResponse({ message: "Redirection successful" });
-//   }
-//   return true;
-// });
+// Listener for messages from background script.
+browser.runtime.onMessage.addListener((request) => {
+  return new Promise((resolve, reject) => {
+    console.log(request);
+    console.log(request.action);
+    app(removeInfowarning);
+
+    let timeoutRef = setTimeout(() => {
+      resolve({ msg: "Auto resolve", removeWarning: false });
+      location.href = request.url;
+    }, 5000);
+
+    function removeInfowarning() {
+      clearTimeout(timeoutRef);
+      resolve({ msg: "Clicked", removeWarning: true });
+      location.href = request.url;
+    }
+  });
+
+  // function redirectRequest() {
+  //   if (document.getElementsByClassName("svelte-1tky8bj").length > 0) {
+  //   } else {
+  //     renderApp();
+  //   }
+  //   sendResponse({ message: "Redirection successful" });
+  // }
+  // return true;
+});

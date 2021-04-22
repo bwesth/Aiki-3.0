@@ -10,6 +10,7 @@
       "storage",
       "tabs",
       "windows",
+      "<all_urls>",
       "webNavigation"
     ],
     "background": {
@@ -21,6 +22,15 @@
       "default_popup": "index.html?page=popup",
       "default_icon": "/images/aikido.png"
     },
+    
+    "content_scripts" : [
+      {
+        "matches" : ["<all_urls>"],
+        "css": ["/build/content.css"],
+        "js": ["/build/injection.js"]
+      }
+    ],
+    
     "content_security_policy":"script-src 'self' 'unsafe-eval' https://maps.googleapis.com; object-src 'self'",
 
     "options_page": "/index.html?page=settings"
