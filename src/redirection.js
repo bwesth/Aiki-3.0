@@ -15,12 +15,12 @@ async function createFilter() {
 
 async function addNavigationListener() {
   const filter = await createFilter();
-  browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
+  browser.webNavigation.onCompleted.addListener(redirect, filter);
 }
 
 async function removeNavigationListener() {
   const filter = await createFilter();
-  browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
+  browser.webNavigation.onCompleted.removeListener(redirect, filter);
 }
 
 async function restartNavigationListener() {
@@ -58,9 +58,10 @@ async function redirect(details) {
     if (toggled && shouldRedirect) {
       timer.startLearningSession();
       storage.origin.set({ url: details.url, tabId: details.tabId });
-      browser.tabs.update(details.tabId, {
-        url: `https://${learningSites[0].host}`,
-      });
+      talkToContent(details.tabId, `https://${learningSites[0].host}`);
+      // browser.tabs.update(details.tabId, {
+      //   url: `https://${learningSites[0].host}`,
+      // });
     }
   }
 }
@@ -96,7 +97,6 @@ If a tab's url is found in the list, it calls the redirect function using that t
 @param {string} tab.url
 @param {number} tab.id */
 async function checkTab(tab) {
-  talkToContent(tab.id);
   const tabSiteName = parseUrl(tab.url).name;
   const procList = await storage.list.get();
   const procListNames = procList.map((site) => site.name);
@@ -120,8 +120,14 @@ async function gotoOrigin() {
   storage.origin.remove();
 }
 
-function talkToContent(tabId) {
-  browser.tabs.sendMessage(tabId, { action: "display: message" });
+function talkToContent(tabId, url) {
+  addMessageListener();
+  console.log(tabId, url);
+  browser.tabs.sendMessage(tabId, { action: "display: message", url: url });
+}
+
+function addMessageListener() {
+  browser.runtime.onMessage.addListener((msg) => console.log(msg));
 }
 
 export default {
