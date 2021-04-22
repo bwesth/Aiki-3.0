@@ -85,7 +85,7 @@
             />
             <div class="input-group-append">
               <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} /> Seconds</span
+                ><Fa icon={faHourglassHalf} />-Seconds</span
               >
             </div>
           </div>
@@ -101,7 +101,7 @@
             />
             <div class="input-group-append">
               <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} /> Seconds</span
+                ><Fa icon={faHourglassHalf} />-Seconds</span
               >
             </div>
           </div>

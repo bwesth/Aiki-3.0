@@ -1,20 +1,27 @@
 <!-- 
-
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
   import SettingsContainer from "./SettingsContainer.svelte";
+  import Fa from "svelte-fa";
+  import { faClock, faCheckCircle, faSkull } from "@fortawesome/free-solid-svg-icons";
+
+  let timeSpentLearning = 0;
+  let rewardTimeEarned = 0;
+  let completedLearningSessions = 0;
+  let emergencySkips = 0;
+
 </script>
 
 <SettingsContainer headline="Your Statistics">
-  <p>Here's a scientific breakdown of your time online:</p>
-  <img src="images/piechart.png" alt="pieboi" />
+  <h5>Your Stats:</h5>
+  <p>Here's a small collection of statistics on how you use Aiki.</p>
+  <hr />
+  <p><Fa icon={faClock}/><strong>-Time Spent Learning:</strong> {timeSpentLearning}</p>
+  <p><Fa icon={faClock}/><strong>-Reward Time Earned:</strong> {rewardTimeEarned}</p>
+  <p><Fa icon={faCheckCircle}/><strong>-Completed Learning Sessions:</strong> {completedLearningSessions}</p>
+  <p><Fa icon={faSkull}/><strong>-Emergency Skips:</strong> {emergencySkips}</p>
 </SettingsContainer>
 
 <style>
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-  }
 </style>

@@ -64,7 +64,7 @@
 
   .container {
     margin: auto;
-    padding: 30px;
+    padding: 30px 30px 10px;
   }
 
   main {
