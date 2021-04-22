@@ -96,7 +96,7 @@
     {#if siteName !== ""}
       <LinearProgress
         {bonusTime}
-        percentRemaining={timeRemaining / learningTime}
+        percentRemaining={ timeRemaining / learningTime }
       />
       <hr />
       <div class="container">
