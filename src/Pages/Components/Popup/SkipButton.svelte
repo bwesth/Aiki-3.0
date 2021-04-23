@@ -9,16 +9,16 @@
   export let gotoOrigin;
 </script>
 
-<button on:click={gotoOrigin} type="default" class="btn btn-secondary item"
+<button on:click={gotoOrigin} type="default" class="btn btn-danger item"
   ><Fa icon={faSkull} /> Emergency Skip!</button
 >
 
-
 <style>
+  button {
+    font-size: 14px;
+  }
 
-.item {
-margin: auto auto;
-}
-
-
+  .item {
+    margin: auto auto;
+  }
 </style>

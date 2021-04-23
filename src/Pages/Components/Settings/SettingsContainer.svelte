@@ -14,6 +14,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
 
 <style>
   h4 {
+    font-family:'Roboto', sans-serif;
     color: #444;
   }
 

@@ -5,16 +5,17 @@
 
 <script>
   /* Functional and module imports */
-  import { parseUrl, parseTimerUp, parseTimerDown } from "../util/utilities";
+  import { parseUrl } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
   /* Components import */
-  import SettingsButton from "./Components/popup/SettingsButton.svelte";
-  //import LinearProgress from "./Components/Popup/LinearProgress.svelte";
+  import SettingsButton from "./Components/Popup/SettingsButton.svelte";
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
+  import LearningTimeLeft from "./Components/Popup/LearningTimeLeft.svelte";
+  import ExtraLearningTime from "./Components/Popup/ExtraLearningTime.svelte";
 
   const port = browser.extension.connect({
     name: "Popup Communication",
@@ -25,13 +26,16 @@
 
   let timeRemaining = -1;
   let bonusTime = -1;
-  let learningTime = -1;
+  //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
+  let learningTime = -1; 
   let intervalRef;
+
   $: canContinue = timeRemaining <= 0 ? true : false;
 
   async function setup() {
     getTimer();
     origin = await storage.origin.get();
+    //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
     learningTime = await storage.timeSettings.learningTime.get();
     handleTimers();
   }
@@ -43,16 +47,16 @@
   }
 
   /**
-   * @function
-   * @description Sends a message to the background script for intepretation.
-   * Background script will initiate a tab update on the tab that triggered a redirection,
-   * restoring the origin uri.
-   */
+  * @function
+  * @description Sends a message to the background script for intepretation.
+  * Background script will initiate a tab update on the tab that triggered a redirection,
+  * restoring the origin uri.
+  */
   function gotoOrigin() {
     port.postMessage("goto: origin");
   }
 
-  // Is also in <Progress>, trying something. Seems to be working.
+  //Is also in <Progress>, trying something. Seems to be working.
   async function getTimer() {
     port.postMessage("get: timer");
     port.onMessage.addListener(function (msg) {
@@ -72,7 +76,7 @@
     }
   }
 
-  // Maybe redundant to make a function for this
+  //Maybe redundant to make a function for this
   function initBonusTime() {
     clearInterval(intervalRef);
     setInterval(() => (bonusTime += 1000), 1000);
@@ -84,30 +88,19 @@
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <main>
   <div class="popup">
-    <div class="container" style="margin-top: 10px">
+    <div id="popupHeader" class="container">
       <img src="images/aikido.png" class="icon item" alt="Aiki logo" />
-      <h5 class="header item">Aiki 3.0</h5>
+      <h5 class="header item">Aiki<sup>3</sup></h5>
     </div>
-    <hr />
     <SettingsButton />
     <hr />
     <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-      <!-- Want to break this into it's on component at some point but not sure how to handle
-      variables. -->
-      <!-- <TimerDisplay /> -->
-      <div class="container">
-        <h6>Learning Time Left: </h6>
-        <p> {parseTimerDown(timeRemaining)}</p>
-      </div>
+      <LearningTimeLeft {timeRemaining} />
       <hr />
-      <div class="container">
-        <h6>Extra Learning Time: </h6>
-        <p> {parseTimerUp(bonusTime)}</p>
-      </div>
+      <ExtraLearningTime {bonusTime} />
       <hr />
-
       <div class="container">
         {#if canContinue}
           <ContinueButton {siteName} {gotoOrigin} />
@@ -122,6 +115,15 @@
 
 <!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
+
+  #popupHeader {
+    padding: 12px 0px;
+    color: white;
+    background-color: #282c34;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
   .container {
     display: flex;
     justify-content: center;
@@ -131,10 +133,6 @@
 
   .item {
     margin: auto auto;
-  }
-
-  .popup {
-    padding: 5px;
   }
 
   .header {
@@ -150,17 +148,29 @@
   hr {
     height: 1px;
     border-width: 0;
-    color: gray;
-    background-color: gray;
+    color: lightgray;
+    background-color: lightgray;
     width: 90%;
     margin: 10px 10px;
   }
 
-  main {
+  /* Old colours */
+  /* main {
     background-color: #282c34;
     color: white;
     text-align: center;
     height: fit-content;
-    width: 250px;
+    width: 220px;
+  } */
+
+  main {
+    font-family: 'Roboto';
+    background-color: #f0f2f5;
+    color: #444;
+    text-align: center;
+    height: fit-content;
+    width: 220px;
   }
 </style>
+
+  

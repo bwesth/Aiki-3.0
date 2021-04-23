@@ -13,10 +13,10 @@
 
 </script>
 
-<SettingsContainer headline="Your Statistics">
-  <h5>Your Stats:</h5>
-  <p>Here's a small collection of statistics on how you use Aiki.</p>
+<SettingsContainer headline="Statistics">
+  <h5>Your Statistics:</h5>
   <hr />
+  <p>Here's a small collection of statistics on how you use Aiki.</p>
   <p><Fa icon={faClock}/><strong>-Time Spent Learning:</strong> {timeSpentLearning}</p>
   <p><Fa icon={faClock}/><strong>-Reward Time Earned:</strong> {rewardTimeEarned}</p>
   <p><Fa icon={faCheckCircle}/><strong>-Completed Learning Sessions:</strong> {completedLearningSessions}</p>
@@ -24,4 +24,12 @@
 </SettingsContainer>
 
 <style>
+  h5 {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+  }
 </style>
