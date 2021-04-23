@@ -17,10 +17,10 @@
   <h5>Your Statistics:</h5>
   <hr />
   <p>Here's a small collection of statistics on how you use Aiki.</p>
-  <p><Fa icon={faClock}/><strong>-Time Spent Learning:</strong> {timeSpentLearning}</p>
-  <p><Fa icon={faClock}/><strong>-Reward Time Earned:</strong> {rewardTimeEarned}</p>
-  <p><Fa icon={faCheckCircle}/><strong>-Completed Learning Sessions:</strong> {completedLearningSessions}</p>
-  <p><Fa icon={faSkull}/><strong>-Emergency Skips:</strong> {emergencySkips}</p>
+  <p><Fa icon={faClock}/><strong>-Time Spent Learning:</strong>&nbsp;seconds{timeSpentLearning}</p>
+  <p><Fa icon={faClock}/><strong>-Reward Time Earned:</strong>&nbsp;seconds{rewardTimeEarned}</p>
+  <p><Fa icon={faCheckCircle}/><strong>-Completed Learning Sessions:</strong>&nbsp;seconds{completedLearningSessions}</p>
+  <p><Fa icon={faSkull}/><strong>-Emergency Skips:</strong>&nbsp;{emergencySkips}</p>
 </SettingsContainer>
 
 <style>
