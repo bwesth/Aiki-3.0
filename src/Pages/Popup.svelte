@@ -88,11 +88,10 @@
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <main>
   <div class="popup">
-    <div class="container" style="margin-top: 10px">
+    <div id="popupHeader" class="container">
       <img src="images/aikido.png" class="icon item" alt="Aiki logo" />
-      <h5 class="header item">Aiki 3.0</h5>
+      <h5 class="header item">Aiki<sup>3</sup></h5>
     </div>
-    <hr />
     <SettingsButton />
     <hr />
     <ToggleRedirection />
@@ -116,6 +115,15 @@
 
 <!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
+
+  #popupHeader {
+    padding: 12px 0px;
+    color: white;
+    background-color: #282c34;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
   .container {
     display: flex;
     justify-content: center;
@@ -125,10 +133,6 @@
 
   .item {
     margin: auto auto;
-  }
-
-  .popup {
-    padding: 5px;
   }
 
   .header {

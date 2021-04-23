@@ -35,7 +35,7 @@
         justify-content: center;
         align-items: center;
         font-size: 14px;
-        color: limegreen;
+        color: #28a745;
     }
 </style>
   
