@@ -11,7 +11,6 @@
   $: learningTime = 0;
   $: rewardTime = 0;
   let infoWarning = false;
-  let t = false;
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
@@ -20,10 +19,6 @@
     infoWarning = await storage.warningOption.get();
     console.log(infoWarning);
   }
-
-  setTimeout(() => {
-    t = true;
-  }, 4000);
 
   /**
    * @description holds callbacks to each time setting function.
@@ -84,7 +79,7 @@
           />
           <div class="input-group-append">
             <span class="input-group-text" id="inputGroup-sizing-sm"
-              ><Fa icon={faHourglassHalf} />-Seconds</span
+              ><Fa icon={faHourglassHalf} />&nbsp;seconds</span
             >
           </div>
         </div>
@@ -100,7 +95,7 @@
           />
           <div class="input-group-append">
             <span class="input-group-text" id="inputGroup-sizing-sm"
-              ><Fa icon={faHourglassHalf} />-Seconds</span
+              ><Fa icon={faHourglassHalf} />&nbsp;seconds</span
             >
           </div>
         </div>
