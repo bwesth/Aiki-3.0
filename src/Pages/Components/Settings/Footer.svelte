@@ -6,6 +6,7 @@
 
 <style>
     footer {
+        font-family: 'Roboto', sans-serif;
         flex-shrink: 0;
         text-align: center;
         margin-top: auto;

@@ -124,4 +124,12 @@
 </SettingsContainer>
 
 <style>
+    h5 {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+  }
 </style>

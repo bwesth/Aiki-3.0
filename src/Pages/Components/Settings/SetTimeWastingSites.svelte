@@ -193,12 +193,24 @@
   th {
     padding: 15px;
     color: #444;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
   }
 
   td {
     font-family: "Lucida Console", "Courier New", monospace;
+    font-size: 16px;
     padding: 15px;
     color: #444;
+  }
+
+  h5 {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
   }
 
   .webFavicon {

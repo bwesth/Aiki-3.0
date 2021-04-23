@@ -116,4 +116,13 @@
     text-align: center;
     padding: 15px;
   }
+
+  h5 {
+    font-family: 'Roboto', sans-serif;
+  }
+
+  p {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+  }
 </style>
