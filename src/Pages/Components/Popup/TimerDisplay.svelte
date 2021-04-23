@@ -31,11 +31,16 @@
       margin: auto auto;
     }
 
+    h6 {
+      font-size: 14px;
+    }
+
     p {
         font-weight: 700;
         padding: 10px;
         justify-content: center;
         align-items: center;
+        font-size: 14px;
     }
 
     hr {

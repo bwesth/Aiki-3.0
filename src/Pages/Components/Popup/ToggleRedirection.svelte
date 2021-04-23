@@ -33,6 +33,14 @@
 </div>
 
 <style>
+  button {
+    font-size: 14px;
+  }
+
+  h6 {
+    font-size: 14px;
+  }
+
   .container {
     display: flex;
     justify-content: center;

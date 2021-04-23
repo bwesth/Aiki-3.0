@@ -5,7 +5,7 @@
 
 <script>
   /* Functional and module imports */
-  import { parseUrl, parseTimerUpLong, parseTimerDownLong } from "../util/utilities";
+  import { parseUrl } from "../util/utilities";
   import storage from "../util/storage";
   import browser from "webextension-polyfill";
 
@@ -46,11 +46,11 @@
   }
 
   /**
-   * @function
-   * @description Sends a message to the background script for intepretation.
-   * Background script will initiate a tab update on the tab that triggered a redirection,
-   * restoring the origin uri.
-   */
+  * @function
+  * @description Sends a message to the background script for intepretation.
+  * Background script will initiate a tab update on the tab that triggered a redirection,
+  * restoring the origin uri.
+  */
   function gotoOrigin() {
     port.postMessage("goto: origin");
   }
@@ -152,7 +152,6 @@
     color: white;
     text-align: center;
     height: fit-content;
-    width: 250px;
-    font-size:14px;
+    width: 220px;
   }
 </style>

@@ -15,10 +15,11 @@
 
 
 <style>
+  button {
+    font-size: 14px;
+  }
 
-.item {
-margin: auto auto;
-}
-
-
+  .item {
+    margin: auto auto;
+  }
 </style>
