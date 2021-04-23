@@ -2,8 +2,7 @@
   Display used in the Popup to show bonus learning time during a learning session.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
- <!-- Doesn't work atm, passing props down isn't reactive. -->
- <script>
+<script>
     import {parseTimerUpLong} from "../../../util/utilities"
     export let bonusTime;
 </script>
