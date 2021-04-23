@@ -6,18 +6,50 @@ browser.runtime.onMessage.addListener((request) => {
   return new Promise((resolve, reject) => {
     console.log(request);
     console.log(request.action);
-    app(removeInfowarning);
 
-    let timeoutRef = setTimeout(() => {
-      resolve({ msg: "Auto resolve", removeWarning: false });
-      location.href = request.url;
-    }, 5000);
+    // let timeoutRef = setTimeout(() => {
+    //   resolve({ msg: "Auto resolve", removeWarning: false });
+    //   location.href = request.url;
+    // }, 5000);
+
+    let timer = {
+      time: 5000,
+      interval: undefined,
+      slowed: false,
+      print: function () {},
+      start: function () {
+        timer.interval = setInterval(() => {
+          if (timer.slowed) {
+            timer.time -= 20;
+          } else {
+            timer.time -= 100;
+          }
+          if (timer.time <= 0) {
+            timer.stop();
+            resolve({ msg: "Auto resolve", removeWarning: false });
+            location.href = request.url;
+          }
+        }, 100);
+      },
+      stop: function () {
+        if (timer.interval) clearInterval(timer.interval);
+        timer.interval = undefined;
+      },
+      slow: function () {
+        timer.slowed = true;
+      },
+      hasten: function () {
+        timer.slowed = false;
+      },
+    };
 
     function removeInfowarning() {
-      clearTimeout(timeoutRef);
+      timer.stop();
       resolve({ msg: "Clicked", removeWarning: true });
       location.href = request.url;
     }
+
+    app(removeInfowarning, timer);
   });
 
   // function redirectRequest() {
