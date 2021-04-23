@@ -9,7 +9,7 @@
 			padding:0;
 		}
 	</style>
-    <title>Aiki 3.0</title>
+    <title>Aiki</title>
     <!-- Importing bootstrap -->
     <link
       rel="stylesheet"
@@ -34,30 +34,34 @@
       html, body {
         width: 100%;
       }
+
+      body {
+        padding: 0px;
+      }
+
+      /* Scrollbar style stuff! */
+      html {
+        --scrollbarBG: #CFD8DC;
+        --thumbBG: #90A4AE;
+      }
+      body::-webkit-scrollbar {
+        width: 11px;
+      }
+      body {
+        scrollbar-width: thin;
+        scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+      }
+      body::-webkit-scrollbar-track {
+        background: var(--scrollbarBG);
+      }
+      body::-webkit-scrollbar-thumb {
+        background-color: var(--thumbBG) ;
+        border-radius: 6px;
+        border: 3px solid var(--scrollbarBG);
+      }
+
     </style>
   </head>
-
-  <body style="padding:0px">
-    <!-- Commenting these out until we fix the errors produced by them. -->
-    <!-- This is producing an error -->
-    <!-- <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script> -->
-    <!-- This is producing an error -->
-    <!-- popper.min -->
-    <!-- <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script> -->
-    <!-- This is producing an error -->
-    <!-- bootstrap.min -->
-    <!-- <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script> -->
+  <body>
   </body>
 </html>
