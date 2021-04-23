@@ -10,6 +10,10 @@
 </header>
 
 <style>
+    h1 {
+        margin-top: 10px;
+    }
+
     header {
         font-family: 'Roboto', sans-serif;
         display: flex;
