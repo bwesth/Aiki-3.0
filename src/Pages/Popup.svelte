@@ -11,10 +11,11 @@
 
   /* Components import */
   import SettingsButton from "./Components/Popup/SettingsButton.svelte";
-  import TimerDisplay from "./Components/Popup/TimerDisplay.svelte"
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
+  import LearningTimeLeft from "./Components/Popup/LearningTimeLeft.svelte";
+  import ExtraLearningTime from "./Components/Popup/ExtraLearningTime.svelte";
 
   const port = browser.extension.connect({
     name: "Popup Communication",
@@ -97,7 +98,9 @@
     <ToggleRedirection />
     <hr />
     {#if siteName !== ""}
-      <TimerDisplay {timeRemaining} {bonusTime} />
+      <LearningTimeLeft {timeRemaining} />
+      <hr />
+      <ExtraLearningTime {bonusTime} />
       <hr />
       <div class="container">
         {#if canContinue}
@@ -141,15 +144,24 @@
   hr {
     height: 1px;
     border-width: 0;
-    color: gray;
-    background-color: gray;
+    color: lightgray;
+    background-color: lightgray;
     width: 90%;
     margin: 10px 10px;
   }
 
-  main {
+  /* Old colours */
+  /* main {
     background-color: #282c34;
     color: white;
+    text-align: center;
+    height: fit-content;
+    width: 220px;
+  } */
+
+  main {
+    background-color: #f0f2f5;
+    color: #444;
     text-align: center;
     height: fit-content;
     width: 220px;

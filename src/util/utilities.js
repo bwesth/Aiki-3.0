@@ -88,7 +88,9 @@ export function parseTimerDown(milliseconds) {
  */
 export function parseTimerDownLong(milliseconds) {
   let seconds = milliseconds/1000;
-  if (seconds <= 60) {
+  if (seconds === 0) {
+    return "None"
+  } else if (seconds <= 60) {
     return `${seconds} seconds`;
   } else if (seconds >= 60) {
     let minutes = seconds/60;
