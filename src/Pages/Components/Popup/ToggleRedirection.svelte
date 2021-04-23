@@ -5,7 +5,7 @@
 <script>
   /* Functional and module imports */
   import Fa from "svelte-fa";
-  import { faDotCircle } from "@fortawesome/free-solid-svg-icons";
+  import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
   import storage from "../../../util/storage";
 
   let toggled;
@@ -28,7 +28,7 @@
     type="default"
     class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
     on:click={toggleRedirection}
-    ><Fa icon={faDotCircle} /> {toggled ? "On" : "Off"}</button
+    ><Fa icon={faPowerOff} /> {toggled ? "On" : "Off"}</button
   >
 </div>
 

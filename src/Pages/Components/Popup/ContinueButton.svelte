@@ -5,7 +5,7 @@
 <script>
   /* Functional and module imports */
   import Fa from "svelte-fa";
-  import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+  import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 
   export let siteName;
   export let gotoOrigin;
@@ -13,7 +13,7 @@
 </script>
 
 <button type="default" on:click={gotoOrigin} class="btn btn-success item"
-  ><Fa icon={faThumbsUp} /> Continue to {siteName}
+  ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
 </button>
 
 
