@@ -7,19 +7,23 @@
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
   import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
-  // let selected;
-  // storage.getRedirectionSite((data) => (selected = data));
-  // TODO: add storage logic to time settings
+
   $: learningTime = 0;
   $: rewardTime = 0;
-  // $: rewardRatio = 0;
+  let infoWarning = false;
+  let t = false;
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
-    // rewardRatio = data.rewardRatio;
+    infoWarning = await storage.warningOption.get();
+    console.log(infoWarning);
   }
+
+  setTimeout(() => {
+    t = true;
+  }, 4000);
 
   /**
    * @description holds callbacks to each time setting function.
@@ -38,19 +42,15 @@
     },
   };
 
-  /**
-   * @deprecated (Or rather, not implemented... Might be? Depends on whether John wants a save button or dynamic storage changes)
-   */
-  function saveSettings() {
-    storage.timeSettings.learningTime.set(learningTime);
-    storage.timeSettings.rewardTime.set(rewardTime);
-    storage.timeSettings.rewardRatio.set(rewardRatio);
+  function updateWarningSetting() {
+    storage.warningOption.set(infoWarning);
+    console.log(infoWarning);
   }
 
   fetchStorage();
 </script>
 
-<SettingsContainer headline="Learning Site">
+<SettingsContainer headline="Redirection Settings">
   <h5>Your Python Learning Platform:</h5>
   <hr />
   <div class="container">
@@ -73,39 +73,52 @@
       </div>
       <div class="col-sm" />
       <div class="col-sm">
-
-          <div class="input-group input-group-sm mb-3">
-            <input
-              bind:value={learningTime}
-              on:change={changeSettings.learningTime}
-              type="number"
-              class="form-control"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-            />
-            <div class="input-group-append">
-              <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} />-Seconds</span
-              >
-            </div>
+        <div class="input-group input-group-sm mb-3">
+          <input
+            bind:value={learningTime}
+            on:change={changeSettings.learningTime}
+            type="number"
+            class="form-control"
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text" id="inputGroup-sizing-sm"
+              ><Fa icon={faHourglassHalf} />-Seconds</span
+            >
           </div>
+        </div>
 
-          <div class="input-group input-group-sm mb-3">
-            <input
-              bind:value={rewardTime}
-              on:change={changeSettings.rewardTime}
-              type="number"
-              class="form-control"
-              aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm"
-            />
-            <div class="input-group-append">
-              <span class="input-group-text" id="inputGroup-sizing-sm"
-                ><Fa icon={faHourglassHalf} />-Seconds</span
-              >
-            </div>
+        <div class="input-group input-group-sm mb-3">
+          <input
+            bind:value={rewardTime}
+            on:change={changeSettings.rewardTime}
+            type="number"
+            class="form-control"
+            aria-label="Small"
+            aria-describedby="inputGroup-sizing-sm"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text" id="inputGroup-sizing-sm"
+              ><Fa icon={faHourglassHalf} />-Seconds</span
+            >
           </div>
-
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div>
+    <div class="row">
+      <div class="col-sm">
+        <p>Miscellaneous:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm" >
+        <input type="checkbox" bind:checked={infoWarning} on:change={updateWarningSetting} />
+        <label for="infoWarningToggle" class="form-check-label"
+          >Info Warning</label
+        >
       </div>
     </div>
   </div>
@@ -118,11 +131,11 @@
   }
 
   h5 {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
   }
 
   p {
-    font-family: 'Lato', sans-serif;
+    font-family: "Lato", sans-serif;
     font-size: 16px;
   }
 </style>
