@@ -10,6 +10,7 @@
   import browser from "webextension-polyfill";
 
   /* Components import */
+  import Header from "./Components/Popup/Header.svelte";
   import SettingsButton from "./Components/Popup/SettingsButton.svelte";
   import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
@@ -87,11 +88,7 @@
 
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <main>
-  <div class="popup">
-    <div id="popupHeader" class="container">
-      <img src="images/aikido.png" class="icon item" alt="Aiki logo" />
-      <h5 class="header item">Aiki<sup>3</sup></h5>
-    </div>
+    <Header />
     <SettingsButton />
     <hr />
     <ToggleRedirection />
@@ -110,39 +107,16 @@
       </div>
       <hr />
     {/if}
-  </div>
 </main>
 
 <!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
 
-  #popupHeader {
-    padding: 12px 0px;
-    color: white;
-    background-color: #282c34;
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
   .container {
     display: flex;
     justify-content: center;
-    align-content: center;
+    align-items: center;
     flex-direction: row;
-  }
-
-  .item {
-    margin: auto auto;
-  }
-
-  .header {
-    display: inline;
-  }
-
-  .icon {
-    height: 27px;
-    display: inline;
-    padding-right: 10px;
   }
 
   hr {
