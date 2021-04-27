@@ -1,5 +1,6 @@
 import storage from "./util/storage";
-import { learningSites, participantResource } from "./util/constants";
+import { participantResource } from "./util/constants";
+import firebase from "./util/firebase";
 import browser from "webextension-polyfill";
 import timer from "./timer";
 import { parseUrl, makeDate } from "./util/utilities";
@@ -66,18 +67,27 @@ async function redirect(details) {
     if (toggled && shouldRedirect) {
       const warningState = await storage.warningOption.get();
       if (warningState) {
+        addRedirectionLog(
+          `Interception: initiating countdown`,
+          parseUrl(details.url).name,
+          participantResource.name
+        );
         talkToContent(
           details.tabId,
-          `https://${participantResource}`,
+          `https://${participantResource.host}`,
           details.url
         );
       } else {
         timer.startLearningSession();
         storage.origin.set({ url: details.url, tabId: details.tabId });
         browser.tabs.update(details.tabId, {
-          url: `https://${participantResource}`,
+          url: `https://${participantResource.host}`,
         });
-        addRedirectionLog(`Redirection`, parseUrl(details.url).name, participantResource);
+        addRedirectionLog(
+          `Interception: instant redirection`,
+          parseUrl(details.url).name,
+          participantResource.name
+        );
       }
     }
   }
@@ -135,19 +145,31 @@ async function gotoOrigin(event) {
   const origin = await storage.origin.get();
   browser.tabs.update(origin.tabId, { url: origin.url });
   storage.origin.remove();
-  addRedirectionLog(`Go to origin: ${event}`, participantResource, parseUrl(origin.url).name);
+  addRedirectionLog(
+    `Go to origin: ${event}`,
+    participantResource.name,
+    parseUrl(origin.url).name
+  );
 }
 
 async function talkToContent(tabId, url, originUrl) {
-  addMessageListener();
-  console.log(tabId, url);
   const result = await browser.tabs.sendMessage(tabId, {
     action: "display: message",
     url: url,
   });
-  console.log(result);
   if (result.removeWarning === true) {
-    toggleWarning();
+    await toggleWarning();
+    addRedirectionLog(
+      `Interception: skipped countdown`,
+      parseUrl(url).name,
+      participantResource.name
+    );
+  } else {
+    addRedirectionLog(
+      `Interception: auto resolve`,
+      parseUrl(url).name,
+      participantResource.name
+    );
   }
   timer.startLearningSession();
   storage.origin.set({ url: originUrl, tabId: tabId });
@@ -158,17 +180,13 @@ async function toggleWarning() {
   restartNavigationListener();
 }
 
-function addMessageListener() {
-  browser.runtime.onMessage.addListener((msg) => console.log(msg));
-}
-
 async function addRedirectionLog(event, from, to) {
   // get user
   const user = await storage.uid.get();
   //get details
-  const warningOption = await storage.warningOption.get()
+  const warningOption = await storage.warningOption.get();
   const timeSettings = await storage.timeSettings.getAll();
-  const details = {warningOption: warningOption, timeSettings: timeSettings}
+  const details = { warningOption: warningOption, timeSettings: timeSettings };
   firebase.addLog(
     {
       user: user,

@@ -17,7 +17,6 @@
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
     infoWarning = await storage.warningOption.get();
-    console.log(infoWarning);
   }
 
   /**
@@ -39,7 +38,6 @@
 
   function updateWarningSetting() {
     storage.warningOption.set(infoWarning);
-    console.log(infoWarning);
   }
 
   fetchStorage();

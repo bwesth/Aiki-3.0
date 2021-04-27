@@ -54,7 +54,7 @@
   * restoring the origin uri.
   */
   function gotoOrigin(type) {
-    port.postMessage("goto: origin : "+type);
+    port.postMessage("goto: origin: "+type);
   }
 
   //Is also in <Progress>, trying something. Seems to be working.

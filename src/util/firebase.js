@@ -17,7 +17,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 /**
- * @async 
+ * @async
  * @function
  * @param {DocumentReference} ref A reference to a firestore document
  * @description Checks if referenced document has a field. If not, it creates a field (active = true).
@@ -33,7 +33,7 @@ async function resolveDoc(ref) {
 }
 
 /**
- * @async 
+ * @async
  * @function
  * @param {object} entry The data to be stored in firestore.
  * @param {DocumentReference} reference A reference to the nested document which should contain the entry.
@@ -48,15 +48,16 @@ async function addEntry(entry, reference, type) {
 }
 
 /**
- * @async 
+ * @async
  * @function
- * @param {object} entry 
- * @param {string} type 
- * @description Top level function to add log entries to firestore. 
+ * @param {object} entry
+ * @param {string} type
+ * @description Top level function to add log entries to firestore.
  * Takes entry object and type of entry and resolves each level of firestore document/collection used.
  * Finally adds entry at appropriate log type within the appropriate date collection.
  */
 async function addLog(entry, type) {
+  console.log("Logging to firestore:", "Entry:", entry, "type:", type);
   entry.user = `${hash(entry.user)}`;
   const userRef = db.collection("user_logs").doc(entry.user);
   resolveDoc(userRef);

@@ -7,4 +7,4 @@ export const learningSites = [
   {name: "skillshare", host: "www.skillshare.com"},
 ];
 
-export const participantResource = "www.codecademy.com"
+export const participantResource = {name: "codecademy", host: "www.codecademy.com"}

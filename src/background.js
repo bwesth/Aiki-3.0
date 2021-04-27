@@ -45,7 +45,7 @@ browser.extension.onConnect.addListener(function (port) {
         redirection.navigationListener.restart();
         break;
       case "origin":
-        redirection.gotoOrigin(msg.split(": "[2]));
+        redirection.gotoOrigin(msg.split(": ")[2]);
         break;
       case "timer":
         port.postMessage(timer.getTime());
