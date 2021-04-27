@@ -2,6 +2,7 @@ import browser from "webextension-polyfill";
 import storage from "./util/storage";
 import firebase from "./util/firebase";
 import { parseUrl, makeDate } from "./util/utilities";
+import { learningSites } from "./util/constants";
 
 let list;
 let user;
@@ -29,7 +30,10 @@ async function counter() {
       currentWindow: true,
     });
     const name = parseUrl(result[0].url).name;
-    if (list.includes(name)) {
+    if (
+      list.includes(name) ||
+      learningSites.find((site) => site.name === name) !== undefined
+    ) {
       data[name] = data[name] ? data[name] + 1 : 1;
     }
   } else {

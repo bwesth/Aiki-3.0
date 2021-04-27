@@ -1,8 +1,9 @@
 import storage from "./util/storage";
-import { learningSites } from "./util/constants";
+import { participantResource } from "./util/constants";
+import firebase from "./util/firebase";
 import browser from "webextension-polyfill";
 import timer from "./timer";
-import { parseUrl } from "./util/utilities";
+import { parseUrl, makeDate } from "./util/utilities";
 
 async function createFilter() {
   const procList = await storage.list.get();
@@ -15,12 +16,12 @@ async function createFilter() {
 
 async function addNavigationListener() {
   const filter = await createFilter();
-  const warningState = await storage.warningOption.get()
+  const warningState = await storage.warningOption.get();
   if (warningState) {
-    console.log(warningState,"Adding an onCompleted listener")
+    console.log(warningState, "Adding an onCompleted listener");
     browser.webNavigation.onCompleted.addListener(redirect, filter);
   } else {
-    console.log(warningState,"Adding an onBeforeNavigate listener")
+    console.log(warningState, "Adding an onBeforeNavigate listener");
     browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
   }
 }
@@ -49,7 +50,7 @@ async function restartTabChangeListener() {
   addTabChangeListener();
 }
 
-/**
+/** #REDIRECT()#
 @function
 @async
 @description Checks if redirection should happen, 
@@ -66,19 +67,33 @@ async function redirect(details) {
     if (toggled && shouldRedirect) {
       const warningState = await storage.warningOption.get();
       if (warningState) {
-        talkToContent(details.tabId, `https://${learningSites[0].host}`, details.url);
+        addRedirectionLog(
+          `Interception: initiating countdown`,
+          parseUrl(details.url).name,
+          participantResource.name
+        );
+        talkToContent(
+          details.tabId,
+          `https://${participantResource.host}`,
+          details.url
+        );
       } else {
         timer.startLearningSession();
         storage.origin.set({ url: details.url, tabId: details.tabId });
         browser.tabs.update(details.tabId, {
-            url: `https://${learningSites[0].host}`,
-          });
-        }
+          url: `https://${participantResource.host}`,
+        });
+        addRedirectionLog(
+          `Interception: instant redirection`,
+          parseUrl(details.url).name,
+          participantResource.name
+        );
+      }
     }
   }
 }
 
-/**
+/** #CHECKCURRENTTAB()#
 @function
 @async
 @description Gets currently active tab and calls checkTab on the resulting tab. */
@@ -99,7 +114,7 @@ async function checkTabById({ tabId }) {
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
 
-/** 
+/** #CHECKTAB()#
 @function
 @async
 @description Checks a tab against a list of websites defined as procrastination websites.
@@ -117,40 +132,72 @@ async function checkTab(tab) {
   }
 }
 
-/**
+/** #GOTOORIGIN()#
 @function
 @async
 @description Changes location of the tab registered as the tab 
 that triggered a redirection from procrastination to learning site.
 The uri was saved upon redirection, and here restored in full in the same tab.
 Origin is an object of type: {integer: tabId, string: url} */
-async function gotoOrigin() {
+async function gotoOrigin(event) {
   await storage.shouldRedirect.set(false);
   timer.startProcrastinationSession(checkCurrentTab);
   const origin = await storage.origin.get();
   browser.tabs.update(origin.tabId, { url: origin.url });
   storage.origin.remove();
+  addRedirectionLog(
+    `Go to origin: ${event}`,
+    participantResource.name,
+    parseUrl(origin.url).name
+  );
 }
 
 async function talkToContent(tabId, url, originUrl) {
-  addMessageListener();
-  console.log(tabId, url);
-  const result = await browser.tabs.sendMessage(tabId, { action: "display: message", url: url });
-  console.log(result)
+  const result = await browser.tabs.sendMessage(tabId, {
+    action: "display: message",
+    url: url,
+  });
   if (result.removeWarning === true) {
-    toggleWarning()
+    await toggleWarning();
+    addRedirectionLog(
+      `Interception: skipped countdown`,
+      parseUrl(url).name,
+      participantResource.name
+    );
+  } else {
+    addRedirectionLog(
+      `Interception: auto resolve`,
+      parseUrl(url).name,
+      participantResource.name
+    );
   }
   timer.startLearningSession();
   storage.origin.set({ url: originUrl, tabId: tabId });
 }
 
-async function toggleWarning(){
-  await storage.warningOption.set(false)
-  restartNavigationListener()
+async function toggleWarning() {
+  await storage.warningOption.set(false);
+  restartNavigationListener();
 }
 
-function addMessageListener() {
-  browser.runtime.onMessage.addListener((msg) => console.log(msg));
+async function addRedirectionLog(event, from, to) {
+  // get user
+  const user = await storage.uid.get();
+  //get details
+  const warningOption = await storage.warningOption.get();
+  const timeSettings = await storage.timeSettings.getAll();
+  const details = { warningOption: warningOption, timeSettings: timeSettings };
+  firebase.addLog(
+    {
+      user: user,
+      event: event,
+      from: from,
+      to: to,
+      detail: details,
+      date: makeDate(),
+    },
+    "redirection"
+  );
 }
 
 export default {

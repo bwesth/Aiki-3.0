@@ -22,7 +22,6 @@
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
     warningOption = await storage.warningOption.get();
-    console.log(warningOption);
   }
 
   /**

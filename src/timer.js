@@ -43,7 +43,6 @@ function startBonusTime() {
 
 function incrementEarnedTime() {
   earnedTime++;
-  console.log("Earned time: ", earnedTime);
 }
 
 // When redirecting to origin site
