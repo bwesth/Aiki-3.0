@@ -7,11 +7,6 @@ browser.runtime.onMessage.addListener((request) => {
     console.log(request);
     console.log(request.action);
 
-    // let timeoutRef = setTimeout(() => {
-    //   resolve({ msg: "Auto resolve", removeWarning: false });
-    //   location.href = request.url;
-    // }, 5000);
-
     let timer = {
       time: 5000,
       interval: undefined,

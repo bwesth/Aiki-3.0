@@ -3,31 +3,27 @@ import browser from "webextension-polyfill";
  
   /**
   * @description Adds text to the badge.
-  * @param { String | number } value Should be less than 4 characters long.
-  */
+  * @param { String | number } value Should be less than 4 characters long.  */
   function setText(value) {
     browser.browserAction.setBadgeText({text: `${value}`});
   }
 
   /**
-  * @description Changes the background colour of the badge to green.
-  */
+  * @description Changes the background colour of the badge to green.  */
   function setBusy() {
     browser.browserAction.setBadgeBackgroundColor({color:'limegreen'});
   }
 
   /**
-  * @description Changes the background colour of the badge to blue.
-  */
+  * @description Changes the background colour of the badge to blue.  */
   function setDone() {
     browser.browserAction.setBadgeBackgroundColor({color:'deepskyblue'});
   }
 
   /**
-  * @description Removes the badge from the icon entirely.
-  */
+  * @description Removes the badge from the icon entirely.  */
   function remove() {
-    browser.browserAction.setBadgeText({text:''});
+    browser.browserAction.setBadgeText({text: ''});
   }
 
   export default {

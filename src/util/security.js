@@ -2,6 +2,7 @@
  * 
  * @param {string} input 
  * @returns 32bit integer
+ * @description Obfuscates string
  */
 export function hash(input) {
     var hash = 0, i, chr;

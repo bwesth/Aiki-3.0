@@ -2,6 +2,7 @@
     Imports both Pages and Popup components.
     Uses a switch to set selected component based on search parameters in the window.location.
     svelte:component is used to dynamically paint selected component.
+    // TODO: More documentation in this file
 -->
 <script>
 import Popup from './Pages/Popup.svelte'
