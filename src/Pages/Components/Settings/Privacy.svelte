@@ -1,5 +1,5 @@
 <!-- 
-
+  Details the privacy of the application when the user first installs it.
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
@@ -23,11 +23,11 @@ import SettingsContainer from "./SettingsContainer.svelte";
 
 <style>
   h5 {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
   }
 </style>

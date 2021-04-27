@@ -8,7 +8,9 @@
   import Fa from "svelte-fa";
   import {
     faHourglassHalf,
-    faPowerOff, faMoon, faSun
+    faPowerOff,
+    faMoon,
+    faSun,
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
@@ -130,19 +132,17 @@
       <div class="col-sm" />
       <div class="col-sm">
         {#if darkMode}
-        <button
-          type="default"
-          class="btn btn-dark item"
-          on:click={toggleDarkMode}
-          ><Fa icon={faMoon}/> Dark</button
-        >
+          <button
+            type="default"
+            class="btn btn-dark item"
+            on:click={toggleDarkMode}><Fa icon={faMoon} /> Dark</button
+          >
         {:else}
-        <button
-        type="default"
-        class="btn btn-light item"
-        on:click={toggleDarkMode}
-        ><Fa icon={faSun}/> Light</button
-      >
+          <button
+            type="default"
+            class="btn btn-light item"
+            on:click={toggleDarkMode}><Fa icon={faSun} /> Light</button
+          >
         {/if}
       </div>
     </div>
@@ -156,11 +156,11 @@
   }
 
   h5 {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: "Lato", sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
   }
 </style>

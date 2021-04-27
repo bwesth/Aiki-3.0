@@ -2,7 +2,6 @@
   This popup is displayed when the user clicks on the extension icon on the toolbar.
   Used in / Parent components: /src/App.svelte
  -->
-
 <script>
   /* Functional and module imports */
   import { parseUrl } from "../util/utilities";
@@ -28,7 +27,7 @@
   let timeRemaining = -1;
   let bonusTime = -1;
   //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
-  let learningTime = -1; 
+  let learningTime = -1;
   let intervalRef;
 
   $: canContinue = timeRemaining <= 0 ? true : false;
@@ -48,13 +47,13 @@
   }
 
   /**
-  * @function
-  * @description Sends a message to the background script for intepretation.
-  * Background script will initiate a tab update on the tab that triggered a redirection,
-  * restoring the origin uri.
-  */
+   * @function
+   * @description Sends a message to the background script for intepretation.
+   * Background script will initiate a tab update on the tab that triggered a redirection,
+   * restoring the origin uri.
+   */
   function gotoOrigin(type) {
-    port.postMessage("goto: origin: "+type);
+    port.postMessage("goto: origin: " + type);
   }
 
   //Is also in <Progress>, trying something. Seems to be working.
@@ -88,25 +87,25 @@
 
 <!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <main>
-    <Header />
-    <SettingsButton />
+  <Header />
+  <SettingsButton />
+  <hr />
+  <ToggleRedirection />
+  <hr />
+  {#if siteName !== ""}
+    <LearningTimeLeft {timeRemaining} />
     <hr />
-    <ToggleRedirection />
+    <ExtraLearningTime {bonusTime} />
     <hr />
-    {#if siteName !== ""}
-      <LearningTimeLeft {timeRemaining} />
-      <hr />
-      <ExtraLearningTime {bonusTime} />
-      <hr />
-      <div class="container">
-        {#if canContinue}
-          <ContinueButton {siteName} {gotoOrigin} />
-        {:else}
-          <SkipButton {gotoOrigin} />
-        {/if}
-      </div>
-      <hr />
-    {/if}
+    <div class="container">
+      {#if canContinue}
+        <ContinueButton {siteName} {gotoOrigin} />
+      {:else}
+        <SkipButton {gotoOrigin} />
+      {/if}
+    </div>
+    <hr />
+  {/if}
 </main>
 
 <!-- Using a mix of flexbox and bootstap to get the styling done. -->
@@ -119,10 +118,10 @@
   }
 
   hr {
-    height: 1px;
-    border-width: 0;
     color: var(--hrColor);
     background-color: var(--hrColor);
+    height: 1px;
+    border-width: 0;
     width: 90%;
     margin: 10px 10px;
   }
@@ -136,5 +135,3 @@
     width: 220px;
   }
 </style>
-
-  

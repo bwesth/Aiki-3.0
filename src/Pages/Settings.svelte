@@ -55,11 +55,11 @@
 
 <style>
   .settings {
+    background-color: var(--backgroundColorPrimary);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     height: 100%;
-    background-color: var(--backgroundColorPrimary);
   }
 
   .container {
@@ -68,9 +68,9 @@
   }
 
   main {
+    background-color: var(--backgroundColorPrimary);
     flex-grow: 1;
     flex-shrink: 0;
     margin-top: 4em;
-    background-color: var(--backgroundColorPrimary);
   }
 </style>

@@ -139,7 +139,8 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button id="add-button" class="btn btn-primary" type="submit">Add</button
+        <button id="add-button" class="btn btn-primary" type="submit"
+          >Add</button
         >
       </div>
     </div>
@@ -187,30 +188,30 @@
 <style>
   thead {
     padding: 20px;
-    color: #444;
+    color: var(--textColor);
   }
 
   th {
+    color: var(--textColor);
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
     padding: 15px;
-    color: #444;
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
   }
 
   td {
+    font-size: var(--fontSizeSettings);
+    color: var(--textColor);
     font-family: "Lucida Console", "Courier New", monospace;
-    font-size: 16px;
     padding: 15px;
-    color: #444;
   }
 
   h5 {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
   }
 
   .webFavicon {

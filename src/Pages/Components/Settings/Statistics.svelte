@@ -42,11 +42,11 @@
 
 <style>
   h5 {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: "Lato", sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
   }
 </style>

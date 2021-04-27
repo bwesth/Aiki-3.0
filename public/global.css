@@ -3,12 +3,14 @@
 
 /* GLOBAL CSS VARIABLES ------------------------- */
 :root {
-	/* Colours */
+	/* Colours - Content */
 	--textColor: #444444;
 	--backgroundColorPrimary: #f0f2f5;
 	--backgroundColorSecondary: #ffffff;
-	--bannerBackroundColor: #282C34;
+	/* Colours - Banners */
 	--bannertextColor: #ffffff;
+	--bannerBackroundColor: #282C34;
+	/* Colours - Misc */
 	--hrColor: #d3d3d3;
 	--footerBackgroundColor: #e8ecf3;
 	/* Fonts */
