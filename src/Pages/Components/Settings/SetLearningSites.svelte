@@ -102,17 +102,30 @@
       </div>
     </div>
   </div>
+  <h5>Other Settings:</h5>
   <hr />
   <div>
     <div class="row">
       <div class="col-sm">
-        <p>Miscellaneous:</p>
+        Toggle countdown before redirection:
       </div>
       <div class="col-sm" />
       <div class="col-sm" >
         <input type="checkbox" bind:checked={infoWarning} on:change={updateWarningSetting} />
         <label for="infoWarningToggle" class="form-check-label"
-          >Info Warning</label
+          >Countdown</label
+        >
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        Toggle dark mode:
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm" >
+        <input type="checkbox" bind:checked={infoWarning} on:change={updateWarningSetting} />
+        <label for="infoWarningToggle" class="form-check-label"
+          >Dark Mode</label
         >
       </div>
     </div>
