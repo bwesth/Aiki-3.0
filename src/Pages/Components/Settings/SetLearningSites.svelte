@@ -163,4 +163,8 @@
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
   }
+
+  hr {
+    background-color: var(--hrColor);
+  }
 </style>

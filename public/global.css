@@ -3,16 +3,7 @@
 
 /* GLOBAL CSS VARIABLES ------------------------- */
 :root {
-	/* Colours - Content */
-	--textColor: #444444;
-	--backgroundColorPrimary: #f0f2f5;
-	--backgroundColorSecondary: #ffffff;
-	/* Colours - Banners */
-	--bannerTextColor: #ffffff;
-	--bannerBackgroundColor: #282C34;
-	/* Colours - Misc */
-	--hrColor: #d3d3d3;
-	--footerBackgroundColor: #e8ecf3;
+  /* UNIVERSAL RULES */
 	/* Fonts */
 	--fontHeaders: "Roboto", sans-serif;
 	--fontContent: "Lato", sans-serif;
@@ -23,6 +14,33 @@
     --toastContainerRight: auto;
     --toastContainerBottom: auto;
     --toastContainerLeft: 0;
+
+  /* LIGHT MODE THEME */
+	/* Colours - Content */
+	/* --textColor: #444444;
+	--backgroundColorPrimary: #f0f2f5;
+	--backgroundColorSecondary: #FFFFFF; 
+  --borderColor: #AAAAAA;*/
+	/* Colours - Banners */
+	/* --bannerTextColor: #FFFFFF;
+	--bannerBackgroundColor: #282C34; */
+	/* Colours - Misc */
+	/* --hrColor: #d3d3d3;
+	--footerBackgroundColor: #e8ecf3; */
+
+  /* DARK MODE THEME */
+	/* Colours - Content */
+	--textColor: #FFFFFF;
+	--backgroundColorPrimary: #1F2933;
+	--backgroundColorSecondary: #323F4B;
+  --borderColor: #12171D;;
+	/* Colours - Banners */
+	--bannerTextColor: #FFFFFF;
+	--bannerBackgroundColor: #3E4C59;
+	/* Colours - Misc */
+	--hrColor: #616E7C;
+	--footerBackgroundColor: #3E4C59;
+  --theadBackgroundColor: #3E4C59;
 }
 
 /* OTHER STYLING -------------------------------- */

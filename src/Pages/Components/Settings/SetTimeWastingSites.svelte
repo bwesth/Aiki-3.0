@@ -147,8 +147,8 @@
   </form>
 
   {#if list.length > 0}
-    <table class="table">
-      <thead class="thead-light ">
+    <table>
+      <thead>
         <tr>
           <th scope="col"><Fa icon={faKeyboard} /> Page Name</th>
           <th scope="col"><Fa icon={faGlobe} /> Page URL</th>
@@ -186,21 +186,29 @@
 </SettingsContainer>
 
 <style>
+  table {
+    width: 100%;
+  }
+
   thead {
     padding: 20px;
     color: var(--textColor);
+    background-color: var(--theadBackgroundColor);
   }
 
   th {
     color: var(--textColor);
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
+    border-bottom: 1px solid var(--hrColor);
+    border-top: 1px solid var(--hrColor);
     padding: 15px;
   }
 
   td {
     font-size: var(--fontSizeSettings);
     color: var(--textColor);
+    border-bottom: 1px solid var(--hrColor);
     font-family: "Lucida Console", "Courier New", monospace;
     padding: 15px;
   }
@@ -212,6 +220,10 @@
   p {
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
   }
 
   .webFavicon {
