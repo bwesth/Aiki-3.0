@@ -1,4 +1,18 @@
 /* Trying to control all CSS from here now rather than across components. */
+/* Want to use variables and apply them to components from this file. */
+
+/* CSS VARIABLES -------------------------------- */
+:root {
+	--textColor: #444;
+	--backgroundColourPrimary: #f0f2f5;
+	--backgroundColourSecondary: #ffffff;
+	--bannerBackroundColor: #282C34;
+	--bannertextColor: #ffffff;
+	--hrColor: #d3d3d3;
+	--footerBackgroundColor: #e8ecf3;
+}
+
+/* OTHER STYLING -------------------------------- */
 html,
 body {
   width: 100%;
@@ -55,11 +69,12 @@ button:focus {
 }
 
 /* SCROLLBAR ------------------------------------ */
+/* Variables */
 html {
   --scrollbarBG: #cfd8dc;
   --thumbBG: #90a4ae;
 }
-
+/* Style */
 body::-webkit-scrollbar {
   width: 11px;
 }
