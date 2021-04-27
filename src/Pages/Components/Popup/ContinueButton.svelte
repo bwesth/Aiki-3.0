@@ -9,17 +9,18 @@
 
   export let siteName;
   export let gotoOrigin;
-  
 </script>
 
-<button type="default" on:click={() => gotoOrigin("continue")} class="btn btn-success item"
+<button
+  type="default"
+  on:click={() => gotoOrigin("continue")}
+  class="btn btn-success item"
   ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
 </button>
 
-
 <style>
   button {
-    font-size: 14px;
+    font-size: var(--fontSizePopup);
   }
 
   .item {
