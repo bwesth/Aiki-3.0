@@ -116,6 +116,12 @@ async function getWarningOption() {
   return result.warningOption;
 }
 
+async function toggleWarningOption() {
+  storage.get("warningOption").then((data) => {
+    storage.set({ warningOption: !data.toggled });
+  });
+}
+
 export default {
   timeSettings: {
     getAll: getUserTimes,
@@ -131,5 +137,5 @@ export default {
   uid: { set: setUid, get: getUid },
   redirectionSite: { get: getRedirectionSite, set: setRedirectionSite },
   redirection: { toggle: toggleRedirection, get: getRedirectionToggled },
-  warningOption: { get: getWarningOption, set: setWarningOption },
+  warningOption: { get: getWarningOption, set: setWarningOption, toggle: toggleWarningOption },
 };

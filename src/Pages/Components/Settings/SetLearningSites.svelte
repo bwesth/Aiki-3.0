@@ -6,18 +6,23 @@
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
+  import {
+    faHourglassHalf,
+    faPowerOff, faMoon, faSun
+  } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
   $: rewardTime = 0;
-  let infoWarning = false;
+
+  let warningOption = false;
+  let darkMode = false;
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
-    infoWarning = await storage.warningOption.get();
-    console.log(infoWarning);
+    warningOption = await storage.warningOption.get();
+    console.log(warningOption);
   }
 
   /**
@@ -37,9 +42,13 @@
     },
   };
 
-  function updateWarningSetting() {
-    storage.warningOption.set(infoWarning);
-    console.log(infoWarning);
+  function toggleWarningOption() {
+    storage.warningOption.toggle();
+    warningOption = !warningOption;
+  }
+
+  function toggleDarkMode() {
+    darkMode = !darkMode;
   }
 
   fetchStorage();
@@ -106,27 +115,36 @@
   <hr />
   <div>
     <div class="row">
-      <div class="col-sm">
-        Toggle countdown before redirection:
-      </div>
+      <div class="col-sm">Toggle countdown before redirection:</div>
       <div class="col-sm" />
-      <div class="col-sm" >
-        <input type="checkbox" bind:checked={infoWarning} on:change={updateWarningSetting} />
-        <label for="infoWarningToggle" class="form-check-label"
-          >Countdown</label
+      <div class="col-sm">
+        <button
+          type="default"
+          class="btn {warningOption ? 'btn-success' : 'btn-danger'} item"
+          on:click={toggleWarningOption}
+          ><Fa icon={faPowerOff} /> {warningOption ? "On" : "Off"}</button
         >
       </div>
     </div>
     <div class="row">
-      <div class="col-sm">
-        Toggle dark mode:
-      </div>
+      <div class="col-sm">Toggle dark mode:</div>
       <div class="col-sm" />
-      <div class="col-sm" >
-        <input type="checkbox" bind:checked={infoWarning} on:change={updateWarningSetting} />
-        <label for="infoWarningToggle" class="form-check-label"
-          >Dark Mode</label
+      <div class="col-sm">
+        {#if darkMode}
+        <button
+          type="default"
+          class="btn btn-dark item"
+          on:click={toggleDarkMode}
+          ><Fa icon={faMoon}/> Dark</button
         >
+        {:else}
+        <button
+        type="default"
+        class="btn btn-light item"
+        on:click={toggleDarkMode}
+        ><Fa icon={faSun}/> Light</button
+      >
+        {/if}
       </div>
     </div>
   </div>
