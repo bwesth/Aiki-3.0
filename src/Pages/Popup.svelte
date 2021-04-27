@@ -128,7 +128,7 @@
 
   main {
     font-family: var(--fontHeaders);
-    background-color: var(--backgroundColorPrimary);
+    background-color: var(--backgroundColorSecondary);
     color: var(--textColor);
     text-align: center;
     height: fit-content;
