@@ -53,8 +53,8 @@
   * Background script will initiate a tab update on the tab that triggered a redirection,
   * restoring the origin uri.
   */
-  function gotoOrigin() {
-    port.postMessage("goto: origin");
+  function gotoOrigin(type) {
+    port.postMessage("goto: origin : "+type);
   }
 
   //Is also in <Progress>, trying something. Seems to be working.

@@ -6,3 +6,5 @@ export const learningSites = [
   {name: "coursera", host: "www.coursera.org"},
   {name: "skillshare", host: "www.skillshare.com"},
 ];
+
+export const participantResource = "www.codecademy.com"
