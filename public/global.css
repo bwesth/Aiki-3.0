@@ -8,8 +8,8 @@
 	--backgroundColorPrimary: #f0f2f5;
 	--backgroundColorSecondary: #ffffff;
 	/* Colours - Banners */
-	--bannertextColor: #ffffff;
-	--bannerBackroundColor: #282C34;
+	--bannerTextColor: #ffffff;
+	--bannerBackgroundColor: #282C34;
 	/* Colours - Misc */
 	--hrColor: #d3d3d3;
 	--footerBackgroundColor: #e8ecf3;
@@ -36,9 +36,6 @@ body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* Don't know about this universal font-family import. */
-  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif; */
 }
 
 a {
