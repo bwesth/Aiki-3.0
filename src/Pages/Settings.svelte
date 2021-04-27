@@ -59,7 +59,7 @@
     flex-direction: column;
     align-items: stretch;
     height: 100%;
-    background-color: #f0f2f5;
+    background-color: var(--backgroundColorPrimary);
   }
 
   .container {
@@ -71,13 +71,6 @@
     flex-grow: 1;
     flex-shrink: 0;
     margin-top: 4em;
-    background-color: #f0f2f5;
-  }
-
-  :root {
-    --toastContainerTop: 0;
-    --toastContainerRight: auto;
-    --toastContainerBottom: auto;
-    --toastContainerLeft: 0;
+    background-color: var(--backgroundColorPrimary);
   }
 </style>

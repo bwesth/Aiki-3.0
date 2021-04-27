@@ -4,9 +4,9 @@
 /* GLOBAL CSS VARIABLES ------------------------- */
 :root {
 	/* Colours */
-	--textColor: #444;
-	--backgroundColourPrimary: #f0f2f5;
-	--backgroundColourSecondary: #ffffff;
+	--textColor: #444444;
+	--backgroundColorPrimary: #f0f2f5;
+	--backgroundColorSecondary: #ffffff;
 	--bannerBackroundColor: #282C34;
 	--bannertextColor: #ffffff;
 	--hrColor: #d3d3d3;
@@ -16,6 +16,11 @@
 	--fontContent: "Lato", sans-serif;
 	--fontSizeSettings: 16px;
 	--fontSizePopup: 14px;
+	/* Toasts */
+	--toastContainerTop: 0;
+    --toastContainerRight: auto;
+    --toastContainerBottom: auto;
+    --toastContainerLeft: 0;
 }
 
 /* OTHER STYLING -------------------------------- */

@@ -111,7 +111,6 @@
 
 <!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
-
   .container {
     display: flex;
     justify-content: center;
@@ -122,25 +121,16 @@
   hr {
     height: 1px;
     border-width: 0;
-    color: lightgray;
-    background-color: lightgray;
+    color: var(--hrColor);
+    background-color: var(--hrColor);
     width: 90%;
     margin: 10px 10px;
   }
 
-  /* Old colours */
-  /* main {
-    background-color: #282c34;
-    color: white;
-    text-align: center;
-    height: fit-content;
-    width: 220px;
-  } */
-
   main {
-    font-family: 'Roboto';
-    background-color: #f0f2f5;
-    color: #444;
+    font-family: var(--fontHeaders);
+    background-color: var(--backgroundColorPrimary);
+    color: var(--textColor);
     text-align: center;
     height: fit-content;
     width: 220px;
