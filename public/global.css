@@ -1,8 +1,9 @@
 /* Trying to control all CSS from here now rather than across components. */
 /* Want to use variables and apply them to components from this file. */
 
-/* CSS VARIABLES -------------------------------- */
+/* GLOBAL CSS VARIABLES ------------------------- */
 :root {
+	/* Colours */
 	--textColor: #444;
 	--backgroundColourPrimary: #f0f2f5;
 	--backgroundColourSecondary: #ffffff;
@@ -10,6 +11,11 @@
 	--bannertextColor: #ffffff;
 	--hrColor: #d3d3d3;
 	--footerBackgroundColor: #e8ecf3;
+	/* Fonts */
+	--fontHeaders: "Roboto", sans-serif;
+	--fontContent: "Lato", sans-serif;
+	--fontSizeSettings: 16px;
+	--fontSizePopup: 14px;
 }
 
 /* OTHER STYLING -------------------------------- */
