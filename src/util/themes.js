@@ -35,6 +35,9 @@ export async function drawTheme() {
         case "blue":
           drawBlueMode();
           break;
+        case "zeeguu":
+          drawZeeguuMode();
+        break;
         default:
           drawLightMode();
       }
@@ -78,3 +81,17 @@ export function drawBlueMode() {
     root.setProperty('--footerBackgroundColor', '#EAEEF1');
     root.setProperty('--theadBackgroundColor', '#EAEEF1');
 }
+
+//Sets CSS variables to make Aiki appear in theme three.
+export function drawZeeguuMode() {
+	root.setProperty('--textColor', '#24292F');
+	root.setProperty('--backgroundColorPrimary', '#F7F7F7');
+    root.setProperty('--backgroundColorSecondary', '#FFFFFF');
+    root.setProperty('--borderColor', '#EFEFEF');
+	root.setProperty('--bannerTextColor', '#FFFFFF');
+    root.setProperty('--bannerBackgroundColor', '#FEBD3B');
+	root.setProperty('--hrColor', '#EFEFEF');
+    root.setProperty('--footerBackgroundColor', '#FEC737');
+    root.setProperty('--theadBackgroundColor', '#F7F7F7');
+}
+

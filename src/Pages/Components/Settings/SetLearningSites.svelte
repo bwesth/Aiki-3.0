@@ -6,13 +6,14 @@
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import { setTheme, getTheme, drawDarkMode, drawLightMode, drawBlueMode } from "../../../util/themes"
+  import { setTheme, getTheme, drawDarkMode, drawLightMode, drawBlueMode, drawZeeguuMode } from "../../../util/themes"
   import {
     faHourglassHalf,
     faPowerOff,
     faMoon,
     faSun,
-    faCrow
+    faCrow,
+    faBookReader
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
@@ -51,21 +52,30 @@
     warningOption = !warningOption;
   }
 
-  function changeTheme(theme) {
-    switch (theme) {
+  function changeTheme(input) {
+    switch (input) {
       case "light" :
+      theme = "light";
       drawLightMode();
-      setTheme(theme);
+      setTheme(input);
       break;
 
       case "dark" :
+      theme = "dark";
       drawDarkMode();
-      setTheme(theme);
+      setTheme(input);
       break;
 
       case "blue" :
+      theme = "blue";
       drawBlueMode();
-      setTheme(theme);
+      setTheme(input);
+      break;
+
+      case "zeeguu" :
+      theme = "zeeguu";
+      drawZeeguuMode();
+      setTheme(input);
       break;
     }
   }
@@ -146,27 +156,40 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm">Toggle dark mode:</div>
+      <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
       <div class="col-sm">
-          <button
-          type="default"
-          class="btn btn-light item"
-          disabled={theme === "light" ? true : false}
-          on:click={changeTheme("light")}><Fa icon={faSun} /> Light</button
-          >
-          <button
-            type="default"
-            class="btn btn-dark item"
-            disabled={theme === "dark" ? true : false}
-            on:click={changeTheme("dark")}><Fa icon={faMoon} /> Dark</button
-          >
-          <button
-          type="default"
-          class="btn btn-info item"
-          disabled={theme === "blue" ? true : false}
-          on:click={changeTheme("blue")}><Fa icon={faCrow} /> Blue</button
-          >
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Themes
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button
+              type="button"
+              class="dropdown-item btn btn-light item"
+              disabled={theme === "light"? true : false}
+              on:click={()=>changeTheme("light")}><Fa icon={faSun} /> Light</button
+            >
+            <button
+              type="button"
+              class="dropdown-item btn btn-dark item"
+              disabled={theme === "dark"? true : false}
+              on:click={()=>changeTheme("dark")}><Fa icon={faMoon} /> Dark</button
+            >
+            <button
+              type="button"
+              class="dropdown-item btn btn-info item"
+              disabled={theme === "blue"? true : false}
+              on:click={()=>changeTheme("blue")}><Fa icon={faCrow} /> Blue</button
+            >
+            <button
+              type="button"
+              class="dropdown-item btn btn-warning item"
+              disabled={theme === "zeeguu"? true : false}
+              on:click={()=>changeTheme("zeeguu")}><Fa icon={faBookReader} /> Zeeguu</button
+            >
+          </div>
+        </div>
       </div>
     </div>
   </div>
