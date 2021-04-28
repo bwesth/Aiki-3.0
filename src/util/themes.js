@@ -1,6 +1,8 @@
 // Controls themes for the application. This is achieved by switching out global CSS variables in global.css
 // Currently only light and dark mode.
 
+// TODO: Put storage functions in storage
+// TODO: JSdocs
 //Should maybe put storage methods in storage.js, but just to avoid collisions will write all the logic here first.
 import browser from "webextension-polyfill";
 const storage = browser.storage.local;

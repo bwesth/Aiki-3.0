@@ -39,7 +39,6 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 function setup() {
-  setTheme("dark");
   storage.shouldRedirect.set(true)
   storage.warningOption.set(true);
   intervals.intervalSetup();

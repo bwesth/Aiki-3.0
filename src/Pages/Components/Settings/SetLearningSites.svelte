@@ -51,10 +51,12 @@
   }
 
   function switchTheme() {
-    if (theme === "dark") {
+    if (theme === "light") {
+      theme = "dark"
       drawDarkMode();
       setTheme("dark");
     } else {
+      theme = "light"
       drawLightMode();
       setTheme("light");
     }
