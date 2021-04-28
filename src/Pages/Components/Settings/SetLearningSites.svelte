@@ -6,12 +6,13 @@
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import { drawDarkMode, drawLightMode, setTheme, getTheme } from "../../../util/themes"
+  import { setTheme, getTheme, drawDarkMode, drawLightMode, drawBlueMode } from "../../../util/themes"
   import {
     faHourglassHalf,
     faPowerOff,
     faMoon,
     faSun,
+    faCrow
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
@@ -50,15 +51,22 @@
     warningOption = !warningOption;
   }
 
-  function switchTheme() {
-    if (theme === "light") {
-      theme = "dark"
-      drawDarkMode();
-      setTheme("dark");
-    } else {
-      theme = "light"
+  function changeTheme(theme) {
+    switch (theme) {
+      case "light" :
       drawLightMode();
-      setTheme("light");
+      setTheme(theme);
+      break;
+
+      case "dark" :
+      drawDarkMode();
+      setTheme(theme);
+      break;
+
+      case "blue" :
+      drawBlueMode();
+      setTheme(theme);
+      break;
     }
   }
 
@@ -141,19 +149,24 @@
       <div class="col-sm">Toggle dark mode:</div>
       <div class="col-sm" />
       <div class="col-sm">
-        {#if theme === "dark"}
+          <button
+          type="default"
+          class="btn btn-light item"
+          disabled={theme === "light" ? true : false}
+          on:click={changeTheme("light")}><Fa icon={faSun} /> Light</button
+          >
           <button
             type="default"
             class="btn btn-dark item"
-            on:click={switchTheme}><Fa icon={faMoon} /> Dark</button
+            disabled={theme === "dark" ? true : false}
+            on:click={changeTheme("dark")}><Fa icon={faMoon} /> Dark</button
           >
-        {:else}
           <button
-            type="default"
-            class="btn btn-light item"
-            on:click={switchTheme}><Fa icon={faSun} /> Light</button
+          type="default"
+          class="btn btn-info item"
+          disabled={theme === "blue" ? true : false}
+          on:click={changeTheme("blue")}><Fa icon={faCrow} /> Blue</button
           >
-        {/if}
       </div>
     </div>
   </div>

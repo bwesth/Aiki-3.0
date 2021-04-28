@@ -30,6 +30,6 @@
     padding: 0;
     height: 4em;
     width: 100%;
-    box-shadow: 10px 0px 5px #121212;
+    /* box-shadow: 10px 0px 5px #121212; */
   }
 </style>

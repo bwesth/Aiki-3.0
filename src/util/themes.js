@@ -1,5 +1,5 @@
 // Controls themes for the application. This is achieved by switching out global CSS variables in global.css
-// Currently only light and dark mode.
+// Currently offers three themes.
 
 // TODO: Put storage functions in storage
 // TODO: JSdocs
@@ -14,26 +14,26 @@ const root = r.style;
 //Basic getter. Choice of theme is stored in localstorage.
 export async function getTheme() {
     const result = await storage.get("theme");
-    console.log("this is the result",result.theme);
     return result.theme;
 }
 
 //Basic setter. Choice of theme is stored in localstorage.
 export function setTheme(theme) {
     storage.set({ theme: theme });
-    console.log("the theme has been set to", theme);
 }
 
 //Draws the theme. Fire on boot?
 export async function drawTheme() {
     const theme = await getTheme();
-    console.log("drawtheme is called with theme", theme);
     switch(theme) {
         case "dark":
           drawDarkMode();
           break;
         case "light":
           drawLightMode();
+          break;
+        case "blue":
+          drawBlueMode();
           break;
         default:
           drawLightMode();
@@ -63,11 +63,18 @@ export function drawLightMode() {
     root.setProperty('--bannerBackgroundColor', '#282C34');
 	root.setProperty('--hrColor', '#D3D3D3');
     root.setProperty('--footerBackgroundColor', '#E8ECF3');
-    root.setProperty('--theadBackgroundColor', '#AAAAAA');
+    root.setProperty('--theadBackgroundColor', '#D3D3D3');
 }
 
-// export default {
-//     drawDarkMode, drawLightMode
-// }
-
-//theme: { get: getTheme, set: setTheme, dark: drawDarkMode, light: drawLightMode }
+//Sets CSS variables to make Aiki appear in theme three.
+export function drawBlueMode() {
+	root.setProperty('--textColor', '#24292F');
+	root.setProperty('--backgroundColorPrimary', '#88909D');
+    root.setProperty('--backgroundColorSecondary', '#D0DAE3');
+    root.setProperty('--borderColor', '#6E7884');
+	root.setProperty('--bannerTextColor', '#0D101F');
+    root.setProperty('--bannerBackgroundColor', '#EAEEF1');
+	root.setProperty('--hrColor', '#EAEEF1');
+    root.setProperty('--footerBackgroundColor', '#EAEEF1');
+    root.setProperty('--theadBackgroundColor', '#EAEEF1');
+}

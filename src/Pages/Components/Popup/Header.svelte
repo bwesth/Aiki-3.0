@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 5px 0px 5px #121212;
+    /* box-shadow: 5px 0px #121212; */
   }
 
   h5 {
