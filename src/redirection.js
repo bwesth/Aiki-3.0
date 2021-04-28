@@ -175,7 +175,7 @@ async function gotoOrigin(event) {
 async function talkToContent(tabId, url, originUrl) {
   try {
     const result = await browser.tabs.sendMessage(tabId, {
-      action: "display: message",
+      action: "display: snooze",
       url: url,
     });
     if (result.snooze === true) {
