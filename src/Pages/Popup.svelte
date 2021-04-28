@@ -54,9 +54,9 @@
    */
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
+    location.reload();
   }
 
-  //Is also in <Progress>, trying something. Seems to be working.
   async function getTimer() {
     port.postMessage("get: timer");
     port.onMessage.addListener(function (msg) {
