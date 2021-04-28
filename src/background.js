@@ -3,6 +3,7 @@ import intervals from "./intervals";
 import storage from "./util/storage";
 import redirection from "./redirection";
 import timer from "./timer";
+import { setTheme } from "./util/themes";
 
 browser.runtime.onInstalled.addListener(({ reason }) => {
   if (reason === "install") {
@@ -12,6 +13,7 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 
 async function installationSetup() {
   await storage.clearStorage();
+  setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
   storage.list.set([]);
@@ -27,6 +29,7 @@ async function installationSetup() {
 }
 
 function setup() {
+  setTheme("dark");
   storage.shouldRedirect.set(true)
   storage.warningOption.set(true);
   intervals.intervalSetup();

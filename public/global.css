@@ -11,36 +11,23 @@
 	--fontSizePopup: 14px;
 	/* Toasts */
 	--toastContainerTop: 0;
-    --toastContainerRight: auto;
-    --toastContainerBottom: auto;
-    --toastContainerLeft: 0;
+  --toastContainerRight: auto;
+  --toastContainerBottom: auto;
+  --toastContainerLeft: 0;
 
   /* LIGHT MODE THEME */
 	/* Colours - Content */
-	/* --textColor: #444444;
+  --textColor: #444444;
 	--backgroundColorPrimary: #f0f2f5;
 	--backgroundColorSecondary: #FFFFFF; 
-  --borderColor: #AAAAAA;*/
-	/* Colours - Banners */
-	/* --bannerTextColor: #FFFFFF;
-	--bannerBackgroundColor: #282C34; */
-	/* Colours - Misc */
-	/* --hrColor: #d3d3d3;
-	--footerBackgroundColor: #e8ecf3; */
-
-  /* DARK MODE THEME */
-	/* Colours - Content */
-	--textColor: #FFFFFF;
-	--backgroundColorPrimary: #1F2933;
-	--backgroundColorSecondary: #323F4B;
-  --borderColor: #12171D;;
+  --borderColor: #AAAAAA;
 	/* Colours - Banners */
 	--bannerTextColor: #FFFFFF;
-	--bannerBackgroundColor: #3E4C59;
+	--bannerBackgroundColor: #282C34;
 	/* Colours - Misc */
-	--hrColor: #616E7C;
-	--footerBackgroundColor: #3E4C59;
-  --theadBackgroundColor: #3E4C59;
+	--hrColor: #d3d3d3;
+	--footerBackgroundColor: #e8ecf3; 
+  --theadBackgroundColor: #AAAAAA;
 }
 
 /* OTHER STYLING -------------------------------- */
@@ -121,3 +108,4 @@ body::-webkit-scrollbar-thumb {
   border-radius: 6px;
   border: 3px solid var(--scrollbarBG);
 }
+
