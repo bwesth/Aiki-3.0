@@ -46,10 +46,9 @@ function incrementEarnedTime() {
 }
 
 // When redirecting to origin site
-async function startProcrastinationSession(callback) {
+async function startProcrastinationSession(callback, rewardTime) {
   stopLearningSession();
   stopBonusTime();
-  const rewardTime = await calculateRewardTime();
   earnedTime = 0;
   setTimeout(() => stopProcrastinationSession(callback), rewardTime);
 }
@@ -62,14 +61,6 @@ function stopBonusTime() {
 function stopProcrastinationSession(callback) {
   storage.shouldRedirect.set(true);
   callback();
-}
-
-async function calculateRewardTime() {
-  // const rewardRatio = await storage.timeSettings.rewardRatio.get();
-  // const learningTime = await storage.timeSettings.learningTime.get();
-  const rewardTime = await storage.timeSettings.rewardTime.get();
-  // let rewardTime = rewardRatio * (earnedTime * 1000 + learningTime);
-  return rewardTime;
 }
 
 function getTime() {

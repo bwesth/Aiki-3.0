@@ -14,7 +14,9 @@ async function createFilter() {
   return filter;
 }
 
-async function addNavigationListener() {
+/**
+ * @deprecated Use addNavigationListener */
+async function addConditionalNavigationListener() {
   const filter = await createFilter();
   const warningState = await storage.warningOption.get();
   if (warningState) {
@@ -26,9 +28,13 @@ async function addNavigationListener() {
   }
 }
 
+async function addNavigationListener() {
+  const filter = await createFilter();
+  browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
+}
+
 async function removeNavigationListener() {
   const filter = await createFilter();
-  browser.webNavigation.onCompleted.removeListener(redirect, filter);
   browser.webNavigation.onBeforeNavigate.removeListener(redirect, filter);
 }
 
@@ -50,7 +56,7 @@ async function restartTabChangeListener() {
   addTabChangeListener();
 }
 
-/** #REDIRECT()# TODO: could use a refactor - Too long.
+/** #REDIRECT()#
  * @async @function
  * @description Checks if redirection should happen,
  * then starts a learning session countdown,
@@ -60,33 +66,24 @@ async function restartTabChangeListener() {
  * @param {string} details.url
  * @param {number} details.tabId */
 async function redirect(details) {
+  console.log("Redirection details: ", details);
   if (details.frameId === 0) {
     const toggled = await storage.redirection.get();
     const shouldRedirect = await storage.shouldRedirect.get();
     if (toggled && shouldRedirect) {
-      const warningState = await storage.warningOption.get();
-      if (warningState) {
-        addRedirectionLog(
-          `Interception: initiating countdown`,
-          parseUrl(details.url).name,
-          participantResource.name
-        );
-        talkToContent(
-          details.tabId,
-          `https://${participantResource.host}`,
-          details.url
-        );
-      } else {
-        timer.startLearningSession();
-        storage.origin.set({ url: details.url, tabId: details.tabId });
-        browser.tabs.update(details.tabId, {
+      timer.startLearningSession();
+      try {
+        await browser.tabs.update(details.tabId, {
           url: `https://${participantResource.host}`,
         });
+        storage.origin.set({ url: details.url, tabId: details.tabId });
         addRedirectionLog(
           `Interception: instant redirection`,
           parseUrl(details.url).name,
           participantResource.name
         );
+      } catch (error) {
+        console.error(error.message);
       }
     }
   }
@@ -96,20 +93,39 @@ async function redirect(details) {
 @function
 @async
 @description Gets currently active tab and calls checkTab on the resulting tab. */
-async function checkCurrentTab() {
-  const tabs = await browser.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
-  if (tabs.length > 0) {
-    const tab = tabs[0];
-    checkTab(tab);
+async function checkActiveTab() {
+  try {
+    const tabs = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (tabs.length > 0) {
+      const tab = tabs[0];
+      console.log("Active tab: ", tab);
+      const tabSiteName = parseUrl(tab.url).name;
+      const procList = await storage.list.get();
+      const procListNames = procList.map((site) => site.name);
+      if (procListNames.includes(tabSiteName)) {
+        addRedirectionLog(
+          `Interception: initiating countdown`,
+          tabSiteName,
+          participantResource.name
+        );
+        talkToContent(tab.id, `https://${participantResource.host}`, tab.url);
+      }
+    }
+  } catch (error) {
+    console.error(error.message);
   }
 }
 
 async function checkTabById({ tabId }) {
-  const tab = await browser.tabs.get(tabId);
-  checkTab(tab);
+  try {
+    const tab = await browser.tabs.get(tabId);
+    checkTab(tab);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
 
@@ -140,38 +156,48 @@ async function checkTab(tab) {
  * Origin is an object of type: {integer: tabId, string: url} */
 async function gotoOrigin(event) {
   await storage.shouldRedirect.set(false);
-  timer.startProcrastinationSession(checkCurrentTab);
+  const rewardTime = await storage.timeSettings.rewardTime.get();
+  timer.startProcrastinationSession(checkActiveTab, rewardTime);
   const origin = await storage.origin.get();
-  browser.tabs.update(origin.tabId, { url: origin.url });
-  storage.origin.remove();
-  addRedirectionLog(
-    `Go to origin: ${event}`,
-    participantResource.name,
-    parseUrl(origin.url).name
-  );
+  try {
+    await browser.tabs.update(origin.tabId, { url: origin.url });
+    storage.origin.remove();
+    addRedirectionLog(
+      `Go to origin: ${event}`,
+      participantResource.name,
+      parseUrl(origin.url).name
+    );
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 async function talkToContent(tabId, url, originUrl) {
-  const result = await browser.tabs.sendMessage(tabId, {
-    action: "display: message",
-    url: url,
-  });
-  if (result.removeWarning === true) {
-    await toggleWarning();
-    addRedirectionLog(
-      `Interception: skipped countdown`,
-      parseUrl(url).name,
-      participantResource.name
-    );
-  } else {
-    addRedirectionLog(
-      `Interception: auto resolve`,
-      parseUrl(url).name,
-      participantResource.name
-    );
+  try {
+    const result = await browser.tabs.sendMessage(tabId, {
+      action: "display: message",
+      url: url,
+    });
+    if (result.snooze === true) {
+      addRedirectionLog(
+        `Interception: snoozed`,
+        parseUrl(originUrl).name,
+        participantResource.name
+      );
+      await storage.shouldRedirect.set(false);
+      timer.startProcrastinationSession(checkActiveTab, 120000);
+    } else {
+      addRedirectionLog(
+        `Interception: auto resolve`,
+        parseUrl(originUrl).name,
+        participantResource.name
+      );
+      timer.startLearningSession();
+      storage.origin.set({ url: originUrl, tabId: tabId });
+    }
+  } catch (error) {
+    console.error(error.message);
   }
-  timer.startLearningSession();
-  storage.origin.set({ url: originUrl, tabId: tabId });
 }
 
 async function toggleWarning() {
@@ -180,9 +206,7 @@ async function toggleWarning() {
 }
 
 async function addRedirectionLog(event, from, to) {
-  // get user
   const user = await storage.uid.get();
-  //get details
   const warningOption = await storage.warningOption.get();
   const timeSettings = await storage.timeSettings.getAll();
   const details = { warningOption: warningOption, timeSettings: timeSettings };
