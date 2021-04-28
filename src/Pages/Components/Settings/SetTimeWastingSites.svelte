@@ -118,11 +118,11 @@
   <h5>Add your Time Wasting Sites here:</h5>
   <hr />
   <p>
-    Type in pages you feel like you spend a little too much time on here (e.g.
-    www.facebook.com, www.reddit.com, 9gag.com):
+    Type in pages you feel like you spend a little too much time on here (e.g:
+    www.facebook.com, www.reddit.com, 9gag.com).
   </p>
   <p>
-    <strong>NB:</strong> You can still visit these websites, we will just be logging
+    <strong>NB:</strong> You can still visit these websites, Aiki will just be logging
     the amount of time you spend on them.
   </p>
   <!-- Bootstrap Input field. -->
@@ -139,15 +139,16 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button id="add-button" class="btn btn-primary" type="submit">Add</button
+        <button id="add-button" class="btn btn-primary" type="submit"
+          >Add</button
         >
       </div>
     </div>
   </form>
 
   {#if list.length > 0}
-    <table class="table">
-      <thead class="thead-light ">
+    <table>
+      <thead>
         <tr>
           <th scope="col"><Fa icon={faKeyboard} /> Page Name</th>
           <th scope="col"><Fa icon={faGlobe} /> Page URL</th>
@@ -185,32 +186,44 @@
 </SettingsContainer>
 
 <style>
+  table {
+    width: 100%;
+  }
+
   thead {
     padding: 20px;
-    color: #444;
+    color: var(--textColor);
+    background-color: var(--theadBackgroundColor);
   }
 
   th {
+    color: var(--textColor);
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+    border-bottom: 1px solid var(--hrColor);
+    border-top: 1px solid var(--hrColor);
     padding: 15px;
-    color: #444;
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
   }
 
   td {
+    font-size: var(--fontSizeSettings);
+    color: var(--textColor);
+    border-bottom: 1px solid var(--hrColor);
     font-family: "Lucida Console", "Courier New", monospace;
-    font-size: 16px;
     padding: 15px;
-    color: #444;
   }
 
   h5 {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
   }
 
   .webFavicon {

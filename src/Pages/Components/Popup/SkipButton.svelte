@@ -9,13 +9,15 @@
   export let gotoOrigin;
 </script>
 
-<button on:click={() => gotoOrigin("skip")} type="default" class="btn btn-danger item"
-  ><Fa icon={faSkull} /> Emergency Skip!</button
+<button
+  on:click={() => gotoOrigin("skip")}
+  type="default"
+  class="btn btn-danger item"><Fa icon={faSkull} /> Emergency Skip!</button
 >
 
 <style>
   button {
-    font-size: 14px;
+    font-size: var(--fontSizePopup);
   }
 
   .item {

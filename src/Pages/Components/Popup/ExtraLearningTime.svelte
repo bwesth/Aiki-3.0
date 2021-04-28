@@ -3,38 +3,39 @@
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>
-    import {parseTimerUpLong} from "../../../util/utilities"
-    export let bonusTime;
+  import { parseTimerUpLong } from "../../../util/utilities";
+  export let bonusTime;
 </script>
 
-      <div class="container">
-        <h6 class="item">Extra Learning Time:</h6>
-        <p class="item">{parseTimerUpLong(bonusTime)}</p>
-      </div>
-  
+<div class="container">
+  <h6 class="item">Extra Learning Time:</h6>
+  <p class="item">{parseTimerUpLong(bonusTime)}</p>
+</div>
+
 <style>
-    .container {
-      display: block;
-      justify-content: center;
-      align-content: center;
-      flex-direction: row;
-    }
-  
-    .item {
-      margin: auto auto;
-    }
+  .container {
+    display: block;
+    justify-content: center;
+    align-content: center;
+    flex-direction: row;
+  }
 
-    h6 {
-      font-size: 14px;
-    }
+  .item {
+    margin: auto auto;
+  }
 
-    p {
-        font-weight: 700;
-        padding: 10px 0px 0px;
-        justify-content: center;
-        align-items: center;
-        font-size: 14px;
-        color: #007bff;
-    }
+  h6 {
+    font-size: var(--fontSizePopup);
+    color: var(--textColor);
+    padding-top: 5px;
+  }
+
+  p {
+    font-size: var(--fontSizePopup);
+    font-weight: 700;
+    padding: 10px 0px 0px;
+    justify-content: center;
+    align-items: center;
+    color: #007bff;
+  }
 </style>
-  

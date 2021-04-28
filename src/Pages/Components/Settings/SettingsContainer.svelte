@@ -14,18 +14,18 @@ Used in / Parent components: /src/Pages/Settings.svelte
 
 <style>
   h4 {
-    font-family:'Roboto', sans-serif;
-    color: #444;
+    font-family: var(--fontHeaders);
+    color: var(--textColor);
   }
 
   .container {
-    border: 1px solid #aaa;
+    background-color: var(--backgroundColorSecondary);
+    color: var(--textColor);
+    border: var(--borderColor);
     border-radius: 2px;
     box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
     margin: 0 0 1em 0;
     padding: 1.5em;
-    background-color: white;
-    color: #444;
     width: 100%;
   }
 </style>

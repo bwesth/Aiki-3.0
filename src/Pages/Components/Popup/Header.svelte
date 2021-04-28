@@ -6,20 +6,22 @@
 </script>
 
 <div class="header">
-    <img src="images/aikido.png" class="icon" alt="Aiki logo" />
-    <h5 class="text">Aiki<sup>3</sup></h5>
+  <img src="images/aikido.png" class="icon" alt="Aiki logo" />
+  <h5 class="text">Aiki<sup>3</sup></h5>
 </div>
 
 <style>
   .header {
+    font-family: var(--fontHeaders);
+    color: var(--bannerTextColor);
+    background-color: var(--bannerBackgroundColor);
     padding: 12px 0px;
-    color: white;
-    background-color: #282c34;
     width: 100%;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 5px 0px 5px #121212;
   }
 
   h5 {

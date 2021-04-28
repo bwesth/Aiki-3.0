@@ -34,11 +34,12 @@
 
 <style>
   button {
-    font-size: 14px;
+    font-size: var(--fontSizePopup);
   }
 
   h6 {
-    font-size: 14px;
+    font-size: var(--fontSizePopup);
+    color: var(--textColor);
   }
 
   .container {

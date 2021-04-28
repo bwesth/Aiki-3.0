@@ -55,11 +55,11 @@
 
 <style>
   .settings {
+    background-color: var(--backgroundColorPrimary);
     display: flex;
     flex-direction: column;
     align-items: stretch;
     height: 100%;
-    background-color: #f0f2f5;
   }
 
   .container {
@@ -68,16 +68,9 @@
   }
 
   main {
+    background-color: var(--backgroundColorPrimary);
     flex-grow: 1;
     flex-shrink: 0;
     margin-top: 4em;
-    background-color: #f0f2f5;
-  }
-
-  :root {
-    --toastContainerTop: 0;
-    --toastContainerRight: auto;
-    --toastContainerBottom: auto;
-    --toastContainerLeft: 0;
   }
 </style>

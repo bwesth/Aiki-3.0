@@ -3,6 +3,7 @@ import intervals from "./intervals";
 import storage from "./util/storage";
 import redirection from "./redirection";
 import timer from "./timer";
+import { setTheme } from "./util/themes";
 
 /* Add listener if the runtime is caused by initial installation of extension.
 If so, run initial setup */
@@ -18,6 +19,7 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
  * as well as automatically opening the settings page such that the user can input user ID and procrastination websites. */
 async function installationSetup() {
   await storage.clearStorage();
+  setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
   storage.list.set([]);
@@ -37,7 +39,8 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 function setup() {
-  storage.shouldRedirect.set(true);
+  setTheme("dark");
+  storage.shouldRedirect.set(true)
   storage.warningOption.set(true);
   intervals.intervalSetup();
   redirection.navigationListener.start();

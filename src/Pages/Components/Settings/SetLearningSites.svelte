@@ -6,22 +6,26 @@
   import SettingsContainer from "./SettingsContainer.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
+  import { drawDarkMode, drawLightMode, setTheme, getTheme } from "../../../util/themes"
   import {
     faHourglassHalf,
-    faPowerOff, faMoon, faSun
+    faPowerOff,
+    faMoon,
+    faSun,
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
   $: rewardTime = 0;
 
   let warningOption = false;
-  let darkMode = false;
+  let theme = "light";
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
     warningOption = await storage.warningOption.get();
+    theme = await getTheme();
   }
 
   /**
@@ -46,8 +50,14 @@
     warningOption = !warningOption;
   }
 
-  function toggleDarkMode() {
-    darkMode = !darkMode;
+  function switchTheme() {
+    if (theme === "dark") {
+      drawDarkMode();
+      setTheme("dark");
+    } else {
+      drawLightMode();
+      setTheme("light");
+    }
   }
 
   fetchStorage();
@@ -129,20 +139,18 @@
       <div class="col-sm">Toggle dark mode:</div>
       <div class="col-sm" />
       <div class="col-sm">
-        {#if darkMode}
-        <button
-          type="default"
-          class="btn btn-dark item"
-          on:click={toggleDarkMode}
-          ><Fa icon={faMoon}/> Dark</button
-        >
+        {#if theme === "dark"}
+          <button
+            type="default"
+            class="btn btn-dark item"
+            on:click={switchTheme}><Fa icon={faMoon} /> Dark</button
+          >
         {:else}
-        <button
-        type="default"
-        class="btn btn-light item"
-        on:click={toggleDarkMode}
-        ><Fa icon={faSun}/> Light</button
-      >
+          <button
+            type="default"
+            class="btn btn-light item"
+            on:click={switchTheme}><Fa icon={faSun} /> Light</button
+          >
         {/if}
       </div>
     </div>
@@ -156,11 +164,15 @@
   }
 
   h5 {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--fontHeaders);
   }
 
   p {
-    font-family: "Lato", sans-serif;
-    font-size: 16px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
   }
 </style>
