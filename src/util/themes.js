@@ -71,27 +71,27 @@ export function drawLightMode() {
 
 //Sets CSS variables to make Aiki appear in theme three.
 export function drawBlueMode() {
-	root.setProperty('--textColor', '#24292F');
-	root.setProperty('--backgroundColorPrimary', '#88909D');
-    root.setProperty('--backgroundColorSecondary', '#D0DAE3');
-    root.setProperty('--borderColor', '#6E7884');
-	root.setProperty('--bannerTextColor', '#0D101F');
-    root.setProperty('--bannerBackgroundColor', '#EAEEF1');
-	root.setProperty('--hrColor', '#EAEEF1');
-    root.setProperty('--footerBackgroundColor', '#EAEEF1');
-    root.setProperty('--theadBackgroundColor', '#EAEEF1');
+	root.setProperty('--textColor', '#212121');
+	root.setProperty('--backgroundColorPrimary', '#F5F6FB');
+    root.setProperty('--backgroundColorSecondary', '#FFFFFF');
+    root.setProperty('--borderColor', '#EDEDED');
+	root.setProperty('--bannerTextColor', '#FFFFFF');
+    root.setProperty('--bannerBackgroundColor', '#3366FF');
+	root.setProperty('--hrColor', '#EAEAEA');
+    root.setProperty('--footerBackgroundColor', '#99B2FF');
+    root.setProperty('--theadBackgroundColor', '#EAEAEA');
 }
 
 //Sets CSS variables to make Aiki appear in theme three.
 export function drawZeeguuMode() {
-	root.setProperty('--textColor', '#24292F');
+	root.setProperty('--textColor', '#263238');
 	root.setProperty('--backgroundColorPrimary', '#F7F7F7');
     root.setProperty('--backgroundColorSecondary', '#FFFFFF');
     root.setProperty('--borderColor', '#EFEFEF');
 	root.setProperty('--bannerTextColor', '#FFFFFF');
-    root.setProperty('--bannerBackgroundColor', '#FEBD3B');
+    root.setProperty('--bannerBackgroundColor', '#FEBF00');
 	root.setProperty('--hrColor', '#EFEFEF');
-    root.setProperty('--footerBackgroundColor', '#FEC737');
+    root.setProperty('--footerBackgroundColor', '#F2C76B');
     root.setProperty('--theadBackgroundColor', '#F7F7F7');
 }
 

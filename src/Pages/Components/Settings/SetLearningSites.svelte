@@ -52,6 +52,7 @@
     warningOption = !warningOption;
   }
 
+  //Probably want to move this to themes.js? Some logic needs to be worked out.
   function changeTheme(input) {
     switch (input) {
       case "light" :
@@ -156,6 +157,7 @@
       </div>
     </div>
     <div class="row">
+      <!-- This is a big ugly chunk of code... In general this component is getting large. -->
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
       <div class="col-sm">

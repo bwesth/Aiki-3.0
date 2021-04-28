@@ -21,7 +21,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    /* box-shadow: 5px 0px #121212; */
+    filter: drop-shadow(0px 2px 1px rgba(0, 0, 0, 0.2));
   }
 
   h5 {
