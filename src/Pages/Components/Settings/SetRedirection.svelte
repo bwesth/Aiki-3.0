@@ -3,31 +3,25 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
+  import Container from "./Container.svelte";
+  import ThemeSelector from "./ThemeSelector.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import { setTheme, getTheme, drawDarkMode, drawLightMode, drawBlueMode, drawZeeguuMode } from "../../../util/themes"
   import {
     faHourglassHalf,
     faPowerOff,
-    faMoon,
-    faSun,
-    faCrow,
-    faBookReader
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
   $: rewardTime = 0;
 
   let warningOption = false;
-  let theme = "light";
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
     warningOption = await storage.warningOption.get();
-    theme = await getTheme();
   }
 
   /**
@@ -52,39 +46,10 @@
     warningOption = !warningOption;
   }
 
-  //Probably want to move this to themes.js? Some logic needs to be worked out.
-  function changeTheme(input) {
-    switch (input) {
-      case "light" :
-      theme = "light";
-      drawLightMode();
-      setTheme(input);
-      break;
-
-      case "dark" :
-      theme = "dark";
-      drawDarkMode();
-      setTheme(input);
-      break;
-
-      case "blue" :
-      theme = "blue";
-      drawBlueMode();
-      setTheme(input);
-      break;
-
-      case "zeeguu" :
-      theme = "zeeguu";
-      drawZeeguuMode();
-      setTheme(input);
-      break;
-    }
-  }
-
   fetchStorage();
 </script>
 
-<SettingsContainer headline="Redirection Settings">
+<Container headline="Redirection Settings">
   <h5>Your Python Learning Platform:</h5>
   <hr />
   <div class="container">
@@ -157,45 +122,14 @@
       </div>
     </div>
     <div class="row">
-      <!-- This is a big ugly chunk of code... In general this component is getting large. -->
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
       <div class="col-sm">
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Themes
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <button
-              type="button"
-              class="dropdown-item btn btn-light item"
-              disabled={theme === "light"? true : false}
-              on:click={()=>changeTheme("light")}><Fa icon={faSun} /> Light</button
-            >
-            <button
-              type="button"
-              class="dropdown-item btn btn-dark item"
-              disabled={theme === "dark"? true : false}
-              on:click={()=>changeTheme("dark")}><Fa icon={faMoon} /> Dark</button
-            >
-            <button
-              type="button"
-              class="dropdown-item btn btn-info item"
-              disabled={theme === "blue"? true : false}
-              on:click={()=>changeTheme("blue")}><Fa icon={faCrow} /> Blue</button
-            >
-            <button
-              type="button"
-              class="dropdown-item btn btn-warning item"
-              disabled={theme === "zeeguu"? true : false}
-              on:click={()=>changeTheme("zeeguu")}><Fa icon={faBookReader} /> Zeeguu</button
-            >
-          </div>
-        </div>
+        <ThemeSelector />
       </div>
     </div>
   </div>
-</SettingsContainer>
+</Container>
 
 <style>
   .container {

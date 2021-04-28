@@ -3,7 +3,7 @@
   Used in / Parent components: /src/Pages/Settings.svelte
 -->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
+  import Container from "./Container.svelte";
   import storage from "../../../util/storage";
   import firebase from "../../../util/firebase";
   import { makeDate } from "../../../util/utilities";
@@ -70,7 +70,7 @@
   setup();
 </script>
 
-<SettingsContainer id="user-settings" headline="Register Email">
+<Container id="user-settings" headline="Register Email">
   {#if userIsRegistered}
     <h5>Registered Email:</h5>
     <input
@@ -121,7 +121,7 @@
       </div>
     </div>
   {/if}
-</SettingsContainer>
+  </Container>
 
 <style>
   h5 {

@@ -2,7 +2,7 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
+  import Container from "./Container.svelte";
   import Fa from "svelte-fa";
   import {
     faClock,
@@ -16,7 +16,7 @@
   let emergencySkips = 0;
 </script>
 
-<SettingsContainer headline="Statistics">
+<Container headline="Statistics">
   <h5>Your Statistics:</h5>
   <hr />
   <p>Here's a small collection of statistics on how you use Aiki.</p>
@@ -38,7 +38,7 @@
     <Fa icon={faSkull} />&nbsp;<strong>Emergency Skips:</strong>
     {emergencySkips}
   </p>
-</SettingsContainer>
+</Container>
 
 <style>
   h5 {
