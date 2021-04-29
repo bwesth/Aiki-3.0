@@ -82,11 +82,25 @@ async function redirect(details) {
           parseUrl(details.url).name,
           participantResource.name
         );
+        handleRedirectionLoad(details.tabId);
       } catch (error) {
         console.error(error.message);
       }
     }
   }
+}
+
+async function handleRedirectionLoad(tabId) {
+  browser.webNavigation.onCompleted.addListener(messageLearningResource, {
+    url: [{ hostContains: `.${participantResource.name}.` }],
+  });
+}
+
+async function messageLearningResource(details) {
+  const response = await browser.tabs.sendMessage(details.tabId, {
+    action: "display: encouragement",
+  });
+  browser.webNavigation.onCompleted.removeListener(messageLearningResource);
 }
 
 /** #CHECKCURRENTTAB()#

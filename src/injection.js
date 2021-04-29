@@ -1,5 +1,6 @@
 import browser from "webextension-polyfill";
-import { ProcrastinationWarning } from "./content/ProcrastinationWarningarning";
+import { ProcrastinationWarning } from "./content/ProcrastinationWarning";
+import { LearningGreeting } from "./content/LearningGreeting";
 
 /* Listener for messages from background script. */
 browser.runtime.onMessage.addListener((request) => {
@@ -68,8 +69,18 @@ browser.runtime.onMessage.addListener((request) => {
     });
   } else if (request.action === "display: encouragement") {
     return new Promise((resolve, reject) => {
-      
+      function removeGreeting() {
+        const element = document.getElementsByClassName("aiki-overlay")[0];
+        try {
+          element.remove();
+        } catch (error) {
+          //This is a horrible way of catching the error thrown by removeChild() because the div is not there anymore at call time.
+          //Or is it? I'm not sure...
+        }
+        resolve({ msg: "loaded" });
+      }
 
+      LearningGreeting(removeGreeting);
     });
   }
 });
