@@ -26,7 +26,7 @@
     "content_scripts" : [
       {
         "matches" : ["<all_urls>"],
-        "css": ["/build/content.css"],
+        "css": ["/build/ProcrastinationWarning.css", "/build/LearningGreeting.css"],
         "js": ["/build/injection.js"]
       }
     ],
