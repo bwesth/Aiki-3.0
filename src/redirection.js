@@ -84,7 +84,7 @@ async function redirect(details) {
         );
         handleRedirectionLoad(details.tabId);
       } catch (error) {
-        console.error(error.message);
+        console.log(error.message);
       }
     }
   }
@@ -129,7 +129,7 @@ async function checkActiveTab() {
       }
     }
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 }
 
@@ -138,7 +138,7 @@ async function checkTabById({ tabId }) {
     const tab = await browser.tabs.get(tabId);
     checkTab(tab);
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
@@ -182,7 +182,7 @@ async function gotoOrigin(event) {
       parseUrl(origin.url).name
     );
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 }
 
@@ -210,7 +210,7 @@ async function talkToContent(tabId, url, originUrl) {
       storage.origin.set({ url: originUrl, tabId: tabId });
     }
   } catch (error) {
-    console.error(error.message);
+    console.log(error.message);
   }
 }
 
