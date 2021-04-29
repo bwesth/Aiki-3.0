@@ -26,17 +26,13 @@
 
   let timeRemaining = -1;
   let bonusTime = -1;
-  //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
-  let learningTime = -1;
   let intervalRef;
 
   $: canContinue = timeRemaining <= 0 ? true : false;
 
   async function setup() {
-    getTimer();
+    await getTimer();
     origin = await storage.origin.get();
-    //DO NOT remove the following line, some kind of update bug related to this. Worth looking into.
-    learningTime = await storage.timeSettings.learningTime.get();
     handleTimers();
   }
 
@@ -58,17 +54,22 @@
   }
 
   async function getTimer() {
-    port.postMessage("get: timer");
-    port.onMessage.addListener(function (msg) {
-      timeRemaining = msg.learningTimeRemaining;
-      bonusTime = msg.earnedTime * 1000;
+    return new Promise((resolve) => {
+      port.postMessage("get: timer");
+      port.onMessage.addListener(async function (msg) {
+        timeRemaining = await msg.learningTimeRemaining;
+        bonusTime = (await msg.earnedTime) * 1000;
+        resolve();
+      });
     });
   }
 
   function handleTimers() {
     if (timeRemaining === 0) {
+      console.log("timeRemaining === 0");
       initBonusTime();
     } else {
+      console.log("timeRemaining: ", timeRemaining);
       intervalRef = setInterval(() => {
         timeRemaining -= 1000;
       }, 1000);
@@ -78,6 +79,7 @@
 
   //Maybe redundant to make a function for this
   function initBonusTime() {
+    console.log("initBonusTime");
     clearInterval(intervalRef);
     setInterval(() => (bonusTime += 1000), 1000);
   }
