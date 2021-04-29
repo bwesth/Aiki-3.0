@@ -214,11 +214,6 @@ async function talkToContent(tabId, url, originUrl) {
   }
 }
 
-async function toggleWarning() {
-  await storage.warningOption.set(false);
-  restartNavigationListener();
-}
-
 async function addRedirectionLog(event, from, to) {
   const user = await storage.uid.get();
   const warningOption = await storage.warningOption.get();
