@@ -16,7 +16,7 @@
   import SetUser from "./Components/Settings/SetUser.svelte";
   import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
   import Statistics from "./Components/Settings/Statistics.svelte";
-  import SetLearningSites from "./Components/Settings/SetLearningSites.svelte";
+  import SetRedirection from "./Components/Settings/SetRedirection.svelte";
 
   $: user = "";
   $: userIsRegistered = false;
@@ -42,7 +42,7 @@
         <SetWebsites {user} {port} />
       </div>
       <div class="container">
-        <SetLearningSites />
+        <SetRedirection />
       </div>
       <div class="container">
         <Statistics />

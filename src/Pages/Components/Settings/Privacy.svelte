@@ -3,10 +3,10 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-import SettingsContainer from "./SettingsContainer.svelte";
+import Container from "./Container.svelte";
 </script>
 
-<SettingsContainer headline="Your Privacy">
+<Container headline="Your Privacy">
 <h5>We want you to know we take your privacy very seriously:</h5>
 <hr>
 <p>For the duration of this study, Aiki will be logging the amount of time you spend on websites that
@@ -19,7 +19,7 @@ import SettingsContainer from "./SettingsContainer.svelte";
     Facebook for 45 seconds on Tuesday. Aiki would log that you spent 45 seconds on Facebook.com on Tuesday, 
     but absolutely nothing else. To be clear, Aiki will not know anything about the content of the pages you 
     visit. We will later use this data to see if Aiki helped you to procrastinate a little less.</p>
-</SettingsContainer>
+</Container>
 
 <style>
   h5 {

@@ -3,7 +3,7 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
+  import Container from "./Container.svelte";
   import storage from "../../../util/storage";
   import firebase from "../../../util/firebase";
   import { parseUrl, makeDate } from "../../../util/utilities";
@@ -114,7 +114,7 @@
   }
 </script>
 
-<SettingsContainer id="site-input-container" headline="Set Time Wasting Sites">
+<Container id="site-input-container" headline="Set Time Wasting Sites">
   <h5>Add your Time Wasting Sites here:</h5>
   <hr />
   <p>
@@ -183,7 +183,7 @@
     </table>
   {/if}
   <!-- Add pagination for more than 10 sites? -->
-</SettingsContainer>
+  </Container>
 
 <style>
   table {

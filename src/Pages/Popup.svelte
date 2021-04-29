@@ -85,7 +85,6 @@
   setup();
 </script>
 
-<!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
 <main>
   <Header />
   <SettingsButton />
@@ -108,7 +107,6 @@
   {/if}
 </main>
 
-<!-- Using a mix of flexbox and bootstap to get the styling done. -->
 <style>
   .container {
     display: flex;
