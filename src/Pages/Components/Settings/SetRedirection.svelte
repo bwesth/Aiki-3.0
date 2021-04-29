@@ -1,5 +1,5 @@
 <!-- 
-
+  Contains settings for redirection duration, as well as other misc settings such as changing theme.
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
@@ -125,6 +125,7 @@
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
       <div class="col-sm">
+        <!-- This has its own component to try and compartmentalize this functionality. -->
         <ThemeSelector />
       </div>
     </div>
