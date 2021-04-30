@@ -61,8 +61,8 @@ browser.runtime.onMessage.addListener((request) => {
        * @description Removes the aiki interception overlay
        * by searching for DOM elements with the name "aiki-overlay" and calling remove() on it/them.  */
       function removeOverlay() {
-        const elements = document.getElementsByClassName("aiki-overlay");
-        elements[0].remove();
+        const element = document.getElementById("aiki-overlay");
+        element.remove();
       }
 
       ProcrastinationWarning(snooze, timer);
@@ -70,7 +70,7 @@ browser.runtime.onMessage.addListener((request) => {
   } else if (request.action === "display: encouragement") {
     return new Promise((resolve, reject) => {
       function removeGreeting() {
-        const element = document.getElementsByClassName("aiki-overlay")[0];
+        const element = document.getElementById("aiki-overlay");
         try {
           element.remove();
         } catch (error) {
@@ -80,7 +80,7 @@ browser.runtime.onMessage.addListener((request) => {
         resolve({ msg: "loaded" });
       }
 
-      LearningGreeting(removeGreeting);
+      LearningGreeting(removeGreeting, browser);
     });
   }
 });

@@ -51,6 +51,35 @@ function removeTabChangeListener() {
   browser.tabs.onActivated.removeListener(checkTabById);
 }
 
+async function windowChangeListener(windowId) {
+  if (windowId >= 0) {
+    try {
+      const tabs = await browser.tabs.query({
+        active: true,
+        currentWindow: true,
+      });
+      if (tabs.length > 0) {
+        checkTab(tabs[0]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}
+
+function addWindowChangeListener() {
+  browser.windows.onFocusChanged.addListener(windowChangeListener);
+}
+
+function removeWindowChangeListener() {
+  browser.windows.onFocusChanged.removeListener(windowChangeListener);
+}
+
+async function restartWindowChangeListener() {
+  removeWindowChangeListener();
+  addWindowChangeListener();
+}
+
 async function restartTabChangeListener() {
   removeTabChangeListener();
   addTabChangeListener();
@@ -106,7 +135,8 @@ async function messageLearningResource(details) {
 /** #CHECKCURRENTTAB()#
 @function
 @async
-@description Gets currently active tab and calls checkTab on the resulting tab. */
+@description Gets currently active tab and sends message to the content script if it
+is a procrastination website. */
 async function checkActiveTab() {
   try {
     const tabs = await browser.tabs.query({
@@ -134,6 +164,7 @@ async function checkActiveTab() {
 }
 
 async function checkTabById({ tabId }) {
+  console.log(`Checking ${tabId}`);
   try {
     const tab = await browser.tabs.get(tabId);
     checkTab(tab);
@@ -242,6 +273,11 @@ export default {
     start: addTabChangeListener,
     stop: removeTabChangeListener,
     restart: restartTabChangeListener,
+  },
+  windowChangeListener: {
+    start: addWindowChangeListener,
+    stop: removeWindowChangeListener,
+    restart: restartWindowChangeListener,
   },
   gotoOrigin,
 };

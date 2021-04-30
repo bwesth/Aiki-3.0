@@ -43,6 +43,7 @@ function setup() {
   intervals.intervalSetup();
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
+  redirection.windowChangeListener.start();
 }
 
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 
