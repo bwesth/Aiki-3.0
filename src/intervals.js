@@ -88,6 +88,7 @@ async function syncList() {
 
 function storeData(data) {
   if (user) {
+    storage.stats.storeSession(data)
     const entry = { data: data, user: user, date: makeDate() };
     firebase.addLog(entry, "session");
   }

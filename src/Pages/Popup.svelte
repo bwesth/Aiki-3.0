@@ -66,10 +66,8 @@
 
   function handleTimers() {
     if (timeRemaining === 0) {
-      console.log("timeRemaining === 0");
       initBonusTime();
     } else {
-      console.log("timeRemaining: ", timeRemaining);
       intervalRef = setInterval(() => {
         timeRemaining -= 1000;
       }, 1000);
@@ -79,7 +77,6 @@
 
   //Maybe redundant to make a function for this
   function initBonusTime() {
-    console.log("initBonusTime");
     clearInterval(intervalRef);
     setInterval(() => (bonusTime += 1000), 1000);
   }

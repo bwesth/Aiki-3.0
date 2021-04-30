@@ -4,16 +4,21 @@
  -->
 <script>
   /* Functional and module imports */
+  import storage from '../../../util/storage'
   import Fa from "svelte-fa";
   import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 
   export let siteName;
   export let gotoOrigin;
+
+  function handleClick(){
+    gotoOrigin("continue")
+  }
 </script>
 
 <button
   type="default"
-  on:click={() => gotoOrigin("continue")}
+  on:click={handleClick}
   class="btn btn-success item"
   ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
 </button>

@@ -14,20 +14,6 @@ async function createFilter() {
   return filter;
 }
 
-/**
- * @deprecated Use addNavigationListener */
-async function addConditionalNavigationListener() {
-  const filter = await createFilter();
-  const warningState = await storage.warningOption.get();
-  if (warningState) {
-    console.log(warningState, "Adding an onCompleted listener");
-    browser.webNavigation.onCompleted.addListener(redirect, filter);
-  } else {
-    console.log(warningState, "Adding an onBeforeNavigate listener");
-    browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
-  }
-}
-
 async function addNavigationListener() {
   const filter = await createFilter();
   browser.webNavigation.onBeforeNavigate.addListener(redirect, filter);
@@ -95,7 +81,6 @@ async function restartTabChangeListener() {
  * @param {string} details.url
  * @param {number} details.tabId */
 async function redirect(details) {
-  console.log("Redirection details: ", details);
   if (details.frameId === 0) {
     const toggled = await storage.redirection.get();
     const shouldRedirect = await storage.shouldRedirect.get();
@@ -145,7 +130,6 @@ async function checkActiveTab() {
     });
     if (tabs.length > 0) {
       const tab = tabs[0];
-      console.log("Active tab: ", tab);
       const tabSiteName = parseUrl(tab.url).name;
       const procList = await storage.list.get();
       const procListNames = procList.map((site) => site.name);
@@ -164,7 +148,6 @@ async function checkActiveTab() {
 }
 
 async function checkTabById({ tabId }) {
-  console.log(`Checking ${tabId}`);
   try {
     const tab = await browser.tabs.get(tabId);
     checkTab(tab);
@@ -200,6 +183,7 @@ async function checkTab(tab) {
  * The uri was saved upon redirection, and here restored in full in the same tab.
  * Origin is an object of type: {integer: tabId, string: url} */
 async function gotoOrigin(event) {
+  await storage.stats[event]();
   await storage.shouldRedirect.set(false);
   const rewardTime = await storage.timeSettings.rewardTime.get();
   timer.startProcrastinationSession(checkActiveTab, rewardTime);
@@ -229,8 +213,9 @@ async function talkToContent(tabId, url, originUrl) {
         parseUrl(originUrl).name,
         participantResource.name
       );
+      storage.stats.snooze();
       await storage.shouldRedirect.set(false);
-      timer.startProcrastinationSession(checkActiveTab, 120000);
+      timer.startProcrastinationSession(checkActiveTab, 60000);
     } else {
       addRedirectionLog(
         `Interception: auto resolve`,
@@ -247,16 +232,14 @@ async function talkToContent(tabId, url, originUrl) {
 
 async function addRedirectionLog(event, from, to) {
   const user = await storage.uid.get();
-  const warningOption = await storage.warningOption.get();
   const timeSettings = await storage.timeSettings.getAll();
-  const details = { warningOption: warningOption, timeSettings: timeSettings };
   firebase.addLog(
     {
       user: user,
       event: event,
       from: from,
       to: to,
-      detail: details,
+      timeSettings: timeSettings,
       date: makeDate(),
     },
     "redirection"
