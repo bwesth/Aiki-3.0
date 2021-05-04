@@ -2,16 +2,16 @@
   import { onMount } from "svelte";
   import Chart from 'chart.js/auto';
   let description =
-    "Donut Chart (also known as Doughnut chart) is a variation on a Pie chart except it has a round hole in the center which makes it look like a donut, hence the name. This empty space can be used to display additional data.";
+    "Here's an overview of your time spent online.";
   function createDoughnut() {
     var ctx = document.getElementById("doughnut-chart");
     let myChart = new Chart(ctx, {
       type: "doughnut",
       data: {
-        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+        labels: ["Learning", "www.facebook.com", "www.youtube.com", "www.kotaku.com", "www.reddit.com"],
         datasets: [
           {
-            label: "Population (millions)",
+            label: "Time (seconds)",
             backgroundColor: [
               "#3e95cd",
               "#8e5ea2",
@@ -26,7 +26,7 @@
       options: {
         title: {
           display: true,
-          text: "Predicted world population (millions) in 2050"
+          text: "Hello"
         }
       }
     });
