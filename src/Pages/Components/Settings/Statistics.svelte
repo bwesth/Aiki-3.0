@@ -1,4 +1,5 @@
 <!-- 
+  The main container for the statistics panel in the settings window.
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>

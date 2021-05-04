@@ -73,8 +73,8 @@
       <StatBlock {...statItem} />
     {/each}
   </div>
-  <div>
-    <h4>History</h4>
+  <div class="section">
+    <h4>All Time</h4>
     {#each historyStats as statItem}
       <StatBlock {...statItem} />
     {/each}
@@ -92,6 +92,8 @@
 
   .dataContainers {
     display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
   }
 
   .section {
