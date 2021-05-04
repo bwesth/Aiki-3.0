@@ -185,19 +185,22 @@ async function storeSession(data) {
     "statsDate",
   ]);
   await checkDate(statsDate);
-  let newData = {};
-  let procrastinationDuration = 0;
+  console.log(sessionData);
+  let newData = sessionData;
   for (const key in data) {
-    if (key === participantResource) {
-      newData.learningDuration = data[key];
+    if (key === participantResource.name) {
+      console.log(newData.learningDuration);
+      console.log(data[key]);
+      newData.learningDuration += data[key];
     } else if (!["chromeInactive", "chromeActive"].includes(key)) {
       newData[key] = sessionData.hasOwnProperty(key)
         ? sessionData[key] + data[key]
         : data[key];
-      procrastinationDuration += data[key];
+      newData.procrastinationDuration += data[key];
     }
+    // console.log(procrastinationDuration);
+    // console.log(newData.learningDuration);
   }
-  newData.procrastinationDuration = procrastinationDuration;
   storage.set({ sessionData: newData });
 }
 
@@ -253,12 +256,28 @@ async function getAllStats() {
 }
 
 function initializeStats() {
-  storage.set({ sessionData: {} });
+  storage.set({
+    sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+  });
   storage.set({ skipCount: 0 });
   storage.set({ completedCount: 0 });
   storage.set({ snoozeCount: 0 });
-  storage.set({ history: { sessionData: {} } });
-  storage.set({ yesterday: { sessionData: {} } });
+  storage.set({
+    history: {
+      sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+      completedCount: 0,
+      skipCount: 0,
+      snoozeCount: 0,
+    },
+  });
+  storage.set({
+    yesterday: {
+      sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+      skipCount: 0,
+      completedCount: 0,
+      snoozeCount: 0,
+    },
+  });
 }
 
 async function overWriteYesterday() {
@@ -276,13 +295,13 @@ async function overWriteYesterday() {
 
 async function addToHistory() {
   let { yesterday, history } = await storage.get(["yesterday", "history"]);
-  history.skipCount = yesterday.skipCount;
-  history.completedCount = yesterday.completedCount;
-  history.snoozeCount = yesterday.snoozeCount;
-  history.procrastinationDuration =
+  history.skipCount += yesterday.skipCount;
+  history.completedCount += yesterday.completedCount;
+  history.snoozeCount += yesterday.snoozeCount;
+  history.procrastinationDuration +=
     yesterday.sessionData.procrastinationDuration;
-  history.learningDuration = yesterday.sessionData.learningDuration;
-  storage.set("history", history);
+  history.learningDuration += yesterday.sessionData.learningDuration;
+  storage.set({ history: history });
 }
 
 export default {

@@ -27,7 +27,6 @@ async function installationSetup() {
   storage.uid.set("");
   storage.timeSettings.learningTime.set(5000);
   storage.timeSettings.rewardTime.set(5000);
-  storage.timeSettings.rewardRatio.set(2);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,
@@ -40,7 +39,8 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 async function setup() {
-  console.log(await storage.stats.getAll());
+  // console.log(await storage.stats.getAll());
+  // storage.stats.storeSession({theguardian: 10, sololearn: 10})
   storage.shouldRedirect.set(true);
   intervals.intervalSetup();
   redirection.navigationListener.start();
