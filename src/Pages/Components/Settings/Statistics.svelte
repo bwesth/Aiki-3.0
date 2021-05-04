@@ -2,55 +2,38 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-  import Container from "./Container.svelte";
-  import Fa from "svelte-fa";
-  import {
-    faClock,
-    faCheckCircle,
-    faSkull,
-  } from "@fortawesome/free-solid-svg-icons";
+  // Functional and module imports
+  import storage from "../../../util/storage";
 
-  let timeSpentLearning = 0;
-  let rewardTimeEarned = 0;
-  let completedLearningSessions = 0;
-  let emergencySkips = 0;
+  // Component imports
+  import StatPageToday from "./StatPageToday.svelte";
+  import StatPageHistory from "./StatPageHistory.svelte";
+  import Container from "./Container.svelte";
+
+  let selected = StatPageToday;
+
+  let statistics = storage.stats.getAll();
+  console.log(statistics);
 </script>
 
 <Container headline="Statistics">
-  <h5>Your Statistics:</h5>
-  <hr />
-  <p>Here's a small collection of statistics on how you use Aiki.</p>
-  <p>
-    <Fa icon={faClock} />&nbsp;<strong>Time Spent Learning:</strong>
-    {timeSpentLearning}
-  </p>
-  <p>
-    <Fa icon={faClock} />&nbsp;<strong>Reward Time Earned:</strong>
-    {rewardTimeEarned}
-  </p>
-  <p>
-    <Fa icon={faCheckCircle} />&nbsp;<strong
-      >Completed Learning Sessions:</strong
+  <div class="buttons">
+    <button on:click={() => (selected = StatPageToday)}>Today</button><button
+      on:click={() => (selected = StatPageHistory)}>History</button
     >
-    {completedLearningSessions}
-  </p>
-  <p>
-    <Fa icon={faSkull} />&nbsp;<strong>Emergency Skips:</strong>
-    {emergencySkips}
-  </p>
+  </div>
+  {#await statistics}
+    <h1>Loading...</h1>
+  {:then data}
+    <svelte:component this={selected} {data} />
+    <!-- <h1>Finished...</h1> -->
+  {/await}
 </Container>
 
 <style>
-  h5 {
-    font-family: var(--fontHeaders);
-  }
-
-  p {
-    font-family: var(--fontContent);
-    font-size: var(--fontSizeSettings);
-  }
-
-  hr {
-    background-color: var(--hrColor);
+  .buttons {
+    display: flex;
+    widows: 100%;
+    justify-content: space-evenly;
   }
 </style>

@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 import { makeDate } from "./utilities";
-import { learningSites } from "./constants";
+import { learningSites, participantResource } from "./constants";
 const storage = browser.storage.local;
 
 /**
@@ -186,20 +186,25 @@ async function storeSession(data) {
   ]);
   await checkDate(statsDate);
   let newData = {};
+  let procrastinationDuration = 0;
   for (const key in data) {
-    if (!["chromeInactive", "chromeActive"].includes(key)) {
+    if (key === participantResource) {
+      newData.learningDuration = data[key];
+    } else if (!["chromeInactive", "chromeActive"].includes(key)) {
       newData[key] = sessionData.hasOwnProperty(key)
         ? sessionData[key] + data[key]
         : data[key];
+      procrastinationDuration += data[key];
     }
-    storage.set({ sessionData: newData });
   }
+  newData.procrastinationDuration = procrastinationDuration;
+  storage.set({ sessionData: newData });
 }
 
 async function checkDate(statsDate) {
   const date = makeDate().dateString;
   if (statsDate !== date) {
-    overWriteYesterday();
+    await overWriteYesterday();
     await storage.set({ snoozeCount: 0 });
     await storage.set({ completedCount: 0 });
     await storage.set({ skipCount: 0 });
@@ -241,31 +246,43 @@ async function getAllStats() {
     "skipCount",
     "completedCount",
     "snoozeCount",
+    "yesterday",
+    "history",
   ]);
   return result;
 }
 
+function initializeStats() {
+  storage.set({ sessionData: {} });
+  storage.set({ skipCount: 0 });
+  storage.set({ completedCount: 0 });
+  storage.set({ snoozeCount: 0 });
+  storage.set({ history: { sessionData: {} } });
+  storage.set({ yesterday: { sessionData: {} } });
+}
+
 async function overWriteYesterday() {
-  const today = await storage.stats.getAll();
-  const procSites = await storage.getList();
-  let p = 0,
-    l = 0;
-  for (const key in today.sessionData) {
-    if (procSites.includes(key)) {
-      p += today.sessionData[key];
-    } else if (learningSites.includes(key)) {
-      l += today.sessionData[key];
-    }
-  }
+  await addToHistory();
+  const today = await storage.get([
+    "sessionData",
+    "skipCount",
+    "completedCount",
+    "snoozeCount",
+  ]);
   storage.set({
-    yesterday: {
-      snoozeCount: today.snoozeCount,
-      completedCount: today.completedCount,
-      skipCount: today.skipCount,
-      procrastinationDuration: p,
-      learningDuration: l,
-    },
+    yesterday: today,
   });
+}
+
+async function addToHistory() {
+  let { yesterday, history } = await storage.get(["yesterday", "history"]);
+  history.skipCount = yesterday.skipCount;
+  history.completedCount = yesterday.completedCount;
+  history.snoozeCount = yesterday.snoozeCount;
+  history.procrastinationDuration =
+    yesterday.sessionData.procrastinationDuration;
+  history.learningDuration = yesterday.sessionData.learningDuration;
+  storage.set("history", history);
 }
 
 export default {
@@ -287,5 +304,6 @@ export default {
     continue: incrContinueCount,
     snooze: incrSnoozeCount,
     getAll: getAllStats,
+    init: initializeStats,
   },
 };

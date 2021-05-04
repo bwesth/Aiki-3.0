@@ -18,7 +18,8 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
  * @description Runs the initial installation setup, creating values in storage used by the application,
  * as well as automatically opening the settings page such that the user can input user ID and procrastination websites. */
 async function installationSetup() {
-  await storage.clearStorage();
+  storage.clearStorage();
+  storage.stats.init();
   setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
@@ -39,6 +40,7 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 async function setup() {
+  console.log(await storage.stats.getAll());
   storage.shouldRedirect.set(true);
   intervals.intervalSetup();
   redirection.navigationListener.start();
