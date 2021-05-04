@@ -26,7 +26,6 @@
     <h1>Loading...</h1>
   {:then data}
     <svelte:component this={selected} {data} />
-    <!-- <h1>Finished...</h1> -->
   {/await}
   <div class="buttons">
     <button 

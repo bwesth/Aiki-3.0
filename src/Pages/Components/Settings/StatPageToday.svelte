@@ -8,6 +8,7 @@
 
   // Component imports
   import StatBlock from "./StatBlock.svelte";
+  import Chart from "./Chart.svelte";
 
   export let data;
   let stats = [
@@ -35,15 +36,17 @@
   ];
 </script>
 
-<div class="section">
-  {#each stats as statItem}
-    <StatBlock {...statItem} />
-  {/each}
+<div class="chartContainer">
+  <Chart />
 </div>
 
+
 <style>
-  .section {
+  /* .chartContainer {
     display: flex;
-    flex-direction: column;
-  }
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  } */
 </style>
+

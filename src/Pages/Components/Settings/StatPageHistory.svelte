@@ -7,7 +7,6 @@
   } from "@fortawesome/free-solid-svg-icons";
 
   // Component imports
-  import StatBlock from "./StatBlock.svelte";
   import Chart from "./Chart.svelte";
   export let data;
 
@@ -36,41 +35,15 @@
   ];
 </script>
 
-<div class="dataContainers">
-
-  <!-- <div class="section">
-    {#each historyStats as statItem}
-      <StatBlock {...statItem} />
-    {/each}
-  </div> -->
-
-  <!-- <div class="section">
-    <h4>Yesterday</h4>
-    {#each yesterdayStats as statItem}
-      <StatBlock {...statItem} />
-    {/each}
-  </div>
-  <div class="section">
-    <h4>All Time</h4>
-    {#each historyStats as statItem}
-      <StatBlock {...statItem} />
-    {/each}
-  </div> -->
-  <!-- Trying out the chart here.... -->
-  <div class="chart">
+<div class="chartContainer">
     <Chart />
-  </div>
 </div>
 
 <style>
-  .dataContainers {
+  /* .chartContainer {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-  }
-
-  /* .section {
-    display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   } */
 </style>
