@@ -8,7 +8,7 @@
 
   // Component imports
   import StatBlock from "./StatBlock.svelte";
-
+  import Chart from "./Chart.svelte";
   export let data;
 
   let historyStats = [
@@ -79,6 +79,11 @@
       <StatBlock {...statItem} />
     {/each}
   </div>
+  <!-- Trying out the chart here.... -->
+  <div class="chart">
+    <Chart />
+  </div>
+
 </div>
 
 <style>
