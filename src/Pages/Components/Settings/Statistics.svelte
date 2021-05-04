@@ -28,12 +28,12 @@
     <svelte:component this={selected} {data} />
   {/await}
   <div class="buttons">
-    <button 
+    <button type="button" class="btn btn-info"
       on:click={() => (selected = StatPageToday)}>Today</button>
-    <button
+    <button type="button" class="btn btn-info"
       on:click={() => (selected = StatPageYesterday)}>Yesterday</button
     >
-    <button
+    <button type="button" class="btn btn-info"
       on:click={() => (selected = StatPageHistory)}>All Time</button
     >
   </div>
@@ -53,9 +53,13 @@
     background-color: var(--hrColor);
   }
 
+  .btn {
+    margin: 10px;
+  }
+
   .buttons {
     display: flex;
     widows: 100%;
-    justify-content: space-evenly;
+    justify-content: center;
   }
 </style>

@@ -1,14 +1,12 @@
 <script>
   import { onMount } from "svelte";
   import Chart from 'chart.js/auto';
-  let description =
-    "Here's an overview of your time spent online.";
-  function createDoughnut() {
-    var ctx = document.getElementById("doughnut-chart");
+  function createPieChart() {
+    var ctx = document.getElementById("pie-chart");
     let myChart = new Chart(ctx, {
-      type: "doughnut",
+      type: "pie",
       data: {
-        labels: ["Learning", "www.facebook.com", "www.youtube.com", "www.kotaku.com", "www.reddit.com"],
+        labels: ["www.codecademy.com", "www.facebook.com", "www.youtube.com", "www.kotaku.com", "www.reddit.com"],
         datasets: [
           {
             label: "Time (seconds)",
@@ -24,39 +22,42 @@
         ]
       },
       options: {
-        title: {
-          display: true,
-          text: "Hello"
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    color: '#FFFFFF',
+                }
+            }
+        },
+        layout: {
+            padding: 20,
+            scale: 40
         }
       }
     });
   }
-  onMount(createDoughnut);
+  onMount(createPieChart);
 </script>
 
 <div class="chart">
-  <h4 class="heading">Time Chart</h4>
-  <p class="sub-heading">{description}</p>
-  <canvas id="doughnut-chart" width="4%" height="3%" />
+  <canvas id="pie-chart" />
 </div>
 
 <style>
-    .heading {
-      margin: 1rem 0;
-      font-size: var(--fontSizeSettings);
-      color: var(--textColor);
+
+    canvas {
+        display: flex;
+        width: 100px;
+        height: 100px;
     }
-    .sub-heading {
-      margin-bottom: 2.5rem;
-      color: var(--textColor);
-      font-size: var(--fontSizeSettings);
-    }
-    .chart {
-      margin: 1rem 1rem 0 0;
-      padding: 30px 20px;
-      background-color: var(--backgroundColorPrimary);
-      flex-direction: column;
-      width: 90%;
-      height: 90%;
-    }
-  </style>
+
+  .chart {
+    margin: 1rem 1rem 0 0;
+    background-color: var(--backgroundColorSecondary);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+</style>

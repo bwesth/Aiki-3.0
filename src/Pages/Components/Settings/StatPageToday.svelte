@@ -7,7 +7,6 @@
   } from "@fortawesome/free-solid-svg-icons";
 
   // Component imports
-  import StatBlock from "./StatBlock.svelte";
   import Chart from "./Chart.svelte";
 
   export let data;
@@ -36,17 +35,17 @@
   ];
 </script>
 
-<div class="chartContainer">
-  <Chart />
+<div>
+  <p>Pie chart will go here! WIP due 10/05/2021</p>
+  <!-- <Chart /> -->
 </div>
 
 
 <style>
-  /* .chartContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  } */
+      p{
+        text-align: center;
+        padding: 20px;
+        font-weight: 700;
+    }
 </style>
 
