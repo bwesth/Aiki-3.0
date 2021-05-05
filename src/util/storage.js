@@ -185,12 +185,9 @@ async function storeSession(data) {
     "statsDate",
   ]);
   await checkDate(statsDate);
-  console.log(sessionData);
   let newData = sessionData;
   for (const key in data) {
     if (key === participantResource.name) {
-      console.log(newData.learningDuration);
-      console.log(data[key]);
       newData.learningDuration += data[key];
     } else if (!["chromeInactive", "chromeActive"].includes(key)) {
       newData[key] = sessionData.hasOwnProperty(key)
@@ -198,8 +195,6 @@ async function storeSession(data) {
         : data[key];
       newData.procrastinationDuration += data[key];
     }
-    // console.log(procrastinationDuration);
-    // console.log(newData.learningDuration);
   }
   storage.set({ sessionData: newData });
 }

@@ -8,7 +8,7 @@ import { parseUrl, makeDate } from "./util/utilities";
 async function createFilter() {
   const procList = await storage.list.get();
   const url = procList.map((item) => {
-    return { hostContains: `.${item.name}.` };
+    return { hostContains: `${item.name}.` };
   });
   const filter = { url: url };
   return filter;
@@ -48,7 +48,7 @@ async function windowChangeListener(windowId) {
         checkTab(tabs[0]);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 }
@@ -81,7 +81,7 @@ async function restartTabChangeListener() {
  * @param {string} details.url
  * @param {number} details.tabId */
 async function redirect(details) {
-  if (details.frameId === 0) {
+  if (details.frameId === 0 && !details.url.includes("auth")) {
     const toggled = await storage.redirection.get();
     const shouldRedirect = await storage.shouldRedirect.get();
     if (toggled && shouldRedirect) {
@@ -98,7 +98,7 @@ async function redirect(details) {
         );
         handleRedirectionLoad(details.tabId);
       } catch (error) {
-        console.log(error.message);
+        // console.log(error.message);
       }
     }
   }
@@ -112,7 +112,7 @@ async function onOriginRemoved(details) {
   const origin = await storage.origin.get();
   if (origin) {
     if (details === origin.tabId) {
-      storage.origin.remove(); 
+      storage.origin.remove();
       timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
       timer.stopLearningSession(); // This is fine
     }
@@ -158,7 +158,7 @@ async function checkActiveTab() {
       }
     }
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
   }
 }
 
@@ -167,7 +167,7 @@ async function checkTabById({ tabId }) {
     const tab = await browser.tabs.get(tabId);
     checkTab(tab);
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
   }
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
@@ -211,7 +211,7 @@ async function gotoOrigin(event) {
       parseUrl(origin.url).name
     );
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
   } finally {
     storage.origin.remove();
   }
@@ -242,7 +242,7 @@ async function talkToContent(tabId, url, originUrl) {
       storage.origin.set({ url: originUrl, tabId: tabId });
     }
   } catch (error) {
-    console.log(error.message);
+    // console.log(error.message);
   }
 }
 

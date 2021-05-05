@@ -34,7 +34,6 @@
     await getTimer();
     origin = await storage.origin.get();
     handleTimers();
-    console.log(origin);
   }
 
   $: if (origin) {

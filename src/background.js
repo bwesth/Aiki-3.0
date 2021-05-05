@@ -13,6 +13,7 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
+
 /**
  * @async @function
  * @description Runs the initial installation setup, creating values in storage used by the application,
@@ -46,7 +47,7 @@ async function setup() {
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
   redirection.windowChangeListener.start();
-  redirection.addOriginTabCloseListener()
+  redirection.addOriginTabCloseListener();
 }
 
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 
