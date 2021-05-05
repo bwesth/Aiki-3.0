@@ -40,14 +40,14 @@
 </script>
 
 <div>
-  <p>Pie chart will go here! WIP due 10/05/2021</p>
-  <!-- <Chart /> -->
+  <!-- <p>Pie chart will go here! WIP due 10/05/2021</p> -->
+  <Chart />
 </div>
 
 <style>
-  p {
+  /* p {
     text-align: center;
     padding: 20px;
     font-weight: 700;
-  }
+  } */
 </style>
