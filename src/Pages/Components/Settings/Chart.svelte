@@ -1,6 +1,21 @@
+<!-- This handles the data and drawing functions required to generate
+  a pie chart for our statistics element in the Settings menu. Uses
+  'chart.js' module to do so.
+Used in / Parent components: /src/Pages/Settings.svelte	
+-->
 <script>
   import { onMount } from "svelte";
   import Chart from "chart.js/auto";
+  import storage from "../../../util/storage";
+
+  //Need to get these values somehow.
+  //Also need to get all data somehow and pipe it into the chart somehow lel.
+  let skips = 1;
+  let completed = 1;
+
+  let textColor = getComputedStyle(document.documentElement).getPropertyValue('--textColor');
+
+  //Generates our pie chart.
   function createPieChart() {
     var ctx = document.getElementById("pie-chart");
     let myChart = new Chart(ctx, {
@@ -33,8 +48,8 @@
       options: {
         plugins: {
           title: {
-            text: "Time Spent",
-            color: "#FFFFFF",
+            text: "Time Spent (in seconds)",
+            color: textColor,
             size: 16,
             display: true,
             padding: 10,
@@ -44,7 +59,7 @@
             position: "bottom",
             align: "center",
             labels: {
-              color: "#FFFFFF",
+              color: textColor,
               boxWidth: 12,
               padding: 12,
             },
@@ -62,6 +77,12 @@
 <div class="flex">
   <div class="chart">
     <canvas id="pie-chart" />
+    <div class="other-stats">
+      <h3>Emergency Skips:</h3>
+      <p>{skips}</p>
+      <h3>Completed Sessions:</h3>
+      <p>{completed}</p>
+    </div>
   </div>
 </div>
 
@@ -71,7 +92,7 @@
     justify-content: center;
     width: 1px;
     height: 1px;
-    background-color: #212121;
+    background-color: var(--backgroundColorSecondary);
   }
 
   .flex {
