@@ -40,12 +40,10 @@
   <!-- <Chart /> -->
 </div>
 
-
 <style>
-      p{
-        text-align: center;
-        padding: 20px;
-        font-weight: 700;
-    }
+  p {
+    text-align: center;
+    padding: 20px;
+    font-weight: 700;
+  }
 </style>
-

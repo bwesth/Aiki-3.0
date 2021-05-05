@@ -28,12 +28,19 @@
     <svelte:component this={selected} {data} />
   {/await}
   <div class="buttons">
-    <button type="button" class="btn btn-info"
-      on:click={() => (selected = StatPageToday)}>Today</button>
-    <button type="button" class="btn btn-info"
+    <button
+      type="button"
+      class="btn btn-info"
+      on:click={() => (selected = StatPageToday)}>Today</button
+    >
+    <button
+      type="button"
+      class="btn btn-info"
       on:click={() => (selected = StatPageYesterday)}>Yesterday</button
     >
-    <button type="button" class="btn btn-info"
+    <button
+      type="button"
+      class="btn btn-info"
       on:click={() => (selected = StatPageHistory)}>All Time</button
     >
   </div>
