@@ -6,6 +6,11 @@ Used in / Parent components: /src/Pages/Settings.svelte
 <script>
   import { onMount } from "svelte";
   import Chart from "chart.js/auto";
+  import Fa from "svelte-fa";
+  import {
+    faSkull,
+    faThumbsUp
+  } from "@fortawesome/free-solid-svg-icons";
   import storage from "../../../util/storage";
 
   //Need to get these values somehow.
@@ -13,7 +18,9 @@ Used in / Parent components: /src/Pages/Settings.svelte
   let skips = 1;
   let completed = 1;
 
-  let textColor = getComputedStyle(document.documentElement).getPropertyValue('--textColor');
+  let textColor = getComputedStyle(document.documentElement).getPropertyValue(
+    "--textColor"
+  );
 
   //Generates our pie chart.
   function createPieChart() {
@@ -77,12 +84,12 @@ Used in / Parent components: /src/Pages/Settings.svelte
 <div class="flex">
   <div class="chart">
     <canvas id="pie-chart" />
-    <div class="other-stats">
-      <h3>Emergency Skips:</h3>
-      <p>{skips}</p>
-      <h3>Completed Sessions:</h3>
-      <p>{completed}</p>
-    </div>
+  </div>
+  <div class="other-stats">
+    <h6><Fa icon={faThumbsUp} /> Completed Sessions:</h6>
+    <p>{completed}</p>
+    <h6><Fa icon={faSkull} /> Emergency Skips:</h6>
+    <p>{skips}</p>
   </div>
 </div>
 
