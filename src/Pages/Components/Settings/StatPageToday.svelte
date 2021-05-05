@@ -7,7 +7,7 @@
   } from "@fortawesome/free-solid-svg-icons";
 
   // Component imports
-  import StatBlock from "./StatBlock.svelte";
+  import Chart from "./Chart.svelte";
 
   export let data;
   let stats = [
@@ -35,31 +35,17 @@
   ];
 </script>
 
-<h5>Your Statistics:</h5>
-<hr />
-<p>Here's a small collection of statistics on how you use Aiki.</p>
-<div class="section">
-  {#each stats as statItem}
-    <StatBlock {...statItem} />
-  {/each}
+<div>
+  <p>Pie chart will go here! WIP due 10/05/2021</p>
+  <!-- <Chart /> -->
 </div>
 
+
 <style>
-  h5 {
-    font-family: var(--fontHeaders);
-  }
-
-  p {
-    font-family: var(--fontContent);
-    font-size: var(--fontSizeSettings);
-  }
-
-  hr {
-    background-color: var(--hrColor);
-  }
-
-  .section {
-    display: flex;
-    flex-direction: column;
-  }
+      p{
+        text-align: center;
+        padding: 20px;
+        font-weight: 700;
+    }
 </style>
+

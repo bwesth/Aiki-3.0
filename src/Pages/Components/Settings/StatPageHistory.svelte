@@ -7,8 +7,7 @@
   } from "@fortawesome/free-solid-svg-icons";
 
   // Component imports
-  import StatBlock from "./StatBlock.svelte";
-
+  import Chart from "./Chart.svelte";
   export let data;
 
   let historyStats = [
@@ -34,70 +33,17 @@
       text: "Times you clicked snooze:",
     },
   ];
-
-  let yesterdayStats = [
-    {
-      icon: faClock,
-      value: data.yesterday.sessionData.learningDuration,
-      text: "Time Spent Learning:",
-    },
-    {
-      icon: faClock,
-      value: data.yesterday.sessionData.procrastinationDuration,
-      text: "Time spend procrastinating:",
-    },
-    {
-      icon: faCheckCircle,
-      value: data.yesterday.completedCount,
-      text: "Completed Learning Sessions:",
-    },
-    {
-      icon: faSkull,
-      value: data.yesterday.skipCount,
-      text: "Emergency Skips:",
-    },
-    {
-      icon: faSkull,
-      value: data.yesterday.snoozeCount,
-      text: "Times you clicked snooze:",
-    },
-  ];
 </script>
 
-<h5>Your Statistics:</h5>
-<hr />
-<div class="dataContainers">
-  <div class="section">
-    <h4>Yesterday</h4>
-    {#each yesterdayStats as statItem}
-      <StatBlock {...statItem} />
-    {/each}
-  </div>
-  <div class="section">
-    <h4>All Time</h4>
-    {#each historyStats as statItem}
-      <StatBlock {...statItem} />
-    {/each}
-  </div>
+<div>
+  <p>Pie chart will go here! WIP due 10/05/2021</p>
+    <!-- <Chart /> -->
 </div>
 
 <style>
-  h5 {
-    font-family: var(--fontHeaders);
-  }
-
-  hr {
-    background-color: var(--hrColor);
-  }
-
-  .dataContainers {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-  }
-
-  .section {
-    display: flex;
-    flex-direction: column;
-  }
+      p{
+        text-align: center;
+        padding: 20px;
+        font-weight: 700;
+    }
 </style>

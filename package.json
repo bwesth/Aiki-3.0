@@ -20,8 +20,11 @@
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "chart.js": "^3.2.1",
+    "chartjs": "^0.3.24",
     "firebase": "^8.2.9",
     "sirv-cli": "^1.0.0",
+    "svelte-check": "^1.5.2",
     "svelte-fa": "^2.2.0"
   }
 }
