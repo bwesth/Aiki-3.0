@@ -13,6 +13,7 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
+
 /**
  * @async @function
  * @description Runs the initial installation setup, creating values in storage used by the application,
@@ -41,11 +42,12 @@ async function installationSetup() {
 async function setup() {
   // console.log(await storage.stats.getAll());
   // storage.stats.storeSession({theguardian: 10, sololearn: 10})
-  storage.shouldRedirect.set(true);
   intervals.intervalSetup();
+  storage.shouldRedirect.set(true);
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
   redirection.windowChangeListener.start();
+  redirection.addOriginTabCloseListener();
 }
 
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 

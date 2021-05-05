@@ -15,7 +15,6 @@
   let selected = StatPageToday;
 
   let statistics = storage.stats.getAll();
-  console.log(statistics);
 </script>
 
 <Container headline="Statistics">

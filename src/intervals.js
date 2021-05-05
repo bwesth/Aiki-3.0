@@ -102,7 +102,8 @@ function resetData() {
 }
 
 function addOnWindowsCloseListener() {
-  browser.windows.onRemoved.addListener(() => {
+  browser.windows.onRemoved.addListener((details) => {
+    console.log(details)
     storeData(data);
     resetData();
   });
