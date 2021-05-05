@@ -104,7 +104,20 @@ async function redirect(details) {
   }
 }
 
+function addOriginTabCloseListener() {
+  browser.tabs.onRemoved.addListener(onOriginRemoved);
+}
 
+async function onOriginRemoved(details) {
+  const origin = await storage.origin.get();
+  if (origin) {
+    if (details === origin.tabId) {
+      storage.origin.remove(); 
+      timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
+      timer.stopLearningSession(); // This is fine
+    }
+  }
+}
 
 async function handleRedirectionLoad() {
   browser.webNavigation.onCompleted.addListener(messageLearningResource, {
@@ -266,4 +279,5 @@ export default {
     restart: restartWindowChangeListener,
   },
   gotoOrigin,
+  addOriginTabCloseListener,
 };

@@ -69,5 +69,7 @@ function getTime() {
 export default {
   startLearningSession,
   startProcrastinationSession,
+  stopLearningSession,
+  stopBonusTime,
   getTime
 };
