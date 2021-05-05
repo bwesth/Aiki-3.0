@@ -15,13 +15,11 @@
   $: learningTime = 0;
   $: rewardTime = 0;
 
-  let warningOption = false;
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = data.learningTime / 1000;
     rewardTime = data.rewardTime / 1000;
-    warningOption = await storage.warningOption.get();
   }
 
   /**
@@ -41,10 +39,6 @@
     },
   };
 
-  function toggleWarningOption() {
-    storage.warningOption.toggle();
-    warningOption = !warningOption;
-  }
 
   fetchStorage();
 </script>
@@ -109,18 +103,6 @@
   <h5>Other Settings:</h5>
   <hr />
   <div>
-    <div class="row">
-      <div class="col-sm">Toggle countdown before redirection:</div>
-      <div class="col-sm" />
-      <div class="col-sm">
-        <button
-          type="default"
-          class="btn {warningOption ? 'btn-success' : 'btn-danger'} item"
-          on:click={toggleWarningOption}
-          ><Fa icon={faPowerOff} /> {warningOption ? "On" : "Off"}</button
-        >
-      </div>
-    </div>
     <div class="row">
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />

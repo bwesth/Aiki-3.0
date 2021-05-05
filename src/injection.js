@@ -53,7 +53,6 @@ browser.runtime.onMessage.addListener((request) => {
         timer.time = 3000;
         resolve({ msg: "Clicked", snooze: true });
         removeOverlay();
-        // location.href = request.url;
       }
 
       /**
@@ -65,7 +64,7 @@ browser.runtime.onMessage.addListener((request) => {
         element.remove();
       }
 
-      ProcrastinationWarning(snooze, timer);
+      ProcrastinationWarning(snooze, timer, browser);
     });
   } else if (request.action === "display: encouragement") {
     return new Promise((resolve, reject) => {

@@ -14,7 +14,6 @@ async function startLearningSession() {
   if (learningTimeCountdownRef) clearInterval(learningTimeCountdownRef);
   badge.setBusy();
   const time = await storage.timeSettings.learningTime.get();
-  console.log("Starting learning session for seconds: ", time);
   learningTimeRemaining = time;
   badge.setText(parseTimerDown(learningTimeRemaining));
   learningTimeCountdownRef = setInterval(decrementLearningTime, 1000);

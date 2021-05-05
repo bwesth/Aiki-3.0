@@ -34,6 +34,7 @@
     await getTimer();
     origin = await storage.origin.get();
     handleTimers();
+    console.log(origin);
   }
 
   $: if (origin) {
@@ -50,6 +51,7 @@
    */
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
+    origin = {};
     location.reload();
   }
 
@@ -66,10 +68,8 @@
 
   function handleTimers() {
     if (timeRemaining === 0) {
-      console.log("timeRemaining === 0");
       initBonusTime();
     } else {
-      console.log("timeRemaining: ", timeRemaining);
       intervalRef = setInterval(() => {
         timeRemaining -= 1000;
       }, 1000);
@@ -79,7 +79,6 @@
 
   //Maybe redundant to make a function for this
   function initBonusTime() {
-    console.log("initBonusTime");
     clearInterval(intervalRef);
     setInterval(() => (bonusTime += 1000), 1000);
   }

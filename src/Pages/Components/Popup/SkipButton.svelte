@@ -7,12 +7,14 @@
   import { faSkull } from "@fortawesome/free-solid-svg-icons";
 
   export let gotoOrigin;
+
+  function handleClick() {
+    gotoOrigin("skip");
+  }
 </script>
 
-<button
-  on:click={() => gotoOrigin("skip")}
-  type="default"
-  class="btn btn-danger item"><Fa icon={faSkull} /> Emergency Skip!</button
+<button on:click={handleClick} type="default" class="btn btn-danger item"
+  ><Fa icon={faSkull} /> Emergency Skip!</button
 >
 
 <style>

@@ -1,4 +1,6 @@
 import browser from "webextension-polyfill";
+import { makeDate } from "./utilities";
+import { learningSites, participantResource } from "./constants";
 const storage = browser.storage.local;
 
 /**
@@ -76,28 +78,6 @@ async function getUid() {
 }
 
 /**
- * @deprecated
- * @async @function
- * @returns {object} website
- * @description returns the website the user is redirected to upon procrastination interception. */
-async function getRedirectionSite() {
-  const result = await storage.get("redirectionSite");
-  return result.redirectionSite;
-}
-
-/**
- /**
- * @deprecated
- * @async @function
- * @param {object} site
- * @param {string} site.name
- * @param {string} site.id
- * @description returns the website the user is redirected to upon procrastination interception. */
-function setRedirectionSite(site) {
-  storage.set({ redirectionSite: site });
-}
-
-/**
  * @function
  * @param {object} origin
  * @param {string} origin.url
@@ -146,25 +126,6 @@ function setLearningTime(time) {
 }
 
 /**
- * @deprecated Ratio no longer used
- * @async @function
- * @returns {number} rewardRatio
- * @description returns ratio with which procrastination time awarded is calculated. */
-async function getRewardRatio() {
-  const result = await storage.get("rewardRatio");
-  return result.rewardRatio;
-}
-
-/**
- * @deprecated
- * @function
- * @param {number} rewardRatio
- * @description sets the ratio with which the procrastination time awarded is calculated. */
-function setRewardRatio(ratio) {
-  storage.set({ rewardRatio: ratio });
-}
-
-/**
  * @async @function
  * @returns {number} rewardTime
  * @description returns the userdefined amount of miliseconds the user is allowed to spend on
@@ -204,7 +165,6 @@ async function getUserTimes() {
  * shouldRedirect is defined by the application when the user has earned
  * procrastination time, and again when this expires. */
 async function setShouldRedirect(state) {
-  console.log("Should redirect set to: ", state);
   storage.set({ shouldRedirect: state });
 }
 
@@ -219,43 +179,129 @@ async function getShouldRedirect() {
   return result.shouldRedirect;
 }
 
-/**
- * @async @function
- * @param {Boolean} state
- * @description sets the state of whether procrastination interception 
- * should have a pre-redirection step. If true, the user will see injected 
- * content with a countdown before redirection, this will use the "onCompleted" webNavigation event.
- * If false, the user will be redirected instantly upon procrastination website loading attempt.
- * This will use the "onBeforeRedirect" webNavigation event */
-async function setWarningOption(state) {
-  storage.set({ warningOption: state });
+async function storeSession(data) {
+  const { sessionData, statsDate } = await storage.get([
+    "sessionData",
+    "statsDate",
+  ]);
+  await checkDate(statsDate);
+  console.log(sessionData);
+  let newData = sessionData;
+  for (const key in data) {
+    if (key === participantResource.name) {
+      console.log(newData.learningDuration);
+      console.log(data[key]);
+      newData.learningDuration += data[key];
+    } else if (!["chromeInactive", "chromeActive"].includes(key)) {
+      newData[key] = sessionData.hasOwnProperty(key)
+        ? sessionData[key] + data[key]
+        : data[key];
+      newData.procrastinationDuration += data[key];
+    }
+    // console.log(procrastinationDuration);
+    // console.log(newData.learningDuration);
+  }
+  storage.set({ sessionData: newData });
 }
 
-/**
- * @async @function
- * @returns {Boolean} warningOption
- * @description returns the state of whether procrastination interception 
- * should have a pre-redirection step. If true, the user will see injected 
- * content with a countdown before redirection, this will use the "onCompleted" webNavigation event.
- * If false, the user will be redirected instantly upon procrastination website loading attempt.
- * This will use the "onBeforeRedirect" webNavigation event */
-async function getWarningOption() {
-  const result = await storage.get("warningOption");
-  return result.warningOption;
+async function checkDate(statsDate) {
+  const date = makeDate().dateString;
+  if (statsDate !== date) {
+    await overWriteYesterday();
+    await storage.set({ snoozeCount: 0 });
+    await storage.set({ completedCount: 0 });
+    await storage.set({ skipCount: 0 });
+    await storage.set({ sessionData: {} });
+    await storage.set({ statsDate: date });
+  }
 }
 
-/**
- * @async @function
- * @description toggles the state of whether procrastination interception 
- * should have a pre-redirection step. If false it will change to true and vice versa.
- *  If true, the user will see injected content with a countdown before redirection, 
- * this will use the "onCompleted" webNavigation event. If false, the user will be 
- * redirected instantly upon procrastination website loading attempt.
- * This will use the "onBeforeRedirect" webNavigation event */
-async function toggleWarningOption() {
-  storage.get("warningOption").then((data) => {
-    storage.set({ warningOption: !data.toggled });
+async function incrSnoozeCount() {
+  const { statsDate, snoozeCount } = await storage.get([
+    "snoozeCount",
+    "statsDate",
+  ]);
+  await checkDate(statsDate);
+  storage.set({ snoozeCount: snoozeCount + 1 });
+}
+
+async function incrContinueCount() {
+  const { completedCount, statsDate } = await storage.get([
+    "completedCount",
+    "statsDate",
+  ]);
+  await checkDate(statsDate);
+  storage.set({ completedCount: completedCount + 1 });
+}
+
+async function incrSkipCount() {
+  const { skipCount, statsDate } = await storage.get([
+    "skipCount",
+    "statsDate",
+  ]);
+  await checkDate(statsDate);
+  storage.set({ skipCount: skipCount + 1 });
+}
+
+async function getAllStats() {
+  const result = await storage.get([
+    "sessionData",
+    "skipCount",
+    "completedCount",
+    "snoozeCount",
+    "yesterday",
+    "history",
+  ]);
+  return result;
+}
+
+function initializeStats() {
+  storage.set({
+    sessionData: { procrastinationDuration: 0, learningDuration: 0 },
   });
+  storage.set({ skipCount: 0 });
+  storage.set({ completedCount: 0 });
+  storage.set({ snoozeCount: 0 });
+  storage.set({
+    history: {
+      sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+      completedCount: 0,
+      skipCount: 0,
+      snoozeCount: 0,
+    },
+  });
+  storage.set({
+    yesterday: {
+      sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+      skipCount: 0,
+      completedCount: 0,
+      snoozeCount: 0,
+    },
+  });
+}
+
+async function overWriteYesterday() {
+  await addToHistory();
+  const today = await storage.get([
+    "sessionData",
+    "skipCount",
+    "completedCount",
+    "snoozeCount",
+  ]);
+  storage.set({
+    yesterday: today,
+  });
+}
+
+async function addToHistory() {
+  let { yesterday, history } = await storage.get(["yesterday", "history"]);
+  history.skipCount += yesterday.skipCount;
+  history.completedCount += yesterday.completedCount;
+  history.snoozeCount += yesterday.snoozeCount;
+  history.procrastinationDuration +=
+    yesterday.sessionData.procrastinationDuration;
+  history.learningDuration += yesterday.sessionData.learningDuration;
+  storage.set({ history: history });
 }
 
 export default {
@@ -263,7 +309,6 @@ export default {
     getAll: getUserTimes,
     learningTime: { get: getLearningTime, set: setLearningTime },
     rewardTime: { get: getRewardTime, set: setRewardTime },
-    rewardRatio: { get: getRewardRatio, set: setRewardRatio },
   },
   shouldRedirect: { get: getShouldRedirect, set: setShouldRedirect },
   clearStorage,
@@ -271,11 +316,13 @@ export default {
   origin: { get: getOrigin, set: setOrigin, remove: removeOrigin },
   list: { set: setList, get: getList },
   uid: { set: setUid, get: getUid },
-  redirectionSite: { get: getRedirectionSite, set: setRedirectionSite },
   redirection: { toggle: toggleRedirection, get: getRedirectionToggled },
-  warningOption: {
-    get: getWarningOption,
-    set: setWarningOption,
-    toggle: toggleWarningOption,
+  stats: {
+    storeSession: storeSession,
+    skip: incrSkipCount,
+    continue: incrContinueCount,
+    snooze: incrSnoozeCount,
+    getAll: getAllStats,
+    init: initializeStats,
   },
 };
