@@ -34,6 +34,7 @@
     await getTimer();
     origin = await storage.origin.get();
     handleTimers();
+    console.log(origin);
   }
 
   $: if (origin) {
@@ -50,6 +51,7 @@
    */
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
+    origin = {};
     location.reload();
   }
 

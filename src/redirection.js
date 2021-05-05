@@ -104,7 +104,9 @@ async function redirect(details) {
   }
 }
 
-async function handleRedirectionLoad(tabId) {
+
+
+async function handleRedirectionLoad() {
   browser.webNavigation.onCompleted.addListener(messageLearningResource, {
     url: [{ hostContains: `.${participantResource.name}.` }],
   });
@@ -190,7 +192,6 @@ async function gotoOrigin(event) {
   const origin = await storage.origin.get();
   try {
     await browser.tabs.update(origin.tabId, { url: origin.url });
-    storage.origin.remove();
     addRedirectionLog(
       `Go to origin: ${event}`,
       participantResource.name,
@@ -198,6 +199,8 @@ async function gotoOrigin(event) {
     );
   } catch (error) {
     console.log(error.message);
+  } finally {
+    storage.origin.remove();
   }
 }
 
