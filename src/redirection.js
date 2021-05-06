@@ -126,10 +126,18 @@ async function handleRedirectionLoad() {
 }
 
 async function messageLearningResource(details) {
-  const response = await browser.tabs.sendMessage(details.tabId, {
-    action: "display: encouragement",
-  });
-  browser.webNavigation.onCompleted.removeListener(messageLearningResource);
+  try {
+    const response = await browser.tabs.sendMessage(details.tabId, {
+      action: "display: encouragement",
+      countdown: timer.getTime().learningTimeRemaining,
+    });
+    browser.webNavigation.onCompleted.removeListener(messageLearningResource);
+    if (response.continue) {
+      gotoOrigin("continue");
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 /** #CHECKCURRENTTAB()#
@@ -233,6 +241,7 @@ async function talkToContent(tabId, url, originUrl) {
       await storage.shouldRedirect.set(false);
       timer.startProcrastinationSession(checkActiveTab, 60000);
     } else {
+      handleRedirectionLoad()
       addRedirectionLog(
         `Interception: auto resolve`,
         parseUrl(originUrl).name,

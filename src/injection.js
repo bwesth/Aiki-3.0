@@ -1,6 +1,9 @@
 import browser from "webextension-polyfill";
 import { ProcrastinationWarning } from "./content/ProcrastinationWarning";
-import { LearningGreeting } from "./content/LearningGreeting";
+import { LearningContent } from "./content/LearningContent";
+
+
+
 
 /* Listener for messages from background script. */
 browser.runtime.onMessage.addListener((request) => {
@@ -12,7 +15,7 @@ browser.runtime.onMessage.addListener((request) => {
     location to a learning site URL as recieved from background script 
     It is passed to the svelte content function app */
       let timer = {
-        time: 3000,
+        time: 5000,
         interval: undefined,
         slowed: false,
         print: function () {},
@@ -50,7 +53,7 @@ browser.runtime.onMessage.addListener((request) => {
        * Lastly the location of this window will be changed to the learning resource URL as recieved from the background script.*/
       function snooze() {
         timer.stop();
-        timer.time = 3000;
+        timer.time = 5000;
         resolve({ msg: "Clicked", snooze: true });
         removeOverlay();
       }
@@ -68,18 +71,11 @@ browser.runtime.onMessage.addListener((request) => {
     });
   } else if (request.action === "display: encouragement") {
     return new Promise((resolve, reject) => {
-      function removeGreeting() {
-        const element = document.getElementById("aiki-overlay");
-        try {
-          element.remove();
-        } catch (error) {
-          //This is a horrible way of catching the error thrown by removeChild() because the div is not there anymore at call time.
-          //Or is it? I'm not sure...
-        }
-        resolve({ msg: "loaded" });
+      function gotoOrigin() {
+        resolve({ continue: true });
       }
-
-      LearningGreeting(removeGreeting, browser);
+      
+      LearningContent(request.countdown-500, gotoOrigin, browser);
     });
   }
 });
