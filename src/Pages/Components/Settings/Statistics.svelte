@@ -11,8 +11,10 @@
   import StatPageYesterday from "./StatPageYesterday.svelte";
   import StatPageHistory from "./StatPageHistory.svelte";
   import Container from "./Container.svelte";
+  import ChartWrapper from "./ChartWrapper.svelte";
 
-  let selected = StatPageToday;
+  //let selected = StatPageToday;
+  $: type = "today"
 
   let statistics = storage.stats.getAll();
 </script>
@@ -24,22 +26,22 @@
   {#await statistics}
     <h1>Loading...</h1>
   {:then data}
-    <svelte:component this={selected} {data} />
+    <ChartWrapper {type} {data} />
     <div class="buttons">
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (selected = StatPageToday)}>Today</button
+        on:click={() => (type = "today")}>Today</button
       >
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (selected = StatPageYesterday)}>Yesterday</button
+        on:click={() => (type = "yesterday")}>Yesterday</button
       >
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (selected = StatPageHistory)}>All Time</button
+        on:click={() => (type = "history")}>All Time</button
       >
     </div>
   {/await}
