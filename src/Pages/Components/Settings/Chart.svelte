@@ -29,15 +29,23 @@ Used in / Parent components: /src/Pages/Settings.svelte
     let myChart = new Chart(ctx, {
       type: "pie",
       data: {
-        labels: ["Learning Time", "Procrastination Time"],
+        labels: [
+          //ORDER MATTERS
+          "Learning Time",
+          "Procrastination Time",
+        ],
         datasets: [
           {
             backgroundColor: [
               //ORDER MATTERS
-              "#0077b6",
-              "#d00000",
+              "#0077b6", //Blue
+              "#d00000", //Red
             ],
-            data: [stats[0], stats[1]], //ORDER MATTERS
+            data: [
+              //ORDER MATTERS
+              stats[0],
+              stats[1],
+            ],
             hoverOffset: 8,
           },
         ],
@@ -45,7 +53,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
       options: {
         plugins: {
           title: {
-            text: "Time Spent (in seconds)",
+            text: `Time spent ${stats[5]} (in seconds)`,
             color: textColor,
             size: 16,
             display: true,

@@ -5,10 +5,9 @@
   export let data;
   export let type;
 
-  let skips, completed, snoozes, procTime, learnTime;
-  console.log("This is the type in chartwrapper", type);
+  let skips, completed, snoozes, procTime, learnTime, title;
+
   //Getting all variables from data to pipe into the graph, depending on the type.
-  //$: data = populateChart();
   function populateChart() {
     switch (type) {
       case "today":
@@ -17,6 +16,7 @@
         snoozes = data.snoozeCount;
         procTime = data.sessionData.procrastinationDuration;
         learnTime = data.sessionData.learningDuration;
+        title = type;
         break;
       case "yesterday":
         skips = data.yesterday.skipCount;
@@ -24,6 +24,7 @@
         snoozes = data.yesterday.snoozeCount;
         procTime = data.yesterday.sessionData.procrastinationDuration;
         learnTime = data.yesterday.sessionData.learningDuration;
+        title = type;
         break;
       case "history":
         skips = data.history.skipCount;
@@ -31,6 +32,7 @@
         snoozes = data.history.snoozeCount;
         procTime = data.history.sessionData.procrastinationDuration;
         learnTime = data.history.sessionData.learningDuration;
+        title = "in all time";
         break;
       default:
         skips = 0;
@@ -38,12 +40,13 @@
         snoozes = 0;
         procTime = 0;
         learnTime = 0;
+        title = "";
     }
   }
 
   populateChart();
 
-  let stats = [learnTime, procTime, completed, skips, snoozes];
+  let stats = [learnTime, procTime, completed, skips, snoozes, title];
 </script>
 
 <div>
