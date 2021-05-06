@@ -15,7 +15,8 @@
   let selected = StatPageToday;
 
   let statistics = storage.stats.getAll();
-  console.log(statistics);
+  console.log("This is the statistics",statistics);
+
 </script>
 
 <Container headline="Statistics">
@@ -43,6 +44,8 @@
         on:click={() => (selected = StatPageHistory)}>All Time</button
       >
     </div>
+  {:catch error}
+	<p style="color: red">{error.message}</p>
   {/await}
 </Container>
 
