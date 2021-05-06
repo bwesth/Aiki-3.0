@@ -13,7 +13,6 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
   }
 });
 
-
 /**
  * @async @function
  * @description Runs the initial installation setup, creating values in storage used by the application,
@@ -61,6 +60,7 @@ as these use the procrastination list.
 
 case "origin" is called by the popup runtime and means the tab that was used to open a procrastination website should
 return to the original procrastination website (ie. the user clicked "continue" or "Emergency skip")
+This also ends the injection listener.
 
 case "timer" is called by the popup runtime and returns the current time values 
 (ie. learning time remaining and extra time spent). */
@@ -76,6 +76,7 @@ browser.extension.onConnect.addListener(function (port) {
         break;
       case "origin":
         redirection.gotoOrigin(msg.split(": ")[2]);
+        redirection.removeLearningSiteLoadedListener();
         break;
       case "timer":
         port.postMessage(timer.getTime());
