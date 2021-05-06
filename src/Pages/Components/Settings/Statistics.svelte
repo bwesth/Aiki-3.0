@@ -26,24 +26,24 @@
     <h1>Loading...</h1>
   {:then data}
     <svelte:component this={selected} {data} />
+    <div class="buttons">
+      <button
+        type="button"
+        class="btn btn-info"
+        on:click={() => (selected = StatPageToday)}>Today</button
+      >
+      <button
+        type="button"
+        class="btn btn-info"
+        on:click={() => (selected = StatPageYesterday)}>Yesterday</button
+      >
+      <button
+        type="button"
+        class="btn btn-info"
+        on:click={() => (selected = StatPageHistory)}>All Time</button
+      >
+    </div>
   {/await}
-  <div class="buttons">
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageToday)}>Today</button
-    >
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageYesterday)}>Yesterday</button
-    >
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageHistory)}>All Time</button
-    >
-  </div>
 </Container>
 
 <style>
