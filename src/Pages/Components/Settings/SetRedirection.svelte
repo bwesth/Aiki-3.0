@@ -9,7 +9,6 @@
   import Fa from "svelte-fa";
   import {
     faHourglassHalf,
-    faPowerOff,
   } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;

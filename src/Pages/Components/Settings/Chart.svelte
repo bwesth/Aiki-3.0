@@ -1,31 +1,51 @@
+<!-- This handles the data and drawing functions required to generate
+  a pie chart for our statistics element in the Settings menu. Uses
+  'chart.js' module to do so.
+Used in / Parent components: /src/Pages/Settings.svelte	
+-->
 <script>
   import { onMount } from "svelte";
   import Chart from "chart.js/auto";
+  import Fa from "svelte-fa";
+  import {
+    faBed,
+    faSkull,
+    faThumbsUp,
+  } from "@fortawesome/free-solid-svg-icons";
+
+  export let stats;
+  //stats comes in in this format:
+  //stats = [ learnTime, procTime, completed, skips, snoozes, title ];
+
+  //Manually grabs the textcolor from global variables to plug into the graph.
+  //Here so the graph sticks to whatever theme is currently applied.
+  let textColor = getComputedStyle(document.documentElement).getPropertyValue(
+    "--textColor"
+  );
+
+  //Generates our pie chart.
   function createPieChart() {
     var ctx = document.getElementById("pie-chart");
     let myChart = new Chart(ctx, {
       type: "pie",
       data: {
         labels: [
-          "Codecademy", //ORDER MATTERS, USE NAMES, NOT URLS
-          "Facebook",
-          "YouTube",
-          "Kotaku",
-          "Reddit",
-          "Other",
+          //ORDER MATTERS
+          "Learning Time",
+          "Procrastination Time",
         ],
         datasets: [
           {
             backgroundColor: [
               //ORDER MATTERS
-              "#0077b6",
-              "#d00000",
-              "#dc2f02",
-              "#e85d04",
-              "#f48c06",
-              "#faa307",
+              "#0077b6", //Blue
+              "#d00000", //Red
             ],
-            data: [5267, 2478, 734, 784, 433, 200], //ORDER MATTERS
+            data: [
+              //ORDER MATTERS
+              stats[0],
+              stats[1],
+            ],
             hoverOffset: 8,
           },
         ],
@@ -33,8 +53,8 @@
       options: {
         plugins: {
           title: {
-            text: "Time Spent",
-            color: "#FFFFFF",
+            text: `Time spent ${stats[5]} (in seconds)`,
+            color: textColor,
             size: 16,
             display: true,
             padding: 10,
@@ -43,8 +63,9 @@
             display: true,
             position: "bottom",
             align: "center",
+            color: textColor,
             labels: {
-              color: "#FFFFFF",
+              color: textColor,
               boxWidth: 12,
               padding: 12,
             },
@@ -63,6 +84,14 @@
   <div class="chart">
     <canvas id="pie-chart" />
   </div>
+  <div class="other-stats">
+    <h6><Fa icon={faThumbsUp} /> Completed Sessions:</h6>
+    <p>{stats[2]}</p>
+    <h6><Fa icon={faSkull} /> Emergency Skips:</h6>
+    <p>{stats[3]}</p>
+    <h6><Fa icon={faBed} /> Snoozes:</h6>
+    <p>{stats[4]}</p>
+  </div>
 </div>
 
 <style>
@@ -71,7 +100,7 @@
     justify-content: center;
     width: 1px;
     height: 1px;
-    background-color: #212121;
+    background-color: var(--backgroundColorSecondary);
   }
 
   .flex {

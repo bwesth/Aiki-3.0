@@ -23,7 +23,7 @@
 </script>
 
 <div class="container">
-  <h6 class="item">Toggle:</h6>
+  <h6 class="item">Aiki is:</h6>
   <button
     type="default"
     class="btn {toggled ? 'btn-success' : 'btn-danger'} item"

@@ -7,42 +7,45 @@
   import storage from "../../../util/storage";
 
   // Component imports
-  import StatPageToday from "./StatPageToday.svelte";
-  import StatPageYesterday from "./StatPageYesterday.svelte";
-  import StatPageHistory from "./StatPageHistory.svelte";
   import Container from "./Container.svelte";
+  import ChartWrapper from "./ChartWrapper.svelte";
 
-  let selected = StatPageToday;
+  let type = "today";
 
   let statistics = storage.stats.getAll();
+
+  function changeChart(newType) {
+    type = newType;
+    statistics = storage.stats.getAll();
+  }
 </script>
 
 <Container headline="Statistics">
   <h5>Your Statistics:</h5>
   <hr />
-  <p>Here's a small collection of statistics on how you use Aiki.</p>
+  <p>Here's how you use Aiki! (Updates every 5 minutes)</p>
   {#await statistics}
     <h1>Loading...</h1>
   {:then data}
-    <svelte:component this={selected} {data} />
+    <ChartWrapper {type} {data} />
+    <div class="buttons">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("today")}>Today</button
+      >
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("yesterday")}>Yesterday</button
+      >
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("history")}>All Time</button
+      >
+    </div>
   {/await}
-  <div class="buttons">
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageToday)}>Today</button
-    >
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageYesterday)}>Yesterday</button
-    >
-    <button
-      type="button"
-      class="btn btn-info"
-      on:click={() => (selected = StatPageHistory)}>All Time</button
-    >
-  </div>
 </Container>
 
 <style>
