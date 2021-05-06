@@ -15,8 +15,7 @@
   let selected = StatPageToday;
 
   let statistics = storage.stats.getAll();
-  console.log("This is the statistics",statistics);
-
+  console.log("This is the statistics", statistics);
 </script>
 
 <Container headline="Statistics">
@@ -26,27 +25,29 @@
   {#await statistics}
     <h1>Loading...</h1>
   {:then data}
+    <!-- Never reaches this point. -->
     <svelte:component this={selected} {data} />
-    <div class="buttons">
-      <button
-        type="button"
-        class="btn btn-info"
-        on:click={() => (selected = StatPageToday)}>Today</button
-      >
-      <button
-        type="button"
-        class="btn btn-info"
-        on:click={() => (selected = StatPageYesterday)}>Yesterday</button
-      >
-      <button
-        type="button"
-        class="btn btn-info"
-        on:click={() => (selected = StatPageHistory)}>All Time</button
-      >
-    </div>
   {:catch error}
-	<p style="color: red">{error.message}</p>
+    <!-- Doesn't work apparently. -->
+    <p style="color: red">{error.message}</p>
   {/await}
+  <div class="buttons">
+    <button
+      type="button"
+      class="btn btn-info"
+      on:click={() => (selected = StatPageToday)}>Today</button
+    >
+    <button
+      type="button"
+      class="btn btn-info"
+      on:click={() => (selected = StatPageYesterday)}>Yesterday</button
+    >
+    <button
+      type="button"
+      class="btn btn-info"
+      on:click={() => (selected = StatPageHistory)}>All Time</button
+    >
+  </div>
 </Container>
 
 <style>
