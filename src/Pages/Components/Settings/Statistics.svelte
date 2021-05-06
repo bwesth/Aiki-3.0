@@ -7,16 +7,17 @@
   import storage from "../../../util/storage";
 
   // Component imports
-  import StatPageToday from "./StatPageToday.svelte";
-  import StatPageYesterday from "./StatPageYesterday.svelte";
-  import StatPageHistory from "./StatPageHistory.svelte";
   import Container from "./Container.svelte";
   import ChartWrapper from "./ChartWrapper.svelte";
 
-  //let selected = StatPageToday;
-  $: type = "today"
+  let type = "today";
 
   let statistics = storage.stats.getAll();
+
+  function changeChart(newType) {
+    type = newType;
+    statistics = storage.stats.getAll();
+  }
 </script>
 
 <Container headline="Statistics">
@@ -31,17 +32,17 @@
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (type = "today")}>Today</button
+        on:click={() => changeChart("today")}>Today</button
       >
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (type = "yesterday")}>Yesterday</button
+        on:click={() => changeChart("yesterday")}>Yesterday</button
       >
       <button
         type="button"
         class="btn btn-info"
-        on:click={() => (type = "history")}>All Time</button
+        on:click={() => changeChart("history")}>All Time</button
       >
     </div>
   {/await}

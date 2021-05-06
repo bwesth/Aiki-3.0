@@ -6,8 +6,9 @@
   export let type;
 
   let skips, completed, snoozes, procTime, learnTime;
-
+  console.log("This is the type in chartwrapper", type);
   //Getting all variables from data to pipe into the graph, depending on the type.
+  //$: data = populateChart();
   function populateChart() {
     switch (type) {
       case "today":
