@@ -8,19 +8,31 @@ Used in / Parent components: /src/Pages/Settings.svelte
   import Chart from "chart.js/auto";
   import Fa from "svelte-fa";
   import {
-faBed,
+    faBed,
     faSkull,
-    faThumbsUp
+    faThumbsUp,
   } from "@fortawesome/free-solid-svg-icons";
   import storage from "../../../util/storage";
 
   //Need to get these values somehow.
   //Also need to get all data somehow and pipe it into the chart somehow lel.
-  let skips = 5;
-  let completed = 10;
-  let snoozes = 386;
+  // let skips = 5;
+  // let completed = 10;
+  // let snoozes = 386;
 
   export let stats;
+
+  // console.log("This is what stats is in the chart:", stats);
+  // console.log("This is what stats.seshData.procDur is in the chart:", stats.sessionData.procrastinationDuration);
+
+  //Getting all variables from stats.
+
+  let skips = stats.skipCount;
+  let completed = stats.completedCount;
+  let snoozes = stats.snoozeCount;
+
+  let procTime = stats.sessionData.procrastinationDuration;
+  let learnTime = stats.sessionData.learningDuration;
 
   let textColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--textColor"
@@ -32,26 +44,15 @@ faBed,
     let myChart = new Chart(ctx, {
       type: "pie",
       data: {
-        labels: [
-          "Codecademy", //ORDER MATTERS, USE NAMES, NOT URLS
-          "Facebook",
-          "YouTube",
-          "Kotaku",
-          "Reddit",
-          "Other",
-        ],
+        labels: ["Learning Time", "Procrastination Time"],
         datasets: [
           {
             backgroundColor: [
               //ORDER MATTERS
               "#0077b6",
               "#d00000",
-              "#dc2f02",
-              "#e85d04",
-              "#f48c06",
-              "#faa307",
             ],
-            data: [5267, 2478, 734, 784, 433, 200], //ORDER MATTERS
+            data: [learnTime, procTime], //ORDER MATTERS
             hoverOffset: 8,
           },
         ],
