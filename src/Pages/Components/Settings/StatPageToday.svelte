@@ -5,19 +5,17 @@
   export let data;
 
   //Getting all variables from data to pipe into the graph.
-  // let skips = data.skipCount;
-  // let completed = data.completedCount;
-  // let snoozes = data.snoozeCount;
-  // let procTime = data.sessionData.procrastinationDuration;
-  // let learnTime = data.sessionData.learningDuration;
+  let skips = data.skipCount;
+  let completed = data.completedCount;
+  let snoozes = data.snoozeCount;
+  let procTime = data.sessionData.procrastinationDuration;
+  let learnTime = data.sessionData.learningDuration;
 
-  // let todayStats = [learnTime, procTime, completed, skips, snoozes];
-
-  let todayStats = [1,1,1,1,1];
+  let todayStats = [learnTime, procTime, completed, skips, snoozes];
 </script>
 
 <div>
-  <Chart {todayStats} />
+  <Chart stats={todayStats} />
 </div>
 
 <style>
