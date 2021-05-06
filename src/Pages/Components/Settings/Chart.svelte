@@ -14,9 +14,11 @@ Used in / Parent components: /src/Pages/Settings.svelte
   } from "@fortawesome/free-solid-svg-icons";
 
   export let stats;
-  //Stats comes in in this format: 
+  //Stats comes in in this format:
   //stats = [ learnTime, procTime, completed, skips, snoozes ];
 
+  //Manually grabs the textcolor from global variables to plug into the graph.
+  //Here so the graph sticks to whatever theme is currently applied.
   let textColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--textColor"
   );

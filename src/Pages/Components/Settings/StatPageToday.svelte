@@ -11,13 +11,12 @@
   let procTime = data.sessionData.procrastinationDuration;
   let learnTime = data.sessionData.learningDuration;
 
-  let stats = [ learnTime, procTime, completed, skips, snoozes ];
+  let todayStats = [learnTime, procTime, completed, skips, snoozes];
 </script>
 
 <div>
-  <Chart {stats}/>
+  <Chart {todayStats} />
 </div>
 
 <style>
-
 </style>
