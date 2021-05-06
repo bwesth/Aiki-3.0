@@ -31,17 +31,17 @@
     <div class="buttons">
       <button
         type="button"
-        class="btn btn-info"
+        class="btn btn-secondary"
         on:click={() => changeChart("today")}>Today</button
       >
       <button
         type="button"
-        class="btn btn-info"
+        class="btn btn-secondary"
         on:click={() => changeChart("yesterday")}>Yesterday</button
       >
       <button
         type="button"
-        class="btn btn-info"
+        class="btn btn-secondary"
         on:click={() => changeChart("history")}>All Time</button
       >
     </div>

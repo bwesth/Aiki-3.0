@@ -14,8 +14,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
   } from "@fortawesome/free-solid-svg-icons";
 
   export let stats;
-  //Stats comes in in this format:
-  //stats = [ learnTime, procTime, completed, skips, snoozes ];
+  //stats comes in in this format:
+  //stats = [ learnTime, procTime, completed, skips, snoozes, title ];
 
   //Manually grabs the textcolor from global variables to plug into the graph.
   //Here so the graph sticks to whatever theme is currently applied.
@@ -63,6 +63,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
             display: true,
             position: "bottom",
             align: "center",
+            color: textColor,
             labels: {
               color: textColor,
               boxWidth: 12,

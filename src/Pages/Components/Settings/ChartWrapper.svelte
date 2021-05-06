@@ -47,11 +47,25 @@
   populateChart();
 
   let stats = [learnTime, procTime, completed, skips, snoozes, title];
+  let noStats = false;
+
+  if (learnTime === 0 && procTime === 0) {
+    noStats = true;
+  }
 </script>
 
 <div>
-  <Chart {stats} />
+  {#if noStats}
+    <h5>No stats for this time period!</h5>
+  {:else}
+    <Chart {stats} />
+  {/if}
 </div>
 
 <style>
+    h5{
+        font-size: var(--fontSizeSettings);
+        color: var(--textColor);
+        text-align:center;
+    }
 </style>
