@@ -54,18 +54,27 @@
   }
 </script>
 
-<div>
-  {#if noStats}
+{#if noStats}
+  <div class="wrapper">
     <h5>No stats for this time period!</h5>
-  {:else}
+  </div>
+{:else}
+  <div>
     <Chart {stats} />
-  {/if}
-</div>
+  </div>
+{/if}
 
 <style>
-    h5{
-        font-size: var(--fontSizeSettings);
-        color: var(--textColor);
-        text-align:center;
-    }
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    height: 50vh;
+  }
+  h5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--fontSizeSettings);
+    color: var(--textColor);
+  }
 </style>
