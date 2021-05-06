@@ -5,6 +5,8 @@ import browser from "webextension-polyfill";
 import timer from "./timer";
 import { parseUrl, makeDate } from "./util/utilities";
 
+let shouldShowWelcome = true;
+
 async function createFilter() {
   const procList = await storage.list.get();
   const url = procList.map((item) => {
@@ -96,7 +98,7 @@ async function redirect(details) {
           parseUrl(details.url).name,
           participantResource.name
         );
-        handleRedirectionLoad(details.tabId);
+        addLearningSiteLoadedListener(details.tabId);
       } catch (error) {
         // console.log(error.message);
       }
@@ -119,10 +121,15 @@ async function onOriginRemoved(details) {
   }
 }
 
-async function handleRedirectionLoad() {
+async function addLearningSiteLoadedListener() {
   browser.webNavigation.onCompleted.addListener(messageLearningResource, {
     url: [{ hostContains: `.${participantResource.name}.` }],
   });
+}
+
+function removeLearningSiteLoadedListener() {
+  browser.webNavigation.onCompleted.removeListener(messageLearningResource);
+  shouldShowWelcome = true;
 }
 
 async function messageLearningResource(details) {
@@ -130,13 +137,18 @@ async function messageLearningResource(details) {
     const response = await browser.tabs.sendMessage(details.tabId, {
       action: "display: encouragement",
       countdown: timer.getTime().learningTimeRemaining,
+      shouldShowWelcome: shouldShowWelcome,
     });
-    browser.webNavigation.onCompleted.removeListener(messageLearningResource);
-    if (response.continue) {
+    shouldShowWelcome = false;
+    if (await response.continue) {
       gotoOrigin("continue");
+      removeLearningSiteLoadedListener()
+    } else if (await response.endInjection) {
+      removeLearningSiteLoadedListener()
     }
   } catch (error) {
     console.log(error);
+    // browser.webNavigation.onCompleted.removeListener(messageLearningResource);
   }
 }
 
@@ -241,7 +253,7 @@ async function talkToContent(tabId, url, originUrl) {
       await storage.shouldRedirect.set(false);
       timer.startProcrastinationSession(checkActiveTab, 60000);
     } else {
-      handleRedirectionLoad()
+      addLearningSiteLoadedListener();
       addRedirectionLog(
         `Interception: auto resolve`,
         parseUrl(originUrl).name,
@@ -289,4 +301,5 @@ export default {
   },
   gotoOrigin,
   addOriginTabCloseListener,
+  removeLearningSiteLoadedListener,
 };

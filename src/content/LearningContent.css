@@ -1,9 +1,9 @@
-.aiki-overlay.svelte-1fyzfpt.svelte-1fyzfpt {
+.aiki-overlay.svelte-1kgoz3.svelte-1kgoz3 {
   border-radius: 10px;
   flex-direction: column;
   top: 1em;
   right: 1em;
-  height: 3.5em;
+  height: 62px;
   width: 8em;
   background-color: rgb(211, 211, 211);
   position: fixed;
@@ -12,29 +12,50 @@
   align-items: flex-end;
   padding-top: 4px;
 }
-button.svelte-1fyzfpt.svelte-1fyzfpt {
+button.svelte-1kgoz3.svelte-1kgoz3 {
   width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
   border-radius: 0 0 10px 10px;
+  display: flex;
+  justify-content: center;
+  z-index: 9001;
 }
-.aiki-header.svelte-1fyzfpt.svelte-1fyzfpt {
+.aiki-header.svelte-1kgoz3.svelte-1kgoz3 {
   display: flex;
   width: 100%;
+  justify-content: space-between;
 }
-h5.svelte-1fyzfpt.svelte-1fyzfpt {
+h5.svelte-1kgoz3.svelte-1kgoz3 {
   margin: 0;
   margin: 0 auto;
 }
-.close-container.svelte-1fyzfpt.svelte-1fyzfpt {
+.aiki-img.svelte-1kgoz3.svelte-1kgoz3 {
+  margin-left: 3px;
+  width: 20px;
+  height: 20px;
+  background-color: #282c34;
+  border-radius: 5px;
+  border: 2px solid #282c34;
+}
+.aiki-p.svelte-1kgoz3.svelte-1kgoz3 {
+  display: flex;
+  align-items: center;
+  height: 4vh;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+  margin: 0;
+  color: #444444;
+}
+.close-container.svelte-1kgoz3.svelte-1kgoz3 {
   width: 20px;
   height: 20px;
   position: relative;
   cursor: pointer;
   z-index: 9999;
+  margin-right: 3px;
 }
-.leftright.svelte-1fyzfpt.svelte-1fyzfpt {
+.leftright.svelte-1kgoz3.svelte-1kgoz3 {
   margin-top: 8px;
   height: 4px;
   width: 20px;
@@ -44,7 +65,7 @@ h5.svelte-1fyzfpt.svelte-1fyzfpt {
   transform: rotate(45deg);
   transition: all 0.3s ease-in;
 }
-.rightleft.svelte-1fyzfpt.svelte-1fyzfpt {
+.rightleft.svelte-1kgoz3.svelte-1kgoz3 {
   margin-top: 8px;
   height: 4px;
   width: 20px;
@@ -54,11 +75,11 @@ h5.svelte-1fyzfpt.svelte-1fyzfpt {
   transform: rotate(-45deg);
   transition: all 0.3s ease-in;
 }
-.close-container.svelte-1fyzfpt:hover .leftright.svelte-1fyzfpt {
+.close-container.svelte-1kgoz3:hover .leftright.svelte-1kgoz3 {
   transform: rotate(-45deg);
   background-color: #f25c66;
 }
-.close-container.svelte-1fyzfpt:hover .rightleft.svelte-1fyzfpt {
+.close-container.svelte-1kgoz3:hover .rightleft.svelte-1kgoz3 {
   transform: rotate(45deg);
   background-color: #f25c66;
 }

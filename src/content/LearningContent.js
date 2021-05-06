@@ -1,4 +1,10 @@
-export function LearningContent (countdown, gotoOrigin, browser) {
+export function LearningContent(
+  countdown,
+  shouldShowWelcome,
+  gotoOrigin,
+  endInjection,
+  browser
+) {
   "use strict";
   function t() {}
   const n = (t) => t;
@@ -11,34 +17,34 @@ export function LearningContent (countdown, gotoOrigin, browser) {
   function i(t) {
     t.forEach(e);
   }
-  function r(t) {
+  function s(t) {
     return "function" == typeof t;
   }
-  function s(t, n) {
+  function c(t, n) {
     return t != t
       ? n == n
       : t !== n || (t && "object" == typeof t) || "function" == typeof t;
   }
-  const c = "undefined" != typeof window;
-  let u = c ? () => window.performance.now() : () => Date.now(),
-    l = c ? (t) => requestAnimationFrame(t) : t;
+  const r = "undefined" != typeof window;
+  let l = r ? () => window.performance.now() : () => Date.now(),
+    u = r ? (t) => requestAnimationFrame(t) : t;
   const a = new Set();
-  function f(t) {
+  function d(t) {
     a.forEach((n) => {
       n.c(t) || (a.delete(n), n.f());
     }),
-      0 !== a.size && l(f);
+      0 !== a.size && u(d);
   }
-  function d(t, n) {
+  function f(t, n) {
     t.appendChild(n);
   }
-  function p(t, n, e) {
+  function g(t, n, e) {
     t.insertBefore(n, e || null);
   }
   function m(t) {
     t.parentNode.removeChild(t);
   }
-  function g(t) {
+  function p(t) {
     return document.createElement(t);
   }
   function $(t) {
@@ -47,52 +53,52 @@ export function LearningContent (countdown, gotoOrigin, browser) {
   function h() {
     return $(" ");
   }
-  function y() {
+  function b() {
     return $("");
   }
-  function b(t, n, e, o) {
+  function v(t, n, e, o) {
     return t.addEventListener(n, e, o), () => t.removeEventListener(n, e, o);
   }
-  function v(t, n, e) {
+  function y(t, n, e) {
     null == e
       ? t.removeAttribute(n)
       : t.getAttribute(n) !== e && t.setAttribute(n, e);
   }
   const _ = new Set();
-  let w,
-    k = 0;
-  function x(t, n, e, o, i, r, s, c = 0) {
-    const u = 16.666 / o;
-    let l = "{\n";
-    for (let t = 0; t <= 1; t += u) {
-      const o = n + (e - n) * r(t);
-      l += 100 * t + `%{${s(o, 1 - o)}}\n`;
+  let k,
+    w = 0;
+  function x(t, n, e, o, i, s, c, r = 0) {
+    const l = 16.666 / o;
+    let u = "{\n";
+    for (let t = 0; t <= 1; t += l) {
+      const o = n + (e - n) * s(t);
+      u += 100 * t + `%{${c(o, 1 - o)}}\n`;
     }
-    const a = l + `100% {${s(e, 1 - e)}}\n}`,
-      f = `__svelte_${(function (t) {
+    const a = u + `100% {${c(e, 1 - e)}}\n}`,
+      d = `__svelte_${(function (t) {
         let n = 5381,
           e = t.length;
         for (; e--; ) n = ((n << 5) - n) ^ t.charCodeAt(e);
         return n >>> 0;
-      })(a)}_${c}`,
-      d = t.ownerDocument;
-    _.add(d);
-    const p =
-        d.__svelte_stylesheet ||
-        (d.__svelte_stylesheet = d.head.appendChild(g("style")).sheet),
-      m = d.__svelte_rules || (d.__svelte_rules = {});
-    m[f] ||
-      ((m[f] = !0), p.insertRule(`@keyframes ${f} ${a}`, p.cssRules.length));
+      })(a)}_${r}`,
+      f = t.ownerDocument;
+    _.add(f);
+    const g =
+        f.__svelte_stylesheet ||
+        (f.__svelte_stylesheet = f.head.appendChild(p("style")).sheet),
+      m = f.__svelte_rules || (f.__svelte_rules = {});
+    m[d] ||
+      ((m[d] = !0), g.insertRule(`@keyframes ${d} ${a}`, g.cssRules.length));
     const $ = t.style.animation || "";
     return (
       (t.style.animation = `${
         $ ? `${$}, ` : ""
-      }${f} ${o}ms linear ${i}ms 1 both`),
-      (k += 1),
-      f
+      }${d} ${o}ms linear ${i}ms 1 both`),
+      (w += 1),
+      d
     );
   }
-  function C(t, n) {
+  function V(t, n) {
     const e = (t.style.animation || "").split(", "),
       o = e.filter(
         n ? (t) => t.indexOf(n) < 0 : (t) => -1 === t.indexOf("__svelte")
@@ -100,10 +106,10 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       i = e.length - o.length;
     i &&
       ((t.style.animation = o.join(", ")),
-      (k -= i),
-      k ||
-        l(() => {
-          k ||
+      (w -= i),
+      w ||
+        u(() => {
+          w ||
             (_.forEach((t) => {
               const n = t.__svelte_stylesheet;
               let e = n.cssRules.length;
@@ -113,53 +119,53 @@ export function LearningContent (countdown, gotoOrigin, browser) {
             _.clear());
         }));
   }
-  function O(t) {
-    w = t;
+  function C(t) {
+    k = t;
   }
-  const E = [],
-    V = [],
+  const j = [],
+    O = [],
+    E = [],
     A = [],
-    L = [],
-    z = Promise.resolve();
-  let T = !1;
-  function M(t) {
+    L = Promise.resolve();
+  let I = !1;
+  function z(t) {
+    E.push(t);
+  }
+  function T(t) {
     A.push(t);
   }
-  function N(t) {
-    L.push(t);
-  }
-  let P = !1;
-  const S = new Set();
-  function j() {
-    if (!P) {
-      P = !0;
+  let M = !1;
+  const N = new Set();
+  function P() {
+    if (!M) {
+      M = !0;
       do {
+        for (let t = 0; t < j.length; t += 1) {
+          const n = j[t];
+          C(n), S(n.$$);
+        }
+        for (C(null), j.length = 0; O.length; ) O.pop()();
         for (let t = 0; t < E.length; t += 1) {
           const n = E[t];
-          O(n), R(n.$$);
+          N.has(n) || (N.add(n), n());
         }
-        for (O(null), E.length = 0; V.length; ) V.pop()();
-        for (let t = 0; t < A.length; t += 1) {
-          const n = A[t];
-          S.has(n) || (S.add(n), n());
-        }
-        A.length = 0;
-      } while (E.length);
-      for (; L.length; ) L.pop()();
-      (T = !1), (P = !1), S.clear();
+        E.length = 0;
+      } while (j.length);
+      for (; A.length; ) A.pop()();
+      (I = !1), (M = !1), N.clear();
     }
   }
-  function R(t) {
+  function S(t) {
     if (null !== t.fragment) {
       t.update(), i(t.before_update);
       const n = t.dirty;
       (t.dirty = [-1]),
         t.fragment && t.fragment.p(t.ctx, n),
-        t.after_update.forEach(M);
+        t.after_update.forEach(z);
     }
   }
-  let q;
-  function D(t, n, e) {
+  let R;
+  function q(t, n, e) {
     t.dispatchEvent(
       (function (t, n) {
         const e = document.createEvent("CustomEvent");
@@ -167,43 +173,43 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       })(`${n ? "intro" : "outro"}${e}`)
     );
   }
-  const H = new Set();
-  let B;
+  const D = new Set();
+  let H;
+  function B() {
+    H = { r: 0, c: [], p: H };
+  }
   function F() {
-    B = { r: 0, c: [], p: B };
+    H.r || i(H.c), (H = H.p);
   }
-  function G() {
-    B.r || i(B.c), (B = B.p);
-  }
-  function I(t, n) {
-    t && t.i && (H.delete(t), t.i(n));
+  function G(t, n) {
+    t && t.i && (D.delete(t), t.i(n));
   }
   function J(t, n, e, o) {
     if (t && t.o) {
-      if (H.has(t)) return;
-      H.add(t),
-        B.c.push(() => {
-          H.delete(t), o && (e && t.d(1), o());
+      if (D.has(t)) return;
+      D.add(t),
+        H.c.push(() => {
+          D.delete(t), o && (e && t.d(1), o());
         }),
         t.o(n);
     }
   }
   const K = { duration: 0 };
-  function Q(e, o, s, c) {
-    let d = o(e, s),
-      p = c ? 0 : 1,
+  function Q(e, o, c, r) {
+    let f = o(e, c),
+      g = r ? 0 : 1,
       m = null,
-      g = null,
+      p = null,
       $ = null;
     function h() {
-      $ && C(e, $);
+      $ && V(e, $);
     }
-    function y(t, n) {
-      const e = t.b - p;
+    function b(t, n) {
+      const e = t.b - g;
       return (
         (n *= Math.abs(e)),
         {
-          a: p,
+          a: g,
           b: t.b,
           d: e,
           duration: n,
@@ -213,65 +219,65 @@ export function LearningContent (countdown, gotoOrigin, browser) {
         }
       );
     }
-    function b(o) {
+    function v(o) {
       const {
-          delay: r = 0,
-          duration: s = 300,
-          easing: c = n,
-          tick: b = t,
-          css: v,
-        } = d || K,
-        _ = { start: u() + r, b: o };
-      o || ((_.group = B), (B.r += 1)),
-        m || g
-          ? (g = _)
-          : (v && (h(), ($ = x(e, p, o, s, r, c, v))),
-            o && b(0, 1),
-            (m = y(_, s)),
-            M(() => D(e, o, "start")),
+          delay: s = 0,
+          duration: c = 300,
+          easing: r = n,
+          tick: v = t,
+          css: y,
+        } = f || K,
+        _ = { start: l() + s, b: o };
+      o || ((_.group = H), (H.r += 1)),
+        m || p
+          ? (p = _)
+          : (y && (h(), ($ = x(e, g, o, c, s, r, y))),
+            o && v(0, 1),
+            (m = b(_, c)),
+            z(() => q(e, o, "start")),
             (function (t) {
               let n;
-              0 === a.size && l(f),
+              0 === a.size && u(d),
                 new Promise((e) => {
                   a.add((n = { c: t, f: e }));
                 });
             })((t) => {
               if (
-                (g &&
-                  t > g.start &&
-                  ((m = y(g, s)),
-                  (g = null),
-                  D(e, m.b, "start"),
-                  v && (h(), ($ = x(e, p, m.b, m.duration, 0, c, d.css)))),
+                (p &&
+                  t > p.start &&
+                  ((m = b(p, c)),
+                  (p = null),
+                  q(e, m.b, "start"),
+                  y && (h(), ($ = x(e, g, m.b, m.duration, 0, r, f.css)))),
                 m)
               )
                 if (t >= m.end)
-                  b((p = m.b), 1 - p),
-                    D(e, m.b, "end"),
-                    g || (m.b ? h() : --m.group.r || i(m.group.c)),
+                  v((g = m.b), 1 - g),
+                    q(e, m.b, "end"),
+                    p || (m.b ? h() : --m.group.r || i(m.group.c)),
                     (m = null);
                 else if (t >= m.start) {
                   const n = t - m.start;
-                  (p = m.a + m.d * c(n / m.duration)), b(p, 1 - p);
+                  (g = m.a + m.d * r(n / m.duration)), v(g, 1 - g);
                 }
-              return !(!m && !g);
+              return !(!m && !p);
             }));
     }
     return {
       run(t) {
-        r(d)
-          ? (q ||
-              ((q = Promise.resolve()),
-              q.then(() => {
-                q = null;
+        s(f)
+          ? (R ||
+              ((R = Promise.resolve()),
+              R.then(() => {
+                R = null;
               })),
-            q).then(() => {
-              (d = d()), b(t);
+            R).then(() => {
+              (f = f()), v(t);
             })
-          : b(t);
+          : v(t);
       },
       end() {
-        h(), (m = g = null);
+        h(), (m = p = null);
       },
     };
   }
@@ -282,15 +288,15 @@ export function LearningContent (countdown, gotoOrigin, browser) {
   function W(t) {
     t && t.c();
   }
-  function X(t, n, o, s) {
-    const { fragment: c, on_mount: u, on_destroy: l, after_update: a } = t.$$;
-    c && c.m(n, o),
-      s ||
-        M(() => {
-          const n = u.map(e).filter(r);
-          l ? l.push(...n) : i(n), (t.$$.on_mount = []);
+  function X(t, n, o, c) {
+    const { fragment: r, on_mount: l, on_destroy: u, after_update: a } = t.$$;
+    r && r.m(n, o),
+      c ||
+        z(() => {
+          const n = l.map(e).filter(s);
+          u ? u.push(...n) : i(n), (t.$$.on_mount = []);
         }),
-      a.forEach(M);
+      a.forEach(z);
   }
   function Y(t, n) {
     const e = t.$$;
@@ -302,18 +308,18 @@ export function LearningContent (countdown, gotoOrigin, browser) {
   }
   function Z(t, n) {
     -1 === t.$$.dirty[0] &&
-      (E.push(t), T || ((T = !0), z.then(j)), t.$$.dirty.fill(0)),
+      (j.push(t), I || ((I = !0), L.then(P)), t.$$.dirty.fill(0)),
       (t.$$.dirty[(n / 31) | 0] |= 1 << n % 31);
   }
-  function tt(n, e, r, s, c, u, l = [-1]) {
-    const a = w;
-    O(n);
-    const f = (n.$$ = {
+  function tt(n, e, s, c, r, l, u = [-1]) {
+    const a = k;
+    C(n);
+    const d = (n.$$ = {
       fragment: null,
       ctx: null,
-      props: u,
+      props: l,
       update: t,
-      not_equal: c,
+      not_equal: r,
       bound: o(),
       on_mount: [],
       on_destroy: [],
@@ -322,39 +328,39 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       after_update: [],
       context: new Map(a ? a.$$.context : e.context || []),
       callbacks: o(),
-      dirty: l,
+      dirty: u,
       skip_bound: !1,
     });
-    let d = !1;
+    let f = !1;
     if (
-      ((f.ctx = r
-        ? r(n, e.props || {}, (t, e, ...o) => {
+      ((d.ctx = s
+        ? s(n, e.props || {}, (t, e, ...o) => {
             const i = o.length ? o[0] : e;
             return (
-              f.ctx &&
-                c(f.ctx[t], (f.ctx[t] = i)) &&
-                (!f.skip_bound && f.bound[t] && f.bound[t](i), d && Z(n, t)),
+              d.ctx &&
+                r(d.ctx[t], (d.ctx[t] = i)) &&
+                (!d.skip_bound && d.bound[t] && d.bound[t](i), f && Z(n, t)),
               e
             );
           })
         : []),
-      f.update(),
-      (d = !0),
-      i(f.before_update),
-      (f.fragment = !!s && s(f.ctx)),
+      d.update(),
+      (f = !0),
+      i(d.before_update),
+      (d.fragment = !!c && c(d.ctx)),
       e.target)
     ) {
       if (e.hydrate) {
         const t = (function (t) {
           return Array.from(t.childNodes);
         })(e.target);
-        f.fragment && f.fragment.l(t), t.forEach(m);
-      } else f.fragment && f.fragment.c();
-      e.intro && I(n.$$.fragment),
+        d.fragment && d.fragment.l(t), t.forEach(m);
+      } else d.fragment && d.fragment.c();
+      e.intro && G(n.$$.fragment),
         X(n, e.target, e.anchor, e.customElement),
-        j();
+        P();
     }
-    O(a);
+    C(a);
   }
   class nt {
     $destroy() {
@@ -378,60 +384,60 @@ export function LearningContent (countdown, gotoOrigin, browser) {
     }
   }
   function et(t, { delay: e = 0, duration: o = 400, easing: i = n } = {}) {
-    const r = +getComputedStyle(t).opacity;
+    const s = +getComputedStyle(t).opacity;
     return {
       delay: e,
       duration: o,
       easing: i,
-      css: (t) => "opacity: " + t * r,
+      css: (t) => "opacity: " + t * s,
     };
   }
   function ot(n) {
-    let e, o, i, r, s, c, u, l, a, f;
+    let e, o, i, s, c, r, l, u, a, d;
     return {
       c() {
-        (e = g("div")),
-          (o = g("div")),
-          (i = g("img")),
-          (s = h()),
-          (c = g("p")),
-          (c.textContent = `${n[2]}`),
-          v(i, "id", "aiki-img"),
-          i.src !== (r = browser.runtime.getURL("images/AikiLogo.png")) &&
-            v(i, "src", browser.runtime.getURL("images/AikiLogo.png")),
-          v(i, "alt", "Aiki Logo"),
-          v(i, "class", "svelte-9r98lt"),
-          v(c, "id", "aiki-p"),
-          v(c, "class", "svelte-9r98lt"),
-          v(o, "id", "aiki-wrapper"),
-          v(o, "class", "svelte-9r98lt"),
-          v(e, "id", "aiki-overlay"),
-          v(e, "class", "svelte-9r98lt");
+        (e = p("div")),
+          (o = p("div")),
+          (i = p("img")),
+          (c = h()),
+          (r = p("p")),
+          (r.textContent = `${n[2]}`),
+          y(i, "id", "aiki-img"),
+          i.src !== (s = browser.runtime.getURL("images/AikiLogo.png")) &&
+            y(i, "src", browser.runtime.getURL("images/AikiLogo.png")),
+          y(i, "alt", "Aiki Logo"),
+          y(i, "class", "svelte-9r98lt"),
+          y(r, "id", "aiki-p"),
+          y(r, "class", "svelte-9r98lt"),
+          y(o, "id", "aiki-wrapper"),
+          y(o, "class", "svelte-9r98lt"),
+          y(e, "id", "aiki-overlay"),
+          y(e, "class", "svelte-9r98lt");
       },
-      m(t, r) {
-        p(t, e, r),
-          d(e, o),
-          d(o, i),
-          d(o, s),
-          d(o, c),
-          (l = !0),
-          a || ((f = b(e, "click", n[3])), (a = !0));
+      m(t, s) {
+        g(t, e, s),
+          f(e, o),
+          f(o, i),
+          f(o, c),
+          f(o, r),
+          (u = !0),
+          a || ((d = v(e, "click", n[3])), (a = !0));
       },
       p: t,
       i(t) {
-        l ||
-          (M(() => {
-            u || (u = Q(e, et, { delay: 0, duration: 200 }, !0)), u.run(1);
+        u ||
+          (z(() => {
+            l || (l = Q(e, et, { delay: 0, duration: 200 }, !0)), l.run(1);
           }),
-          (l = !0));
+          (u = !0));
       },
       o(t) {
-        u || (u = Q(e, et, { delay: 0, duration: 200 }, !1)),
-          u.run(0),
-          (l = !1);
+        l || (l = Q(e, et, { delay: 0, duration: 200 }, !1)),
+          l.run(0),
+          (u = !1);
       },
       d(t) {
-        t && m(e), t && u && u.end(), (a = !1), f();
+        t && m(e), t && l && l.end(), (a = !1), d();
       },
     };
   }
@@ -441,25 +447,25 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       o = t[1] && ot(t);
     return {
       c() {
-        o && o.c(), (n = y());
+        o && o.c(), (n = b());
       },
       m(t, i) {
-        o && o.m(t, i), p(t, n, i), (e = !0);
+        o && o.m(t, i), g(t, n, i), (e = !0);
       },
       p(t, [e]) {
         t[1]
           ? o
-            ? (o.p(t, e), 2 & e && I(o, 1))
-            : ((o = ot(t)), o.c(), I(o, 1), o.m(n.parentNode, n))
+            ? (o.p(t, e), 2 & e && G(o, 1))
+            : ((o = ot(t)), o.c(), G(o, 1), o.m(n.parentNode, n))
           : o &&
-            (F(),
+            (B(),
             J(o, 1, 1, () => {
               o = null;
             }),
-            G());
+            F());
       },
       i(t) {
-        e || (I(o), (e = !0));
+        e || (G(o), (e = !0));
       },
       o(t) {
         J(o), (e = !1);
@@ -469,11 +475,11 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       },
     };
   }
-  function rt(t, n, e) {
+  function st(t, n, e) {
     let { welcomeVisible: o } = n,
       i = !0;
     setTimeout(() => e(1, (i = !1)), 2e3);
-    const r = [
+    const s = [
       "Let's do something productive! 😊",
       "Time to learn some Python! 🖥️",
       "Time for some more learning! 👓",
@@ -482,124 +488,138 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       "Let's get some coding done! 🤖",
       "Python won't teach itself! 👩‍🏫",
     ];
-    let s = (function () {
+    let c = (function () {
       let t = ((n = 0), (e = 6), Math.floor(Math.random() * (e - n)) + n);
       var n, e;
-      return r[t];
+      return s[t];
     })();
     return (
       (t.$$set = (t) => {
         "welcomeVisible" in t && e(0, (o = t.welcomeVisible));
       }),
-      [o, i, s, () => e(0, (o = !1))]
+      [o, i, c, () => e(0, (o = !1))]
     );
   }
-  class st extends nt {
+  class ct extends nt {
     constructor(t) {
-      super(), tt(this, t, rt, it, s, { welcomeVisible: 0 });
+      super(), tt(this, t, st, it, c, { welcomeVisible: 0 });
     }
   }
-  function ct(t) {
-    let n, e, o, s, c, u, l, a, f, y, _, w, k;
+  function rt(t) {
+    let n, e, o, c, r, l, u, a, d, $, b, _, k, w, x, V;
     return {
       c() {
-        (n = g("div")),
-          (e = g("div")),
-          (o = g("h5")),
-          (o.innerHTML = "Aiki<sup>3</sup>"),
-          (s = h()),
-          (c = g("div")),
-          (c.innerHTML =
-            '<div class="leftright svelte-1fyzfpt"></div> \n      <div class="rightleft svelte-1fyzfpt"></div>'),
+        (n = p("div")),
+          (e = p("div")),
+          (o = p("img")),
+          (r = h()),
+          (l = p("h5")),
+          (l.innerHTML = "Aiki<sup>3</sup>"),
           (u = h()),
-          (l = g("button")),
-          (a = $("Continue")),
-          v(o, "class", "svelte-1fyzfpt"),
-          v(c, "class", "close-container svelte-1fyzfpt"),
-          v(e, "class", "aiki-header svelte-1fyzfpt"),
-          (l.disabled = f = !t[2]),
-          v(l, "class", "svelte-1fyzfpt"),
-          v(n, "class", "aiki-overlay svelte-1fyzfpt");
+          (a = p("div")),
+          (a.innerHTML =
+            '<div class="leftright svelte-1kgoz3"></div> \n      <div class="rightleft svelte-1kgoz3"></div>'),
+          (d = h()),
+          ($ = p("button")),
+          (b = p("p")),
+          (b.textContent = "Continue"),
+          y(o, "class", "aiki-img svelte-1kgoz3"),
+          o.src !== (c = browser.runtime.getURL("images/AikiLogo.png")) &&
+            y(o, "src", browser.runtime.getURL("images/AikiLogo.png")),
+          y(o, "alt", "Aiki Logo"),
+          y(l, "class", "svelte-1kgoz3"),
+          y(a, "class", "close-container svelte-1kgoz3"),
+          y(e, "class", "aiki-header svelte-1kgoz3"),
+          y(b, "class", "aiki-p svelte-1kgoz3"),
+          ($.disabled = _ = !t[1]),
+          y($, "class", "svelte-1kgoz3"),
+          y(n, "class", "aiki-overlay svelte-1kgoz3");
       },
-      m(i, f) {
-        p(i, n, f),
-          d(n, e),
-          d(e, o),
-          d(e, s),
-          d(e, c),
-          d(n, u),
-          d(n, l),
-          d(l, a),
-          (_ = !0),
-          w ||
-            ((k = [
-              b(c, "click", t[3]),
-              b(l, "click", function () {
-                r(t[1]) && t[1].apply(this, arguments);
+      m(i, c) {
+        g(i, n, c),
+          f(n, e),
+          f(e, o),
+          f(e, r),
+          f(e, l),
+          f(e, u),
+          f(e, a),
+          f(n, d),
+          f(n, $),
+          f($, b),
+          (w = !0),
+          x ||
+            ((V = [
+              v(a, "click", t[2]),
+              v($, "click", function () {
+                s(t[0]) && t[0].apply(this, arguments);
               }),
             ]),
-            (w = !0));
+            (x = !0));
       },
       p(n, [e]) {
-        (t = n), (!_ || (4 & e && f !== (f = !t[2]))) && (l.disabled = f);
+        (t = n), (!w || (2 & e && _ !== (_ = !t[1]))) && ($.disabled = _);
       },
       i(t) {
-        _ ||
-          (M(() => {
-            y || (y = Q(n, et, { delay: 0, duration: 200 }, !0)), y.run(1);
+        w ||
+          (z(() => {
+            k || (k = Q(n, et, { delay: 0, duration: 200 }, !0)), k.run(1);
           }),
-          (_ = !0));
+          (w = !0));
       },
       o(t) {
-        y || (y = Q(n, et, { delay: 0, duration: 200 }, !1)),
-          y.run(0),
-          (_ = !1);
+        k || (k = Q(n, et, { delay: 0, duration: 200 }, !1)),
+          k.run(0),
+          (w = !1);
       },
       d(t) {
-        t && m(n), t && y && y.end(), (w = !1), i(k);
+        t && m(n), t && k && k.end(), (x = !1), i(V);
       },
     };
   }
-  function ut(t, n, e) {
+  function lt(t, n, e) {
     let { gotoOrigin: o } = n,
       { continueVisible: i } = n,
-      { canContinue: r } = n;
+      { canContinue: s } = n,
+      { endInjection: c } = n;
     return (
       (t.$$set = (t) => {
-        "gotoOrigin" in t && e(1, (o = t.gotoOrigin)),
-          "continueVisible" in t && e(0, (i = t.continueVisible)),
-          "canContinue" in t && e(2, (r = t.canContinue));
+        "gotoOrigin" in t && e(0, (o = t.gotoOrigin)),
+          "continueVisible" in t && e(3, (i = t.continueVisible)),
+          "canContinue" in t && e(1, (s = t.canContinue)),
+          "endInjection" in t && e(4, (c = t.endInjection));
       }),
       [
-        i,
         o,
-        r,
-        () => {
-          e(0, (i = !1));
+        s,
+        function () {
+          e(3, (i = !1)), c();
         },
+        i,
+        c,
       ]
     );
   }
-  class lt extends nt {
+  class ut extends nt {
     constructor(t) {
       super(),
-        tt(this, t, ut, ct, s, {
-          gotoOrigin: 1,
-          continueVisible: 0,
-          canContinue: 2,
+        tt(this, t, lt, rt, c, {
+          gotoOrigin: 0,
+          continueVisible: 3,
+          canContinue: 1,
+          endInjection: 4,
         });
     }
   }
   function at(t) {
     let n, e, o;
     function i(n) {
-      t[5](n);
+      t[6](n);
     }
-    let r = {};
+    let s = {};
     return (
-      void 0 !== t[1] && (r.welcomeVisible = t[1]),
-      (n = new st({ props: r })),
-      V.push(() => U(n, "welcomeVisible", i)),
+      void 0 !== t[0] && (s.welcomeVisible = t[0]),
+      (n = new ct({ props: s })),
+      O.push(() => U(n, "welcomeVisible", i)),
       {
         c() {
           W(n.$$.fragment);
@@ -610,12 +630,12 @@ export function LearningContent (countdown, gotoOrigin, browser) {
         p(t, o) {
           const i = {};
           !e &&
-            2 & o &&
-            ((e = !0), (i.welcomeVisible = t[1]), N(() => (e = !1))),
+            1 & o &&
+            ((e = !0), (i.welcomeVisible = t[0]), T(() => (e = !1))),
             n.$set(i);
         },
         i(t) {
-          o || (I(n.$$.fragment, t), (o = !0));
+          o || (G(n.$$.fragment, t), (o = !0));
         },
         o(t) {
           J(n.$$.fragment, t), (o = !1);
@@ -626,21 +646,21 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       }
     );
   }
-  function ft(t) {
+  function dt(t) {
     let n, e, o, i;
-    function r(n) {
-      t[6](n);
-    }
     function s(n) {
       t[7](n);
     }
-    let c = { gotoOrigin: t[0] };
+    function c(n) {
+      t[8](n);
+    }
+    let r = { gotoOrigin: t[1], endInjection: t[2] };
     return (
-      void 0 !== t[2] && (c.continueVisible = t[2]),
-      void 0 !== t[3] && (c.canContinue = t[3]),
-      (n = new lt({ props: c })),
-      V.push(() => U(n, "continueVisible", r)),
-      V.push(() => U(n, "canContinue", s)),
+      void 0 !== t[3] && (r.continueVisible = t[3]),
+      void 0 !== t[4] && (r.canContinue = t[4]),
+      (n = new ut({ props: r })),
+      O.push(() => U(n, "continueVisible", s)),
+      O.push(() => U(n, "canContinue", c)),
       {
         c() {
           W(n.$$.fragment);
@@ -649,18 +669,19 @@ export function LearningContent (countdown, gotoOrigin, browser) {
           X(n, t, e), (i = !0);
         },
         p(t, i) {
-          const r = {};
-          1 & i && (r.gotoOrigin = t[0]),
+          const s = {};
+          2 & i && (s.gotoOrigin = t[1]),
+            4 & i && (s.endInjection = t[2]),
             !e &&
-              4 & i &&
-              ((e = !0), (r.continueVisible = t[2]), N(() => (e = !1))),
-            !o &&
               8 & i &&
-              ((o = !0), (r.canContinue = t[3]), N(() => (o = !1))),
-            n.$set(r);
+              ((e = !0), (s.continueVisible = t[3]), T(() => (e = !1))),
+            !o &&
+              16 & i &&
+              ((o = !0), (s.canContinue = t[4]), T(() => (o = !1))),
+            n.$set(s);
         },
         i(t) {
-          i || (I(n.$$.fragment, t), (i = !0));
+          i || (G(n.$$.fragment, t), (i = !0));
         },
         o(t) {
           J(n.$$.fragment, t), (i = !1);
@@ -671,91 +692,106 @@ export function LearningContent (countdown, gotoOrigin, browser) {
       }
     );
   }
-  function dt(t) {
+  function ft(t) {
     let n,
       e,
       o,
-      i = t[1] && at(t),
-      r = t[2] && ft(t);
+      i = t[0] && at(t),
+      s = t[3] && dt(t);
     return {
       c() {
-        i && i.c(), (n = h()), r && r.c(), (e = y());
+        i && i.c(), (n = h()), s && s.c(), (e = b());
       },
-      m(t, s) {
-        i && i.m(t, s), p(t, n, s), r && r.m(t, s), p(t, e, s), (o = !0);
+      m(t, c) {
+        i && i.m(t, c), g(t, n, c), s && s.m(t, c), g(t, e, c), (o = !0);
       },
       p(t, [o]) {
-        t[1]
+        t[0]
           ? i
-            ? (i.p(t, o), 2 & o && I(i, 1))
-            : ((i = at(t)), i.c(), I(i, 1), i.m(n.parentNode, n))
+            ? (i.p(t, o), 1 & o && G(i, 1))
+            : ((i = at(t)), i.c(), G(i, 1), i.m(n.parentNode, n))
           : i &&
-            (F(),
+            (B(),
             J(i, 1, 1, () => {
               i = null;
             }),
-            G()),
-          t[2]
-            ? r
-              ? (r.p(t, o), 4 & o && I(r, 1))
-              : ((r = ft(t)), r.c(), I(r, 1), r.m(e.parentNode, e))
-            : r &&
-              (F(),
-              J(r, 1, 1, () => {
-                r = null;
+            F()),
+          t[3]
+            ? s
+              ? (s.p(t, o), 8 & o && G(s, 1))
+              : ((s = dt(t)), s.c(), G(s, 1), s.m(e.parentNode, e))
+            : s &&
+              (B(),
+              J(s, 1, 1, () => {
+                s = null;
               }),
-              G());
+              F());
       },
       i(t) {
-        o || (I(i), I(r), (o = !0));
+        o || (G(i), G(s), (o = !0));
       },
       o(t) {
-        J(i), J(r), (o = !1);
+        J(i), J(s), (o = !1);
       },
       d(t) {
-        i && i.d(t), t && m(n), r && r.d(t), t && m(e);
+        i && i.d(t), t && m(n), s && s.d(t), t && m(e);
       },
     };
   }
-  function pt(t, n, e) {
+  function gt(t, n, e) {
     let { gotoOrigin: o } = n,
       { countdown: i } = n,
+      { endInjection: s } = n,
+      { welcomeVisible: c } = n,
       r = !0,
-      s = !0,
-      c = !1;
+      l = !1;
     return (
       setTimeout(() => {
-        e(3, (c = !0));
+        e(4, (l = !0));
       }, i),
       (t.$$set = (t) => {
-        "gotoOrigin" in t && e(0, (o = t.gotoOrigin)),
-          "countdown" in t && e(4, (i = t.countdown));
+        "gotoOrigin" in t && e(1, (o = t.gotoOrigin)),
+          "countdown" in t && e(5, (i = t.countdown)),
+          "endInjection" in t && e(2, (s = t.endInjection)),
+          "welcomeVisible" in t && e(0, (c = t.welcomeVisible));
       }),
       [
-        o,
-        r,
-        s,
         c,
+        o,
+        s,
+        r,
+        l,
         i,
         function (t) {
-          (r = t), e(1, r);
+          (c = t), e(0, c);
         },
         function (t) {
-          (s = t), e(2, s);
+          (r = t), e(3, r);
         },
         function (t) {
-          (c = t), e(3, c);
+          (l = t), e(4, l);
         },
       ]
     );
   }
   return new (class extends nt {
     constructor(t) {
-      super(), tt(this, t, pt, dt, s, { gotoOrigin: 0, countdown: 4 });
+      super(),
+        tt(this, t, gt, ft, c, {
+          gotoOrigin: 1,
+          countdown: 5,
+          endInjection: 2,
+          welcomeVisible: 0,
+        });
     }
   })({
     target: document.body,
-    props: { countdown: countdown, gotoOrigin: gotoOrigin },
+    props: {
+      countdown: countdown,
+      welcomeVisible: shouldShowWelcome,
+      gotoOrigin: gotoOrigin,
+      endInjection: endInjection,
+    },
   });
-};
+}
 //# sourceMappingURL=bundle.js.map
