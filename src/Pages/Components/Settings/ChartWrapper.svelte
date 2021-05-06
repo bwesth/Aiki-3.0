@@ -1,6 +1,8 @@
 <script>
   // Component imports
   import Chart from "./Chart.svelte";
+  import Fa from "svelte-fa";
+  import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
   //Accepts a data object and a type string passed down from statistics.svelte
   export let data;
   export let type;
@@ -56,7 +58,11 @@
 
 {#if noStats}
   <div class="wrapper">
-    <h5>No stats for this time period!</h5>
+    <h5>
+      <Fa icon={faExclamationTriangle} />
+      &nbsp;&nbsp;No stats for this time period (yet)!&nbsp;&nbsp;
+      <Fa icon={faExclamationTriangle} />
+    </h5>
   </div>
 {:else}
   <div>
@@ -68,8 +74,10 @@
   .wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
     height: 50vh;
   }
+
   h5 {
     display: flex;
     justify-content: center;
