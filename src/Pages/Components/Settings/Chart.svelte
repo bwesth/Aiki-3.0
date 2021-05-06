@@ -12,27 +12,10 @@ Used in / Parent components: /src/Pages/Settings.svelte
     faSkull,
     faThumbsUp,
   } from "@fortawesome/free-solid-svg-icons";
-  import storage from "../../../util/storage";
-
-  //Need to get these values somehow.
-  //Also need to get all data somehow and pipe it into the chart somehow lel.
-  // let skips = 5;
-  // let completed = 10;
-  // let snoozes = 386;
 
   export let stats;
-
-  // console.log("This is what stats is in the chart:", stats);
-  // console.log("This is what stats.seshData.procDur is in the chart:", stats.sessionData.procrastinationDuration);
-
-  //Getting all variables from stats.
-
-  let skips = stats.skipCount;
-  let completed = stats.completedCount;
-  let snoozes = stats.snoozeCount;
-
-  let procTime = stats.sessionData.procrastinationDuration;
-  let learnTime = stats.sessionData.learningDuration;
+  //Stats comes in in this format: 
+  //stats = [ learnTime, procTime, completed, skips, snoozes ];
 
   let textColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--textColor"
@@ -52,7 +35,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
               "#0077b6",
               "#d00000",
             ],
-            data: [learnTime, procTime], //ORDER MATTERS
+            data: [stats[0], stats[1]], //ORDER MATTERS
             hoverOffset: 8,
           },
         ],
@@ -92,11 +75,11 @@ Used in / Parent components: /src/Pages/Settings.svelte
   </div>
   <div class="other-stats">
     <h6><Fa icon={faThumbsUp} /> Completed Sessions:</h6>
-    <p>{completed}</p>
+    <p>{stats[2]}</p>
     <h6><Fa icon={faSkull} /> Emergency Skips:</h6>
-    <p>{skips}</p>
+    <p>{stats[3]}</p>
     <h6><Fa icon={faBed} /> Snoozes:</h6>
-    <p>{snoozes}</p>
+    <p>{stats[4]}</p>
   </div>
 </div>
 
