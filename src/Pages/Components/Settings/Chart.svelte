@@ -8,6 +8,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
   import Chart from "chart.js/auto";
   import Fa from "svelte-fa";
   import {
+faBed,
     faSkull,
     faThumbsUp
   } from "@fortawesome/free-solid-svg-icons";
@@ -15,8 +16,11 @@ Used in / Parent components: /src/Pages/Settings.svelte
 
   //Need to get these values somehow.
   //Also need to get all data somehow and pipe it into the chart somehow lel.
-  let skips = 1;
-  let completed = 1;
+  let skips = 5;
+  let completed = 10;
+  let snoozes = 386;
+
+  export let stats;
 
   let textColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--textColor"
@@ -90,6 +94,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
     <p>{completed}</p>
     <h6><Fa icon={faSkull} /> Emergency Skips:</h6>
     <p>{skips}</p>
+    <h6><Fa icon={faBed} /> Snoozes:</h6>
+    <p>{snoozes}</p>
   </div>
 </div>
 

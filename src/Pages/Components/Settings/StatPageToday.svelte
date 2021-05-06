@@ -8,8 +8,9 @@
 
   // Component imports
   import Chart from "./Chart.svelte";
-
+  //Accepts a data object passed down from statistics.svelte
   export let data;
+
   let stats = [
     {
       icon: faClock,
@@ -36,14 +37,9 @@
 </script>
 
 <div>
-  <!-- <p>Pie chart will go here! WIP due 10/05/2021</p> -->
-  <Chart />
+  <Chart {stats}/>
 </div>
 
 <style>
-  /* p {
-    text-align: center;
-    padding: 20px;
-    font-weight: 700;
-  } */
+
 </style>
