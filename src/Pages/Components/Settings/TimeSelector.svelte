@@ -1,32 +1,47 @@
 <script>
-  import Fa from "svelte-fa";
-  import { faHourglass } from "@fortawesome/free-solid-svg-icons";
-
-  let minutes;
-  let seconds;
+  //Accepts two arrays of values and a third array of labels for said values.
+  export let firstValues;
+  export let secondValues;
+  export let labels;
 </script>
 
-<select id="inline" class="custom-select custom-select-sm">
-  <option selected>Minutes</option>
-  <option value="1">1</option>
-  <option value="2">2</option>
-  <option value="3">3</option>
-  <option value="4">4</option>
-  <option value="5">5</option>
-</select>
+<div class="wrapper">
+  <select class="custom-select custom-select-sm inline">
+    <optgroup label="{labels[0]}">
+      {#each firstValues as value}
+        <option value={value}>{value}</option>
+      {/each}
+    </optgroup>
+  </select>
 
-<select id="inline" class="custom-select custom-select-sm">
-  <option selected>Seconds</option>
-  <option value="0">00</option>
-  <option value="15">15</option>
-  <option value="30">30</option>
-  <option value="45">45</option>
-</select>
+  <select class="custom-select custom-select-sm inline">
+    <optgroup label="{labels[1]}">
+      {#each secondValues as value}
+        <option value={value}>{value}</option>
+      {/each}
+    </optgroup>
+  </select>
+
+  <p><small>{labels[2]}</small></p>
+</div>
 
 <style>
-  #inline {
+  .wrapper {
     display: flex;
     flex-direction: row;
-    width: 40%;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inline {
+    display: inline !important;
+    width: 25%;
+    margin: 0px 5px 20px 0px;
+  }
+
+  p {
+    display: inline;
+    padding: 0;
+    margin: 0px 5px 20px 0px;
   }
 </style>

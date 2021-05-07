@@ -5,10 +5,16 @@
 <script>
   import Container from "./Container.svelte";
   import ThemeSelector from "./ThemeSelector.svelte";
-  import TimeSelector from "./TimeSelector.svelte";
   import storage from "../../../util/storage";
-  import Fa from "svelte-fa";
-  import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
+  // import Fa from "svelte-fa";
+  // import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
+
+  import TimeSelector from "./TimeSelector.svelte";
+
+  //Generates an array with values from 1->60
+  let minutesArray = Array.from({ length: 60 }, (_, i) => i + 1);
+  let secondsArray = [0, 15, 30, 45];
+  let labels = ["Minutes", "Seconds", "Min/Sec"];
 
   $: learningTime = 0;
   $: rewardTime = 0;
@@ -54,19 +60,30 @@
     are rewarded for doing so.
   </p>
 
-  <div>
+  <div class="main">
     <div class="row">
       <div class="col-sm">
         <p>Time spent learning:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <TimeSelector firstValues={minutesArray} secondValues={secondsArray} {labels} />
+      </div>
+    </div>
+  </div>
+  
+  <div class="main">
+    <div class="row">
+      <div class="col-sm">
         <p>Time you get on your procrastination sites in exchange:</p>
       </div>
       <div class="col-sm" />
       <div class="col-sm">
-        <TimeSelector />
-        <TimeSelector />
+        <TimeSelector firstValues={minutesArray} secondValues={secondsArray} {labels} />
       </div>
     </div>
   </div>
+
   <h5>Other Settings:</h5>
   <hr />
   <div>
@@ -98,4 +115,22 @@
   hr {
     background-color: var(--hrColor);
   }
+
+  /* .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  } */
+  /* .top-row {
+    width: 80%;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .bottom-row {
+    width: 80%;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+  } */
 </style>
