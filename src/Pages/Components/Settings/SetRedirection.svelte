@@ -5,6 +5,7 @@
 <script>
     // Functional and module imports
   import storage from "../../../util/storage";
+  import {parseTime} from "../../../util/utilities"
   // import Fa from "svelte-fa";
   // import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
@@ -27,8 +28,8 @@
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
-    learningTime = data.learningTime / 1000;
-    rewardTime = data.rewardTime / 1000;
+    learningTime = parseTime.toHuman(data.learningTime);
+    rewardTime = parseTime.toHuman(data.rewardTime);
   }
 
   /**
@@ -39,12 +40,10 @@
    */
   const changeSettings = {
     learningTime: () => {
-      storage.timeSettings.learningTime.set(learningTime * 1000);
-      storage.timeSettings.rewardRatio.set(rewardTime / learningTime);
+      storage.timeSettings.learningTime.set(parseTime.toSystem(learningTime));
     },
     rewardTime: () => {
-      storage.timeSettings.rewardTime.set(rewardTime * 1000);
-      storage.timeSettings.rewardRatio.set(rewardTime / learningTime);
+      storage.timeSettings.rewardTime.set(parseTime.toSystem(rewardTime));
     },
   };
 

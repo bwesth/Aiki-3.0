@@ -1,8 +1,11 @@
 <script>
+  import util from "../../../util/utilities"
   //Accepts two arrays of values and a third array of labels for said values.
   export let firstValues;
   export let secondValues;
   export let labels;
+
+  export let values;
 </script>
 
 <div class="wrapper">
