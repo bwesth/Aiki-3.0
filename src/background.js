@@ -19,15 +19,15 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
  * @description Runs the initial installation setup, creating values in storage used by the application,
  * as well as automatically opening the settings page such that the user can input user ID and procrastination websites. */
 async function installationSetup() {
-  // storage.clearStorage();
+  storage.clearStorage();
   storage.stats.init();
+  storage.activeTime.init()
   setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.timeSettings.learningTime.set(60000 * 5);
-  storage.timeSettings.rewardTime.set(60000 * 15);
+  storage.timeSettings.init()
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,
