@@ -35,6 +35,20 @@
     activeTimeTo = await storage.activeTime.to.get();
   }
 
+  function shouldDisableTo(hours) {
+    // console.log(value)
+    const threshhold = activeTimeFrom.hrs * 60 + activeTimeFrom.min;
+    if (hours * 60 + activeTimeTo.min > threshhold) {
+      console.log(threshhold, "is greater than", hours * 60 + activeTimeTo.min);
+      console.log(hours, "Not disabled");
+      return false;
+    } else {
+      console.log(threshhold, "is less than", hours * 60 + activeTimeTo.min);
+      console.log(hours, "Disabled");
+      return true;
+    }
+  }
+
   /**
    * @description holds callbacks to each time setting function.
    * selecting changeSettings.learningTime will set learningTime in storage to
@@ -150,6 +164,7 @@
         values={[activeTimeTo.hrs, activeTimeTo.min]}
         onChange={changeSettings.activeTo}
         ids={["hrs", "min"]}
+        shouldDisable={shouldDisableTo}
       />
     </div>
   </div>

@@ -6,8 +6,7 @@
   export let values;
   export let onChange;
   export let ids;
-  export let disabling;
-
+  export let shouldDisable = () => false;
 </script>
 
 <div class="wrapper">
@@ -20,7 +19,11 @@
   >
     <optgroup label={labels[0]}>
       {#each firstValues as value}
-        <option selected={value === values[0]} {value}>{value}</option>
+        <option
+          disabled={shouldDisable(value)}
+          selected={value === values[0]}
+          {value}>{value}</option
+        >
       {/each}
     </optgroup>
   </select>
