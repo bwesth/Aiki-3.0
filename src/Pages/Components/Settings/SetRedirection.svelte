@@ -5,15 +5,13 @@
 <script>
   import Container from "./Container.svelte";
   import ThemeSelector from "./ThemeSelector.svelte";
+  import TimeSelector from "./TimeSelector.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import {
-    faHourglassHalf,
-  } from "@fortawesome/free-solid-svg-icons";
+  import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
   $: rewardTime = 0;
-
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
@@ -37,7 +35,6 @@
       storage.timeSettings.rewardRatio.set(rewardTime / learningTime);
     },
   };
-
 
   fetchStorage();
 </script>
@@ -65,37 +62,8 @@
       </div>
       <div class="col-sm" />
       <div class="col-sm">
-        <div class="input-group input-group-sm mb-3">
-          <input
-            bind:value={learningTime}
-            on:change={changeSettings.learningTime}
-            type="number"
-            class="form-control"
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          <div class="input-group-append">
-            <span class="input-group-text" id="inputGroup-sizing-sm"
-              ><Fa icon={faHourglassHalf} />&nbsp;seconds</span
-            >
-          </div>
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-          <input
-            bind:value={rewardTime}
-            on:change={changeSettings.rewardTime}
-            type="number"
-            class="form-control"
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-          <div class="input-group-append">
-            <span class="input-group-text" id="inputGroup-sizing-sm"
-              ><Fa icon={faHourglassHalf} />&nbsp;seconds</span
-            >
-          </div>
-        </div>
+        <TimeSelector />
+        <TimeSelector />
       </div>
     </div>
   </div>
@@ -106,7 +74,6 @@
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
       <div class="col-sm">
-        <!-- This has its own component to try and compartmentalize this functionality. -->
         <ThemeSelector />
       </div>
     </div>
