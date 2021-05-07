@@ -7,13 +7,10 @@
   import ThemeSelector from "./ThemeSelector.svelte";
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
-  import {
-    faHourglassHalf,
-  } from "@fortawesome/free-solid-svg-icons";
+  import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
   $: learningTime = 0;
   $: rewardTime = 0;
-
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
@@ -37,7 +34,6 @@
       storage.timeSettings.rewardRatio.set(rewardTime / learningTime);
     },
   };
-
 
   fetchStorage();
 </script>

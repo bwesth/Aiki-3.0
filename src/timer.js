@@ -26,11 +26,11 @@ function stopLearningSession() {
   badge.remove();
 }
 
-function decrementLearningTime () {
+function decrementLearningTime() {
   learningTimeRemaining -= 1000;
   badge.setText(parseTimerDown(learningTimeRemaining));
 }
- 
+
 function startBonusTime() {
   if (bonusTimeIntervalRef) stopBonusTime();
   badge.setDone();
@@ -63,7 +63,10 @@ function stopProcrastinationSession(callback) {
 }
 
 function getTime() {
-  return { earnedTime: earnedTime, learningTimeRemaining: learningTimeRemaining };
+  return {
+    earnedTime: earnedTime,
+    learningTimeRemaining: learningTimeRemaining,
+  };
 }
 
 export default {
@@ -71,5 +74,6 @@ export default {
   startProcrastinationSession,
   stopLearningSession,
   stopBonusTime,
-  getTime
+  stopProcrastinationSession,
+  getTime,
 };

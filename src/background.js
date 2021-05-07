@@ -4,6 +4,7 @@ import storage from "./util/storage";
 import redirection from "./redirection";
 import timer from "./timer";
 import { setTheme } from "./util/themes";
+import badge from "./badge";
 
 /* Add listener if the runtime is caused by initial installation of extension.
 If so, run initial setup */
@@ -25,8 +26,8 @@ async function installationSetup() {
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.timeSettings.learningTime.set(60000*5);
-  storage.timeSettings.rewardTime.set(60000*15);
+  storage.timeSettings.learningTime.set(60000 * 5);
+  storage.timeSettings.rewardTime.set(60000 * 15);
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,
@@ -47,6 +48,20 @@ async function setup() {
   redirection.tabChangeListener.start();
   redirection.windowChangeListener.start();
   redirection.addOriginTabCloseListener();
+}
+
+async function killAiki() {
+  const tabs = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  })
+  browser.tabs.sendMessage(tabs[0].id, {
+    action: "kill aiki",
+  });
+  timer.stopLearningSession();
+  timer.stopBonusTime();
+  timer.stopProcrastinationSession(() => console.log("Aiki killed"));
+  badge.remove();
 }
 
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 
@@ -80,6 +95,9 @@ browser.extension.onConnect.addListener(function (port) {
         break;
       case "timer":
         port.postMessage(timer.getTime());
+        break;
+      case "off":
+        killAiki();
         break;
     }
   });
