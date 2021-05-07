@@ -83,27 +83,46 @@ async function restartTabChangeListener() {
  * @param {string} details.url
  * @param {number} details.tabId */
 async function redirect(details) {
-  if (details.frameId === 0 && !details.url.includes("auth")) {
-    const toggled = await storage.redirection.get();
-    const shouldRedirect = await storage.shouldRedirect.get();
-    if (toggled && shouldRedirect) {
-      timer.startLearningSession();
-      try {
-        await browser.tabs.update(details.tabId, {
-          url: `https://${participantResource.host}`,
-        });
-        storage.origin.set({ url: details.url, tabId: details.tabId });
-        addRedirectionLog(
-          `Interception: instant redirection`,
-          parseUrl(details.url).name,
-          participantResource.name
-        );
-        addLearningSiteLoadedListener(details.tabId);
-      } catch (error) {
-        // console.log(error.message);
+  if (await checkActiveTime()) {
+    if (details.frameId === 0 && !details.url.includes("auth")) {
+      const toggled = await storage.redirection.get();
+      const shouldRedirect = await storage.shouldRedirect.get();
+      if (toggled && shouldRedirect) {
+        timer.startLearningSession();
+        try {
+          await browser.tabs.update(details.tabId, {
+            url: `https://${participantResource.host}`,
+          });
+          storage.origin.set({ url: details.url, tabId: details.tabId });
+          addRedirectionLog(
+            `Interception: instant redirection`,
+            parseUrl(details.url).name,
+            participantResource.name
+          );
+          addLearningSiteLoadedListener(details.tabId);
+        } catch (error) {
+          // console.log(error.message);
+        }
       }
     }
   }
+}
+
+async function checkActiveTime() {
+  const fromTime = await storage.activeTime.from.get();
+  const toTime = await storage.activeTime.to.get();
+  const date = makeDate();
+  if (date.hours < fromTime.hrs) {
+    return false;
+  } else if (date.hours === fromTime.hours && date.minutes < fromTime.minutes) {
+    return false;
+  }
+  if (date.hours > toTime.hrs) {
+    return false;
+  } else if (date.hours === toTime.hrs && date.minutes > toTime.min) {
+    return false;
+  }
+  return true;
 }
 
 function addOriginTabCloseListener() {
@@ -142,9 +161,9 @@ async function messageLearningResource(details) {
     shouldShowWelcome = false;
     if (await response.continue) {
       gotoOrigin("continue");
-      removeLearningSiteLoadedListener()
+      removeLearningSiteLoadedListener();
     } else if (await response.endInjection) {
-      removeLearningSiteLoadedListener()
+      removeLearningSiteLoadedListener();
     }
   } catch (error) {
     console.log(error);

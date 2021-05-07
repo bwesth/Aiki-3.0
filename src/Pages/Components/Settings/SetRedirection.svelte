@@ -128,7 +128,7 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={hoursArray}
-        secondValues={secondsArray}
+        secondValues={minutesArray}
         labels={secondLabels}
         values={[activeTimeFrom.hrs, activeTimeFrom.min]}
         onChange={changeSettings.activeFrom}
@@ -145,7 +145,7 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={hoursArray}
-        secondValues={secondsArray}
+        secondValues={minutesArray}
         labels={secondLabels}
         values={[activeTimeTo.hrs, activeTimeTo.min]}
         onChange={changeSettings.activeTo}
