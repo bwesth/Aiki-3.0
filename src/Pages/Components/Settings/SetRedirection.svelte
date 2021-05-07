@@ -12,9 +12,12 @@
   import TimeSelector from "./TimeSelector.svelte";
 
   //Generates an array with values from 1->60
-  let minutesArray = Array.from({ length: 60 }, (_, i) => i + 1);
+  //These arrays are for the seconds display
+  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1);
+  let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1);
   let secondsArray = [0, 15, 30, 45];
-  let labels = ["Minutes", "Seconds", "Min/Sec"];
+  let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
+  let secondLabels = ["Hours", "Minutes", "Hr/Min"];
 
   $: learningTime = 0;
   $: rewardTime = 0;
@@ -53,6 +56,7 @@
       ><button type="button" class="btn btn-dark">www.codecademy.com</button></a
     >
   </div>
+  <hr />
   <h5>Set Learning Time:</h5>
   <hr />
   <p>
@@ -60,30 +64,71 @@
     are rewarded for doing so.
   </p>
 
-  <div class="main">
-    <div class="row">
-      <div class="col-sm">
-        <p>Time spent learning:</p>
-      </div>
-      <div class="col-sm" />
-      <div class="col-sm">
-        <TimeSelector firstValues={minutesArray} secondValues={secondsArray} {labels} />
-      </div>
+  <div class="row">
+    <div class="col-sm">
+      <p>Time spent learning:</p>
     </div>
-  </div>
-  
-  <div class="main">
-    <div class="row">
-      <div class="col-sm">
-        <p>Time you get on your procrastination sites in exchange:</p>
-      </div>
-      <div class="col-sm" />
-      <div class="col-sm">
-        <TimeSelector firstValues={minutesArray} secondValues={secondsArray} {labels} />
-      </div>
+    <div class="col-sm" />
+    <div class="col-sm">
+      <TimeSelector
+        firstValues={minutesArray}
+        secondValues={secondsArray}
+        labels={firstLabels}
+      />
     </div>
   </div>
 
+  <div class="row">
+    <div class="col-sm">
+      <p>Time you get on your procrastination sites in exchange:</p>
+    </div>
+    <div class="col-sm" />
+    <div class="col-sm">
+      <TimeSelector
+        firstValues={minutesArray}
+        secondValues={secondsArray}
+        labels={firstLabels}
+      />
+    </div>
+  </div>
+
+  <hr />
+  <h5>Set Operating Hours:</h5>
+  <hr />
+  <p>
+    Choose the window of time you would like Aiki to normally be on during the
+    day (for example: ON during your working hours, OFF when you're at home.)
+  </p>
+
+  <div class="row">
+    <div class="col-sm">
+      <p>Aiki will turn ON at this time:</p>
+    </div>
+    <div class="col-sm" />
+    <div class="col-sm">
+      <TimeSelector
+        firstValues={hoursArray}
+        secondValues={secondsArray}
+        labels={secondLabels}
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm">
+      <p>Aiki will turn OFF at this time:</p>
+    </div>
+    <div class="col-sm" />
+    <div class="col-sm">
+      <TimeSelector
+        firstValues={hoursArray}
+        secondValues={secondsArray}
+        labels={secondLabels}
+      />
+    </div>
+  </div>
+
+  <hr/>
   <h5>Other Settings:</h5>
   <hr />
   <div>
@@ -115,22 +160,4 @@
   hr {
     background-color: var(--hrColor);
   }
-
-  /* .main {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  } */
-  /* .top-row {
-    width: 80%;
-    padding-top: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-  .bottom-row {
-    width: 80%;
-    padding-bottom: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  } */
 </style>
