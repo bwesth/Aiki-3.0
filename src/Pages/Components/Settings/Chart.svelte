@@ -43,8 +43,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
             ],
             data: [
               //ORDER MATTERS
-              stats[0],
-              stats[1],
+              stats[0]/60,
+              stats[1]/60,
             ],
             hoverOffset: 8,
           },
@@ -53,7 +53,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
       options: {
         plugins: {
           title: {
-            text: `Time spent ${stats[5]} (in seconds)`,
+            text: `Time spent ${stats[5]} (in minutes)`,
             color: textColor,
             size: 16,
             display: true,
