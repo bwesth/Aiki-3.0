@@ -3,13 +3,16 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-  import Container from "./Container.svelte";
-  import ThemeSelector from "./ThemeSelector.svelte";
+    // Functional and module imports
   import storage from "../../../util/storage";
   import Fa from "svelte-fa";
   import {
     faHourglassHalf,
   } from "@fortawesome/free-solid-svg-icons";
+
+// Component imports
+  import Container from "./Container.svelte";
+  import ThemeSelector from "./ThemeSelector.svelte";
 
   $: learningTime = 0;
   $: rewardTime = 0;
