@@ -1,26 +1,28 @@
 <script>
-  import util from "../../../util/utilities"
   //Accepts two arrays of values and a third array of labels for said values.
   export let firstValues;
   export let secondValues;
   export let labels;
-
   export let values;
+  export let onChange;
+  export let ids;
 </script>
 
 <div class="wrapper">
-  <select class="custom-select custom-select-sm inline">
-    <optgroup label="{labels[0]}">
+  <!-- svelte-ignore a11y-no-onchange -->
+  <select selected={values[0]} id={ids[0]} on:change={onChange} class="custom-select custom-select-sm inline">
+    <optgroup label={labels[0]}>
       {#each firstValues as value}
-        <option value={value}>{value}</option>
+        <option selected={value===values[0]} value={value}>{value}</option>
       {/each}
     </optgroup>
   </select>
 
-  <select class="custom-select custom-select-sm inline">
-    <optgroup label="{labels[1]}">
+  <!-- svelte-ignore a11y-no-onchange -->
+  <select  id={ids[1]} on:change={onChange} class="custom-select custom-select-sm inline">
+    <optgroup label={labels[1]}>
       {#each secondValues as value}
-        <option value={value}>{value}</option>
+        <option selected={value===values[1]} value={value}>{value}</option>
       {/each}
     </optgroup>
   </select>

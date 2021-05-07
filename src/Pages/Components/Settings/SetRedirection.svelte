@@ -3,47 +3,59 @@
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
-    // Functional and module imports
+  // Functional and module imports
   import storage from "../../../util/storage";
-  import {parseTime} from "../../../util/utilities"
+  import { parseTime } from "../../../util/utilities";
   // import Fa from "svelte-fa";
   // import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
 
   import TimeSelector from "./TimeSelector.svelte";
 
-  //Generates an array with values from 1->60
   //These arrays are for the seconds display
-  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1);
-  let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1);
+  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1); //Generates an array with values from 1->23
+  let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1); //Generates an array with values from 1->59
   let secondsArray = [0, 15, 30, 45];
   let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
   let secondLabels = ["Hours", "Minutes", "Hr/Min"];
 
-// Component imports
+  // Component imports
   import Container from "./Container.svelte";
   import ThemeSelector from "./ThemeSelector.svelte";
 
-  $: learningTime = 0;
-  $: rewardTime = 0;
+  let learningTime = { min: 1, sec: 30 };
+  let rewardTime = { min: 1, sec: 30 };
+  let activeTimeFrom = { hrs: 8, min: 0 };
+  let activeTimeTo = { hrs: 22, min: 0 };
 
   async function fetchStorage() {
     const data = await storage.timeSettings.getAll();
     learningTime = parseTime.toHuman(data.learningTime);
     rewardTime = parseTime.toHuman(data.rewardTime);
+    activeTimeFrom = await storage.activeTime.from.get();
+    activeTimeTo = await storage.activeTime.to.get();
   }
 
   /**
    * @description holds callbacks to each time setting function.
    * selecting changeSettings.learningTime will set learningTime in storage to
    * the learningTime value currently stored in this component (incl conversion).
-   * Additionally the ratio is updated.
-   */
+   * Additionally the ratio is updated.   */
   const changeSettings = {
-    learningTime: () => {
+    learningTime: ({ target }) => {
+      learningTime[target.id] = parseInt(target.value);
       storage.timeSettings.learningTime.set(parseTime.toSystem(learningTime));
     },
-    rewardTime: () => {
+    rewardTime: ({ target }) => {
+      rewardTime[target.id] = parseInt(target.value);
       storage.timeSettings.rewardTime.set(parseTime.toSystem(rewardTime));
+    },
+    activeFrom: ({ target }) => {
+      activeTimeFrom[target.id] = parseInt(target.value);
+      storage.activeTime.from.set(activeTimeFrom);
+    },
+    activeTo: ({ target }) => {
+      activeTimeTo[target.id] = parseInt(target.value);
+      storage.activeTime.to.set(activeTimeTo);
     },
   };
 
@@ -76,6 +88,9 @@
         firstValues={minutesArray}
         secondValues={secondsArray}
         labels={firstLabels}
+        values={[learningTime.min, learningTime.sec]}
+        onChange={changeSettings.learningTime}
+        ids={["min", "sec"]}
       />
     </div>
   </div>
@@ -90,6 +105,9 @@
         firstValues={minutesArray}
         secondValues={secondsArray}
         labels={firstLabels}
+        values={[rewardTime.min, rewardTime.sec]}
+        onChange={changeSettings.rewardTime}
+        ids={["min", "sec"]}
       />
     </div>
   </div>
@@ -112,6 +130,9 @@
         firstValues={hoursArray}
         secondValues={secondsArray}
         labels={secondLabels}
+        values={[activeTimeFrom.hrs, activeTimeFrom.min]}
+        onChange={changeSettings.activeFrom}
+        ids={["hrs", "min"]}
       />
     </div>
   </div>
@@ -126,11 +147,14 @@
         firstValues={hoursArray}
         secondValues={secondsArray}
         labels={secondLabels}
+        values={[activeTimeTo.hrs, activeTimeTo.min]}
+        onChange={changeSettings.activeTo}
+        ids={["hrs", "min"]}
       />
     </div>
   </div>
 
-  <hr/>
+  <hr />
   <h5>Other Settings:</h5>
   <hr />
   <div>
