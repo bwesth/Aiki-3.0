@@ -148,14 +148,20 @@ function setRewardTime(time) {
  * @async @function
  * @returns {object} userTimes
  * @description returns an object containing the time-related
- * values set by the user: rewardTime and learningTime (and rewardTime(depricated)). */
+ * values set by the user: rewardTime and learningTime. */
 async function getUserTimes() {
   const result = await storage.get([
     "rewardTime",
-    "rewardRatio",
     "learningTime",
   ]);
   return result;
+}
+
+/**
+ * @description Initializes the time settings in storage upon app installation. */
+function userTimeInit(){
+  setLearningTime(60000*5);
+  setRewardTime(60000*15);
 }
 
 /**
@@ -299,9 +305,30 @@ async function addToHistory() {
   storage.set({ history: history });
 }
 
+async function setActiveTimeFrom(value) {
+  storage.set({ activeFrom: value });
+}
+function getActiveTimeFrom() {
+  const result = await storage.get("activeFrom");
+  return result.activeFrom;
+}
+function setActiveTimeTo(value) {
+  storage.set({ activeTo: value });
+}
+async function getActiveTimeTo() {
+  const result = await storage.get("activeTo");
+  return result.activeTo;
+}
+
+function activeTimeInit(){
+  setActiveTimeFrom({hrs: 8, min: 0})
+  setActiveTimeTo({hrs: 21, min: 30})
+}
+
 export default {
   timeSettings: {
     getAll: getUserTimes,
+    init: userTimeInit,
     learningTime: { get: getLearningTime, set: setLearningTime },
     rewardTime: { get: getRewardTime, set: setRewardTime },
   },
@@ -319,5 +346,10 @@ export default {
     snooze: incrSnoozeCount,
     getAll: getAllStats,
     init: initializeStats,
+  },
+  activeTime: {
+    from: { get: getActiveTimeFrom, set: setActiveTimeFrom },
+    to: { get: getActiveTimeTo, set: setActiveTimeTo },
+    init: activeTimeInit
   },
 };
