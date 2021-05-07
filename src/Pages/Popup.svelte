@@ -89,7 +89,7 @@
   <Header />
   <SettingsButton />
   <hr />
-  <ToggleRedirection />
+  <ToggleRedirection {port} />
   <hr />
   {#if siteName !== ""}
     <LearningTimeLeft {timeRemaining} />

@@ -8,6 +8,7 @@
   import { faPowerOff } from "@fortawesome/free-solid-svg-icons";
   import storage from "../../../util/storage";
 
+  export let port;
   let toggled;
 
   async function setup() {
@@ -17,6 +18,7 @@
   function toggleRedirection() {
     storage.redirection.toggle();
     toggled = !toggled;
+    if (!toggled) port.postMessage("goto: off");
   }
 
   setup();
