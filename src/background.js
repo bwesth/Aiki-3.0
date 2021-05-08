@@ -21,13 +21,13 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 async function installationSetup() {
   storage.clearStorage();
   storage.stats.init();
-  storage.activeTime.init()
+  storage.activeTime.init();
   setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.timeSettings.init()
+  storage.timeSettings.init();
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,
@@ -43,6 +43,8 @@ async function setup() {
   // console.log(await storage.stats.getAll());
   // storage.stats.storeSession({theguardian: 10, sololearn: 10})
   intervals.intervalSetup();
+  storage.timeSettings.init();
+  storage.activeTime.init();
   storage.shouldRedirect.set(true);
   redirection.navigationListener.start();
   redirection.tabChangeListener.start();
@@ -54,7 +56,7 @@ async function killAiki() {
   const tabs = await browser.tabs.query({
     active: true,
     currentWindow: true,
-  })
+  });
   browser.tabs.sendMessage(tabs[0].id, {
     action: "kill aiki",
   });

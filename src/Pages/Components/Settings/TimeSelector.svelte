@@ -7,6 +7,8 @@
   export let onChange;
   export let ids;
   export let shouldDisable = () => false;
+
+  console.log(values);
 </script>
 
 <div class="wrapper">
@@ -14,7 +16,11 @@
   <select
     selected={values[0]}
     id={ids[0]}
-    on:change={onChange}
+    on:change={(e) => {
+      values[0] = parseInt(e.target.value);
+      console.log(values);
+      onChange(values);
+    }}
     class="custom-select custom-select-sm inline"
   >
     <optgroup label={labels[0]}>
@@ -31,7 +37,11 @@
   <!-- svelte-ignore a11y-no-onchange -->
   <select
     id={ids[1]}
-    on:change={onChange}
+    on:change={(e) => {
+      values[1] = parseInt(e.target.value);
+      console.log(values);
+      onChange(values);
+    }}
     class="custom-select custom-select-sm inline"
   >
     <optgroup label={labels[1]}>

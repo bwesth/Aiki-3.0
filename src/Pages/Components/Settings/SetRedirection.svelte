@@ -6,44 +6,46 @@
   // Functional and module imports
   import storage from "../../../util/storage";
   import { parseTime } from "../../../util/utilities";
-  // import Fa from "svelte-fa";
-  // import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
-
   import TimeSelector from "./TimeSelector.svelte";
-
-  //These arrays are for the seconds display
-  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1); //Generates an array with values from 1->23
-  let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1); //Generates an array with values from 1->59
-  let secondsArray = [0, 15, 30, 45];
-  let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
-  let secondLabels = ["Hours", "Minutes", "Hr/Min"];
 
   // Component imports
   import Container from "./Container.svelte";
   import ThemeSelector from "./ThemeSelector.svelte";
 
-  let learningTime = { min: 1, sec: 30 };
-  let rewardTime = { min: 1, sec: 30 };
-  let activeTimeFrom = { hrs: 8, min: 0 };
-  let activeTimeTo = { hrs: 22, min: 0 };
+  //These arrays are for the seconds display
+  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1); //Generates an array with values from 1->23
+  let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1); //Generates an array with values from 1->59
+  let minutesArray2 = Array.from({ length: 60 }, (_, i) => i); //Generates an array
+  let secondsArray = [0, 15, 30, 45];
+  let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
+  let secondLabels = ["Hours", "Minutes", "Hr/Min"];
 
-  async function fetchStorage() {
-    const data = await storage.timeSettings.getAll();
-    learningTime = parseTime.toHuman(data.learningTime);
-    rewardTime = parseTime.toHuman(data.rewardTime);
-    activeTimeFrom = await storage.activeTime.from.get();
-    activeTimeTo = await storage.activeTime.to.get();
-  }
+  let learningTime = storage.timeSettings.learningTime.get();
+  let rewardTime = storage.timeSettings.rewardTime.get();
+  let activeTimeFrom = storage.activeTime.from.get();
+  let activeTimeTo = storage.activeTime.to.get();
 
-  function shouldDisableTo(hours) {
-    // console.log(value)
-    const threshhold = activeTimeFrom.hrs * 60 + activeTimeFrom.min;
-    if (hours * 60 + activeTimeTo.min > threshhold) {
-      console.log(threshhold, "is greater than", hours * 60 + activeTimeTo.min);
+  // async function fetchStorage() {
+  // const data = await storage.timeSettings.getAll();
+  // learningTime = parseTime.toHuman(data.learningTime);
+  // rewardTime = parseTime.toHuman(data.rewardTime);
+  // activeTimeFrom = await storage.activeTime.from.get();
+  // activeTimeTo = await storage.activeTime.to.get();
+  // }
+
+  async function shouldDisableTo(hours) {
+    const threshholdTime = await activeTimeFrom;
+    const threshhold = threshholdTime.hrs * 60 + threshholdTime.min;
+    console.log("threshhold: ", threshhold);
+    console.log("hours: ", hours);
+    const target = hours * 60 + threshholdTime.min;
+    console.log("target: ", target);
+    if (target > threshhold) {
+      console.log(target, "is greater than", threshhold);
       console.log(hours, "Not disabled");
       return false;
     } else {
-      console.log(threshhold, "is less than", hours * 60 + activeTimeTo.min);
+      console.log(target, "is less than", threshhold);
       console.log(hours, "Disabled");
       return true;
     }
@@ -55,25 +57,27 @@
    * the learningTime value currently stored in this component (incl conversion).
    * Additionally the ratio is updated.   */
   const changeSettings = {
-    learningTime: ({ target }) => {
-      learningTime[target.id] = parseInt(target.value);
-      storage.timeSettings.learningTime.set(parseTime.toSystem(learningTime));
+    learningTime: (values) => {
+      // learningTime[target.id] = parseInt(target.value);
+      console.log("Learning time: ", values);
+      storage.timeSettings.learningTime.set({ min: values[0], sec: values[1] });
     },
-    rewardTime: ({ target }) => {
-      rewardTime[target.id] = parseInt(target.value);
-      storage.timeSettings.rewardTime.set(parseTime.toSystem(rewardTime));
+    rewardTime: (values) => {
+      console.log("Reward time: ", values);
+      // rewardTime[target.id] = parseInt(target.value);
+      storage.timeSettings.rewardTime.set({ min: values[0], sec: values[1] });
     },
-    activeFrom: ({ target }) => {
-      activeTimeFrom[target.id] = parseInt(target.value);
-      storage.activeTime.from.set(activeTimeFrom);
+    activeFrom: (values) => {
+      // activeTimeFrom[target.id] = parseInt(target.value);
+      storage.activeTime.from.set({ hrs: values[0], min: values[1] });
     },
-    activeTo: ({ target }) => {
-      activeTimeTo[target.id] = parseInt(target.value);
-      storage.activeTime.to.set(activeTimeTo);
+    activeTo: (values) => {
+      // activeTimeTo[target.id] = parseInt(target.value);
+      storage.activeTime.to.set({ hrs: values[0], min: values[1] });
     },
   };
 
-  fetchStorage();
+  // fetchStorage();
 </script>
 
 <Container headline="Redirection Settings">
@@ -91,40 +95,47 @@
     Choose the amount of time you want to spend learning, and how much time you
     are rewarded for doing so.
   </p>
+  {#await learningTime}
+    <p>Loading...</p>
+  {:then data}
+    <div class="row">
+      <div class="col-sm">
+        <p>Time spent learning:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <TimeSelector
+          firstValues={minutesArray}
+          secondValues={secondsArray}
+          labels={firstLabels}
+          values={[data.min, data.sec]}
+          onChange={changeSettings.learningTime}
+          ids={["min", "sec"]}
+        />
+      </div>
+    </div>
+  {/await}
 
-  <div class="row">
-    <div class="col-sm">
-      <p>Time spent learning:</p>
+  {#await rewardTime}
+    <p>Loading...</p>
+  {:then data}
+    <div class="row">
+      <div class="col-sm">
+        <p>Time you get on your procrastination sites in exchange:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <TimeSelector
+          firstValues={minutesArray}
+          secondValues={secondsArray}
+          labels={firstLabels}
+          values={[data.min, data.sec]}
+          onChange={changeSettings.rewardTime}
+          ids={["min", "sec"]}
+        />
+      </div>
     </div>
-    <div class="col-sm" />
-    <div class="col-sm">
-      <TimeSelector
-        firstValues={minutesArray}
-        secondValues={secondsArray}
-        labels={firstLabels}
-        values={[learningTime.min, learningTime.sec]}
-        onChange={changeSettings.learningTime}
-        ids={["min", "sec"]}
-      />
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm">
-      <p>Time you get on your procrastination sites in exchange:</p>
-    </div>
-    <div class="col-sm" />
-    <div class="col-sm">
-      <TimeSelector
-        firstValues={minutesArray}
-        secondValues={secondsArray}
-        labels={firstLabels}
-        values={[rewardTime.min, rewardTime.sec]}
-        onChange={changeSettings.rewardTime}
-        ids={["min", "sec"]}
-      />
-    </div>
-  </div>
+  {/await}
 
   <hr />
   <h5>Set Operating Hours:</h5>
@@ -133,41 +144,48 @@
     Choose the window of time you would like Aiki to normally be on during the
     day (for example: ON during your working hours, OFF when you're at home.)
   </p>
+  {#await activeTimeFrom}
+    <p>Loading...</p>
+  {:then data}
+    <div class="row">
+      <div class="col-sm">
+        <p>Aiki will turn ON at this time:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <TimeSelector
+          firstValues={hoursArray}
+          secondValues={minutesArray2}
+          labels={secondLabels}
+          values={[data.hrs, data.min]}
+          onChange={changeSettings.activeFrom}
+          ids={["hrs", "min"]}
+        />
+      </div>
+    </div>
+  {/await}
 
-  <div class="row">
-    <div class="col-sm">
-      <p>Aiki will turn ON at this time:</p>
+  {#await activeTimeTo}
+    <p>Loading...</p>
+  {:then data}
+    <div class="row">
+      <div class="col-sm">
+        <p>Aiki will turn OFF at this time:</p>
+      </div>
+      <div class="col-sm" />
+      <div class="col-sm">
+        <TimeSelector
+          firstValues={hoursArray}
+          secondValues={minutesArray2}
+          labels={secondLabels}
+          values={[data.hrs, data.min]}
+          onChange={changeSettings.activeTo}
+          ids={["hrs", "min"]}
+          shouldDisable={shouldDisableTo}
+        />
+      </div>
     </div>
-    <div class="col-sm" />
-    <div class="col-sm">
-      <TimeSelector
-        firstValues={hoursArray}
-        secondValues={minutesArray}
-        labels={secondLabels}
-        values={[activeTimeFrom.hrs, activeTimeFrom.min]}
-        onChange={changeSettings.activeFrom}
-        ids={["hrs", "min"]}
-      />
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-sm">
-      <p>Aiki will turn OFF at this time:</p>
-    </div>
-    <div class="col-sm" />
-    <div class="col-sm">
-      <TimeSelector
-        firstValues={hoursArray}
-        secondValues={minutesArray}
-        labels={secondLabels}
-        values={[activeTimeTo.hrs, activeTimeTo.min]}
-        onChange={changeSettings.activeTo}
-        ids={["hrs", "min"]}
-        shouldDisable={shouldDisableTo}
-      />
-    </div>
-  </div>
+  {/await}
 
   <hr />
   <h5>Other Settings:</h5>
