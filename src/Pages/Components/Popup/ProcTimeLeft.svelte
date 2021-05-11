@@ -1,5 +1,5 @@
 <!-- 
-  Display used in the Popup to show remaining time during a learning session.
+  Display used in the Popup to show remaining procrastination time when procrastinating.
   Used in / Parent components: /src/Pages/Popup.svelte
  -->
 <script>
@@ -8,8 +8,9 @@
 </script>
 
 <div class="container">
-  <h6 class="item">Learning Time Left:</h6>
-  <p class="item">{parseTimerDownLong(timeRemaining)}</p>
+  <h6 class="item">Reward Time Left:</h6>
+  <!-- Need a function to put a value in this P tag -->
+  <p class="item">{()=>"Hello"}</p>
 </div>
 
 <style>
@@ -36,6 +37,6 @@
     padding: 10px 0px 0px;
     justify-content: center;
     align-items: center;
-    color: #28a745;
+    color: #17a2b8;
   }
 </style>
