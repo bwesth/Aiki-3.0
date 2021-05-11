@@ -5,6 +5,7 @@
   import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
   //Accepts a data object and a type string passed down from statistics.svelte
   export let data;
+  console.log(data);
   export let type;
 
   let skips, completed, snoozes, procTime, learnTime, title;

@@ -25,10 +25,12 @@
   let siteName = "";
   let origin = {};
   //Need to calculate this procTimeRemaining somehow...
-  let procTimeRemaining = -1;
+  let rewardTimeRemaining = -1;
   let learnTimeRemaining = -1;
   let bonusTime = -1;
   let intervalRef;
+  let timeoutRef;
+  let rewardIntervalRef;
 
   $: canContinue = learnTimeRemaining <= 0 ? true : false;
 
@@ -61,13 +63,22 @@
       port.postMessage("get: timer");
       port.onMessage.addListener(async function (msg) {
         learnTimeRemaining = await msg.learningTimeRemaining;
+        rewardTimeRemaining = await msg.rewardTimeRemaining;
         bonusTime = (await msg.earnedTime) * 1000;
         resolve();
       });
     });
   }
 
+  function killAiki(){
+    clearInterval()
+    clearTimeout(timeoutRef)
+    clearInterval(rewardIntervalRef)
+    rewardTimeRemaining = 0;
+  }
+
   function handleTimers() {
+    console.log(rewardTimeRemaining);
     if (learnTimeRemaining === 0) {
       initBonusTime();
     } else {
@@ -75,6 +86,14 @@
         learnTimeRemaining -= 1000;
       }, 1000);
       setTimeout(initBonusTime, learnTimeRemaining);
+    }
+    if (rewardTimeRemaining > 0) {
+      console.log(rewardTimeRemaining);
+      rewardIntervalRef = setInterval(() => {
+        rewardTimeRemaining -= 1000;
+        console.log(rewardTimeRemaining);
+      }, 1000);
+      timeoutRef = setTimeout(() => clearInterval(rewardIntervalRef), rewardTimeRemaining);
     }
   }
 
@@ -91,22 +110,26 @@
   <Header />
   <SettingsButton />
   <hr />
-  <ToggleRedirection {port} />
+  <ToggleRedirection {port} {killAiki} />
   <hr />
-  <ProcTimeLeft {procTimeRemaining}/>
-  <hr />
+
   {#if siteName !== ""}
-    <LearningTimeLeft {learnTimeRemaining} />
-    <hr />
-    <ExtraLearningTime {bonusTime} />
-    <hr />
-    <div class="container">
-      {#if canContinue}
+    {#if canContinue}
+      <ExtraLearningTime {bonusTime} />
+      <hr />
+      <div class="container">
         <ContinueButton {siteName} {gotoOrigin} />
-      {:else}
+      </div>
+    {:else}
+      <LearningTimeLeft {learnTimeRemaining} />
+      <hr />
+      <div class="container">
         <SkipButton {gotoOrigin} />
-      {/if}
-    </div>
+      </div>
+    {/if}
+    <hr />
+  {:else}
+    <ProcTimeLeft {rewardTimeRemaining} />
     <hr />
   {/if}
 </main>

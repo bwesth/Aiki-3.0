@@ -271,7 +271,7 @@ async function talkToContent(tabId, url, originUrl) {
       storage.stats.snooze();
       await storage.shouldRedirect.set(false);
       timer.startProcrastinationSession(checkActiveTab, 60000);
-    } else {
+    } else if (result.endInjection === false) { //absolute horseshit
       addLearningSiteLoadedListener();
       addRedirectionLog(
         `Interception: auto resolve`,

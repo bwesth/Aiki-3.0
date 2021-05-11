@@ -7,6 +7,9 @@ let learningTimeRemaining = 0;
 let bonusTimeIntervalRef;
 let learningTimeCountdownRef;
 let learningTimeOutRef;
+let rewardTimeRemaining = 0;
+let rewardTimeCountdownRef;
+let redirectionTimeoutRef;
 
 //When redirecting to learning site
 async function startLearningSession() {
@@ -49,7 +52,13 @@ async function startProcrastinationSession(callback, rewardTime) {
   stopLearningSession();
   stopBonusTime();
   earnedTime = 0;
-  setTimeout(() => stopProcrastinationSession(callback), rewardTime);
+  rewardTimeRemaining = rewardTime;
+  rewardTimeCountdownRef = setInterval(decrementRewardTime, 1000);
+  redirectionTimeoutRef = setTimeout(() => stopProcrastinationSession(callback), rewardTime);
+}
+
+function decrementRewardTime() {
+  rewardTimeRemaining -= 1000;
 }
 
 function stopBonusTime() {
@@ -58,14 +67,25 @@ function stopBonusTime() {
 }
 
 function stopProcrastinationSession(callback) {
+  clearInterval(rewardTimeCountdownRef);
+  rewardTimeCountdownRef = undefined;
   storage.shouldRedirect.set(true);
   callback();
+}
+
+function killAiki(){
+  clearTimeout(redirectionTimeoutRef);
+  clearInterval(rewardTimeCountdownRef);
+  rewardTimeCountdownRef = undefined;
+  storage.shouldRedirect.set(true);
+  rewardTimeRemaining = 0;
 }
 
 function getTime() {
   return {
     earnedTime: earnedTime,
     learningTimeRemaining: learningTimeRemaining,
+    rewardTimeRemaining: rewardTimeRemaining,
   };
 }
 
@@ -76,4 +96,5 @@ export default {
   stopBonusTime,
   stopProcrastinationSession,
   getTime,
+  killAiki,
 };

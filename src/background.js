@@ -60,7 +60,7 @@ async function killAiki() {
   });
   timer.stopLearningSession();
   timer.stopBonusTime();
-  timer.stopProcrastinationSession(() => console.log("Aiki killed"));
+  timer.killAiki();
   badge.remove();
 }
 

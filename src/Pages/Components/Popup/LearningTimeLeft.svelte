@@ -4,12 +4,13 @@
  -->
 <script>
   import { parseTimerDownLong } from "../../../util/utilities";
-  export let timeRemaining;
+  export let learnTimeRemaining;
+  console.log("L-time:",learnTimeRemaining)
 </script>
 
 <div class="container">
   <h6 class="item">Learning Time Left:</h6>
-  <p class="item">{parseTimerDownLong(timeRemaining)}</p>
+  <p class="item">{parseTimerDownLong(learnTimeRemaining)}</p>
 </div>
 
 <style>

@@ -189,6 +189,19 @@ async function storeSession(data) {
   ]);
   await checkDate(statsDate);
   let newData = sessionData;
+  if (
+    !newData.hasOwnProperty("procrastinationDuration") ||
+    newData.procrastinationDuration === NaN
+  ) {
+    newData.procrastinationDuration = 0;
+  }
+  if (
+    !newData.hasOwnProperty("learningDuration") ||
+    newData.learningDuration === NaN
+  ) {
+    newData.learningDuration = 0;
+  }
+
   for (const key in data) {
     if (key === participantResource.name) {
       newData.learningDuration += data[key];
@@ -199,6 +212,7 @@ async function storeSession(data) {
       newData.procrastinationDuration += data[key];
     }
   }
+  console.log("HERE!", newData);
   storage.set({ sessionData: newData });
 }
 
@@ -280,14 +294,14 @@ function initializeStats() {
 
 async function overWriteYesterday() {
   await addToHistory();
-  const today = await storage.get([
+  const yesterday = await storage.get([
     "sessionData",
     "skipCount",
     "completedCount",
     "snoozeCount",
   ]);
   storage.set({
-    yesterday: today,
+    yesterday: yesterday,
   });
 }
 

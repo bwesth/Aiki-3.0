@@ -4,13 +4,14 @@
  -->
 <script>
   import { parseTimerDownLong } from "../../../util/utilities";
-  export let timeRemaining;
+  export let rewardTimeRemaining;
+  console.log("P-time:",rewardTimeRemaining)
 </script>
 
 <div class="container">
   <h6 class="item">Reward Time Left:</h6>
   <!-- Need a function to put a value in this P tag -->
-  <p class="item">{()=>"Hello"}</p>
+  <p class="item">{parseTimerDownLong(rewardTimeRemaining)}</p>
 </div>
 
 <style>

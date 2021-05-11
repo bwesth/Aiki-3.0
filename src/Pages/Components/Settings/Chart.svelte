@@ -14,6 +14,7 @@ Used in / Parent components: /src/Pages/Settings.svelte
   } from "@fortawesome/free-solid-svg-icons";
 
   export let stats;
+  console.log("Stats:",stats);
   //stats comes in in this format:
   //stats = [ learnTime, procTime, completed, skips, snoozes, title ];
 
@@ -43,8 +44,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
             ],
             data: [
               //ORDER MATTERS
-              stats[0]/60,
-              stats[1]/60,
+              stats[0] / 60,
+              stats[1] / 60,
             ],
             hoverOffset: 8,
           },

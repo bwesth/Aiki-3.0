@@ -9,7 +9,11 @@ browser.runtime.onMessage.addListener((request) => {
   } else if (request.action === "display: encouragement") {
     return renderLearningContent(request.countdown, request.shouldShowWelcome);
   } else if (request.action === "kill aiki") {
-    timer.stop();
+    return new Promise((resolve) => {
+      console.log(request);
+      timer.stop();
+      resolve({ continue: false, endInjection: true, snooze: false });
+    });
   }
 });
 
@@ -22,7 +26,6 @@ let timer = {
   time: 5000,
   interval: undefined,
   slowed: false,
-  print: function () {},
   start: function (resolve, url) {
     timer.interval = setInterval(() => {
       if (timer.slowed) {
@@ -41,6 +44,8 @@ let timer = {
     console.log("Stopping timer");
     if (timer.interval) clearInterval(timer.interval);
     timer.interval = undefined;
+    timer.time = 5000;
+    removeOverlay();
   },
   slow: function () {
     timer.slowed = true;
@@ -49,6 +54,19 @@ let timer = {
     timer.slowed = false;
   },
 };
+
+/**
+ * @function
+ * @description Removes the aiki interception overlay
+ * by searching for DOM elements with the name "aiki-overlay" and calling remove() on it/them.  */
+function removeOverlay() {
+  try {
+    const element = document.getElementById("aiki-overlay");
+    element.remove();
+  } catch (error) {
+    // console.log(error);
+  }
+}
 
 function renderProcrastinationContent(url) {
   return new Promise((resolve) => {
@@ -65,14 +83,6 @@ function renderProcrastinationContent(url) {
       removeOverlay();
     }
 
-    /**
-     * @function
-     * @description Removes the aiki interception overlay
-     * by searching for DOM elements with the name "aiki-overlay" and calling remove() on it/them.  */
-    function removeOverlay() {
-      const element = document.getElementById("aiki-overlay");
-      element.remove();
-    }
     ProcrastinationWarning(snooze, timer, browser, resolve, url);
   });
 }

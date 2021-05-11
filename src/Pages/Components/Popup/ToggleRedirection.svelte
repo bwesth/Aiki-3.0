@@ -9,6 +9,7 @@
   import storage from "../../../util/storage";
 
   export let port;
+  export let killAiki;
   let toggled;
 
   async function setup() {
@@ -18,7 +19,10 @@
   function toggleRedirection() {
     storage.redirection.toggle();
     toggled = !toggled;
-    if (!toggled) port.postMessage("goto: off");
+    if (!toggled) {
+      port.postMessage("goto: off");
+      killAiki()
+    }
   }
 
   setup();
