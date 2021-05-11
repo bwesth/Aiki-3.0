@@ -15,6 +15,7 @@
   import ContinueButton from "./Components/Popup/ContinueButton.svelte";
   import SkipButton from "./Components/Popup/SkipButton.svelte";
   import LearningTimeLeft from "./Components/Popup/LearningTimeLeft.svelte";
+  import ProcTimeLeft from "./Components/Popup/ProcTimeLeft.svelte";
   import ExtraLearningTime from "./Components/Popup/ExtraLearningTime.svelte";
 
   const port = browser.extension.connect({
@@ -23,12 +24,13 @@
 
   let siteName = "";
   let origin = {};
-
-  let timeRemaining = -1;
+  //Need to calculate this procTimeRemaining somehow...
+  let procTimeRemaining = -1;
+  let learnTimeRemaining = -1;
   let bonusTime = -1;
   let intervalRef;
 
-  $: canContinue = timeRemaining <= 0 ? true : false;
+  $: canContinue = learnTimeRemaining <= 0 ? true : false;
 
   async function setup() {
     await getTimer();
@@ -58,7 +60,7 @@
     return new Promise((resolve) => {
       port.postMessage("get: timer");
       port.onMessage.addListener(async function (msg) {
-        timeRemaining = await msg.learningTimeRemaining;
+        learnTimeRemaining = await msg.learningTimeRemaining;
         bonusTime = (await msg.earnedTime) * 1000;
         resolve();
       });
@@ -66,13 +68,13 @@
   }
 
   function handleTimers() {
-    if (timeRemaining === 0) {
+    if (learnTimeRemaining === 0) {
       initBonusTime();
     } else {
       intervalRef = setInterval(() => {
-        timeRemaining -= 1000;
+        learnTimeRemaining -= 1000;
       }, 1000);
-      setTimeout(initBonusTime, timeRemaining);
+      setTimeout(initBonusTime, learnTimeRemaining);
     }
   }
 
@@ -91,8 +93,10 @@
   <hr />
   <ToggleRedirection {port} />
   <hr />
+  <ProcTimeLeft {procTimeRemaining}/>
+  <hr />
   {#if siteName !== ""}
-    <LearningTimeLeft {timeRemaining} />
+    <LearningTimeLeft {learnTimeRemaining} />
     <hr />
     <ExtraLearningTime {bonusTime} />
     <hr />
