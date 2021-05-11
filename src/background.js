@@ -5,6 +5,8 @@ import redirection from "./redirection";
 import timer from "./timer";
 import { setTheme } from "./util/themes";
 import badge from "./badge";
+import firebase from "./util/firebase";
+import { makeDate } from "./util/utilities";
 
 /* Add listener if the runtime is caused by initial installation of extension.
 If so, run initial setup */
@@ -21,13 +23,13 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 async function installationSetup() {
   storage.clearStorage();
   storage.stats.init();
-  storage.activeTime.init()
+  storage.activeTime.init();
   setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.timeSettings.init()
+  storage.timeSettings.init();
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
     active: true,
@@ -51,10 +53,11 @@ async function setup() {
 }
 
 async function killAiki() {
+  // storage.origin.remove();
   const tabs = await browser.tabs.query({
     active: true,
     currentWindow: true,
-  })
+  });
   browser.tabs.sendMessage(tabs[0].id, {
     action: "kill aiki",
   });
@@ -62,6 +65,28 @@ async function killAiki() {
   timer.stopBonusTime();
   timer.killAiki();
   badge.remove();
+  const user = await storage.uid.get();
+  firebase.addLog(
+    {
+      user: user,
+      event: "User toggled redirection off",
+      date: makeDate(),
+    },
+    "config"
+  );
+}
+
+async function reviveAiki() {
+  redirection.checkActiveTab();
+  const user = await storage.uid.get();
+  firebase.addLog(
+    {
+      user: user,
+      event: "User toggled redirection on",
+      date: makeDate(),
+    },
+    "config"
+  );
 }
 
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 
@@ -90,7 +115,7 @@ browser.extension.onConnect.addListener(function (port) {
         redirection.navigationListener.restart();
         break;
       case "origin":
-        redirection.gotoOrigin(msg.split(": ")[2]);
+        redirection.gotoOrigin(msg.split(": ")[2], "popup");
         redirection.removeLearningSiteLoadedListener();
         break;
       case "timer":
@@ -98,6 +123,9 @@ browser.extension.onConnect.addListener(function (port) {
         break;
       case "off":
         killAiki();
+        break;
+      case "on":
+        reviveAiki();
         break;
     }
   });

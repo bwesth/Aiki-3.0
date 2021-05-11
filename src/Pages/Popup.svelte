@@ -28,6 +28,7 @@
   let rewardTimeRemaining = -1;
   let learnTimeRemaining = -1;
   let bonusTime = -1;
+  let bonusIntervalRef;
   let intervalRef;
   let timeoutRef;
   let rewardIntervalRef;
@@ -70,18 +71,21 @@
     });
   }
 
-  function killAiki(){
-    clearInterval()
-    clearTimeout(timeoutRef)
-    clearInterval(rewardIntervalRef)
+  function killAiki() {
+    clearInterval(intervalRef);
+    clearTimeout(timeoutRef);
+    clearInterval(rewardIntervalRef);
+    clearInterval(bonusIntervalRef);
     rewardTimeRemaining = 0;
+    learnTimeRemaining = -1;
+    bonusTime = -1;
   }
 
   function handleTimers() {
-    console.log(rewardTimeRemaining);
+    console.log("learnTime:", learnTimeRemaining);
     if (learnTimeRemaining === 0) {
       initBonusTime();
-    } else {
+    } else if (learnTimeRemaining > 0) {
       intervalRef = setInterval(() => {
         learnTimeRemaining -= 1000;
       }, 1000);
@@ -93,14 +97,18 @@
         rewardTimeRemaining -= 1000;
         console.log(rewardTimeRemaining);
       }, 1000);
-      timeoutRef = setTimeout(() => clearInterval(rewardIntervalRef), rewardTimeRemaining);
+      timeoutRef = setTimeout(
+        () => clearInterval(rewardIntervalRef),
+        rewardTimeRemaining
+      );
     }
   }
 
   //Maybe redundant to make a function for this
   function initBonusTime() {
+    console.log("Initiating bonus time");
     clearInterval(intervalRef);
-    setInterval(() => (bonusTime += 1000), 1000);
+    bonusIntervalRef = setInterval(() => (bonusTime += 1000), 1000);
   }
 
   setup();
@@ -115,7 +123,11 @@
 
   {#if siteName !== ""}
     {#if canContinue}
-      <ExtraLearningTime {bonusTime} />
+      {#if bonusTime >= 0}
+        <ExtraLearningTime {bonusTime} />
+      {:else}
+        <p>Done!</p>
+      {/if}
       <hr />
       <div class="container">
         <ContinueButton {siteName} {gotoOrigin} />

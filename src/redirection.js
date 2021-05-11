@@ -160,7 +160,7 @@ async function messageLearningResource(details) {
     });
     shouldShowWelcome = false;
     if (await response.continue) {
-      gotoOrigin("continue");
+      gotoOrigin("continue", response.source);
       removeLearningSiteLoadedListener();
     } else if (await response.endInjection) {
       removeLearningSiteLoadedListener();
@@ -236,16 +236,14 @@ async function checkTab(tab) {
  * that triggered a redirection from procrastination to learning site.
  * The uri was saved upon redirection, and here restored in full in the same tab.
  * Origin is an object of type: {integer: tabId, string: url} */
-async function gotoOrigin(event) {
+async function gotoOrigin(event, source) {
   await storage.stats[event]();
   await storage.shouldRedirect.set(false);
-  const rewardTime = await storage.timeSettings.rewardTime.get();
-  timer.startProcrastinationSession(checkActiveTab, rewardTime);
   const origin = await storage.origin.get();
   try {
     await browser.tabs.update(origin.tabId, { url: origin.url });
     addRedirectionLog(
-      `Go to origin: ${event}`,
+      `Go to origin: ${event}, source: ${source}`,
       participantResource.name,
       parseUrl(origin.url).name
     );
@@ -253,6 +251,11 @@ async function gotoOrigin(event) {
     // console.log(error.message);
   } finally {
     storage.origin.remove();
+  }
+  const redirectionToggled = await storage.redirection.get();
+  if (redirectionToggled) {
+    const rewardTime = await storage.timeSettings.rewardTime.get();
+    timer.startProcrastinationSession(checkActiveTab, rewardTime);
   }
 }
 
@@ -271,7 +274,7 @@ async function talkToContent(tabId, url, originUrl) {
       storage.stats.snooze();
       await storage.shouldRedirect.set(false);
       timer.startProcrastinationSession(checkActiveTab, 60000);
-    } else if (result.endInjection === false) { //absolute horseshit
+    } else {
       addLearningSiteLoadedListener();
       addRedirectionLog(
         `Interception: auto resolve`,
@@ -321,4 +324,5 @@ export default {
   gotoOrigin,
   addOriginTabCloseListener,
   removeLearningSiteLoadedListener,
+  checkActiveTab
 };

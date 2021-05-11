@@ -54,7 +54,10 @@ async function startProcrastinationSession(callback, rewardTime) {
   earnedTime = 0;
   rewardTimeRemaining = rewardTime;
   rewardTimeCountdownRef = setInterval(decrementRewardTime, 1000);
-  redirectionTimeoutRef = setTimeout(() => stopProcrastinationSession(callback), rewardTime);
+  redirectionTimeoutRef = setTimeout(
+    () => stopProcrastinationSession(callback),
+    rewardTime
+  );
 }
 
 function decrementRewardTime() {
@@ -73,12 +76,15 @@ function stopProcrastinationSession(callback) {
   callback();
 }
 
-function killAiki(){
+function killAiki() {
   clearTimeout(redirectionTimeoutRef);
   clearInterval(rewardTimeCountdownRef);
+  stopBonusTime();
   rewardTimeCountdownRef = undefined;
   storage.shouldRedirect.set(true);
   rewardTimeRemaining = 0;
+  earnedTime = -1;
+  learningTimeRemaining = -1;
 }
 
 function getTime() {

@@ -506,80 +506,73 @@ export function LearningContent(
     }
   }
   function rt(t) {
-    let n, e, i, c, r, l, u, a, d, h, b, _, k, w, j, x;
+    let n, e, i, s, c, r, l, u, a, d, h, b, _, k, w, j;
     return {
       c() {
         (n = p("div")),
           (e = p("div")),
           (i = p("img")),
-          (r = $()),
-          (l = p("h5")),
-          (l.innerHTML = "Aiki<sup>3</sup>"),
-          (u = $()),
-          (a = p("div")),
-          (a.innerHTML =
+          (c = $()),
+          (r = p("h5")),
+          (r.innerHTML = "Aiki<sup>3</sup>"),
+          (l = $()),
+          (u = p("div")),
+          (u.innerHTML =
             '<div id="aiki-leftright" class="svelte-1jmla3q"></div> \n      <div id="aiki-rightleft" class="svelte-1jmla3q"></div>'),
-          (d = $()),
-          (h = p("button")),
-          (b = p("p")),
-          (b.textContent = "Continue"),
+          (a = $()),
+          (d = p("button")),
+          (h = p("p")),
+          (h.textContent = "Continue"),
           y(i, "id", "aiki-img"),
-          i.src !== (c = browser.runtime.getURL("images/AikiLogo.png")) &&
+          i.src !== (s = browser.runtime.getURL("images/AikiLogo.png")) &&
             y(i, "src", browser.runtime.getURL("images/AikiLogo.png")),
           y(i, "alt", "Aiki Logo"),
           y(i, "class", "svelte-1jmla3q"),
-          y(l, "id", "aiki-h5"),
-          y(l, "class", "svelte-1jmla3q"),
-          y(a, "id", "aiki-close-container"),
-          y(a, "class", "svelte-1jmla3q"),
+          y(r, "id", "aiki-h5"),
+          y(r, "class", "svelte-1jmla3q"),
+          y(u, "id", "aiki-close-container"),
+          y(u, "class", "svelte-1jmla3q"),
           y(e, "id", "aiki-header"),
           y(e, "class", "svelte-1jmla3q"),
-          y(b, "id", "aiki-p"),
-          y(b, "class", "svelte-1jmla3q"),
-          y(h, "id", "aiki-button"),
-          (h.disabled = _ = !t[1]),
+          y(h, "id", "aiki-p"),
           y(h, "class", "svelte-1jmla3q"),
+          y(d, "id", "aiki-button"),
+          (d.disabled = b = !t[1]),
+          y(d, "class", "svelte-1jmla3q"),
           y(n, "id", "aiki-overlay"),
           y(n, "class", "svelte-1jmla3q");
       },
-      m(o, c) {
-        m(o, n, c),
+      m(o, s) {
+        m(o, n, s),
           f(n, e),
           f(e, i),
+          f(e, c),
           f(e, r),
           f(e, l),
           f(e, u),
-          f(e, a),
+          f(n, a),
           f(n, d),
-          f(n, h),
-          f(h, b),
-          (w = !0),
-          j ||
-            ((x = [
-              v(a, "click", t[2]),
-              v(h, "click", function () {
-                s(t[0]) && t[0].apply(this, arguments);
-              }),
-            ]),
-            (j = !0));
+          f(d, h),
+          (k = !0),
+          w || ((j = [v(u, "click", t[2]), v(d, "click", t[5])]), (w = !0));
       },
-      p(n, [e]) {
-        (t = n), (!w || (2 & e && _ !== (_ = !t[1]))) && (h.disabled = _);
+      p(t, [n]) {
+        (!k || (2 & n && b !== (b = !t[1]))) && (d.disabled = b);
       },
       i(t) {
-        w ||
+        k ||
           (q(() => {
-            k || (k = Q(n, et, { delay: 0, duration: 200 }, !0)), k.run(1);
+            _ || (_ = Q(n, et, { delay: 0, duration: 200 }, !0)), _.run(1);
           }),
-          (w = !0));
+          (k = !0));
       },
       o(t) {
-        k || (k = Q(n, et, { delay: 0, duration: 200 }, !1)),
-          k.run(0),
-          (w = !1);
+        _ || (_ = Q(n, et, { delay: 0, duration: 200 }, !1)),
+          _.run(0),
+          (k = !1);
       },
       d(t) {
-        t && g(n), t && k && k.end(), (j = !1), o(x);
+        t && g(n), t && _ && _.end(), (w = !1), o(j);
       },
     };
   }
@@ -603,6 +596,7 @@ export function LearningContent(
         },
         o,
         c,
+        () => i("injected"),
       ]
     );
   }
