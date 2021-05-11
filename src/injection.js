@@ -23,7 +23,7 @@ let timer = {
   interval: undefined,
   slowed: false,
   print: function () {},
-  start: function () {
+  start: function (resolve, url) {
     timer.interval = setInterval(() => {
       if (timer.slowed) {
         timer.time -= 20;
@@ -38,6 +38,7 @@ let timer = {
     }, 100);
   },
   stop: function () {
+    console.log("Stopping timer");
     if (timer.interval) clearInterval(timer.interval);
     timer.interval = undefined;
   },
@@ -50,7 +51,7 @@ let timer = {
 };
 
 function renderProcrastinationContent(url) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     /**
      * @function
      * @description removes the interception pre-redirection step entirely.
@@ -72,7 +73,7 @@ function renderProcrastinationContent(url) {
       const element = document.getElementById("aiki-overlay");
       element.remove();
     }
-    ProcrastinationWarning(snooze, timer, browser);
+    ProcrastinationWarning(snooze, timer, browser, resolve, url);
   });
 }
 
@@ -87,7 +88,7 @@ function renderLearningContent(countdown, shouldShowWelcome) {
     }
 
     LearningContent(
-      countdown - 500,
+      countdown,
       shouldShowWelcome,
       gotoOrigin,
       endInjection,
