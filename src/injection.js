@@ -10,7 +10,6 @@ browser.runtime.onMessage.addListener((request) => {
     return renderLearningContent(request.countdown, request.shouldShowWelcome);
   } else if (request.action === "kill aiki") {
     return new Promise((resolve) => {
-      console.log(request);
       timer.stop();
       resolve({ continue: false, endInjection: true, snooze: false });
     });
@@ -41,7 +40,6 @@ let timer = {
     }, 100);
   },
   stop: function () {
-    console.log("Stopping timer");
     if (timer.interval) clearInterval(timer.interval);
     timer.interval = undefined;
     timer.time = 5000;

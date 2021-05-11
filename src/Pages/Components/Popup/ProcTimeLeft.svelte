@@ -5,7 +5,6 @@
 <script>
   import { parseTimerDownLong } from "../../../util/utilities";
   export let rewardTimeRemaining;
-  console.log("P-time:",rewardTimeRemaining)
 </script>
 
 <div class="container">

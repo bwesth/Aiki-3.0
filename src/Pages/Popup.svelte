@@ -82,7 +82,6 @@
   }
 
   function handleTimers() {
-    console.log("learnTime:", learnTimeRemaining);
     if (learnTimeRemaining === 0) {
       initBonusTime();
     } else if (learnTimeRemaining > 0) {
@@ -92,10 +91,8 @@
       setTimeout(initBonusTime, learnTimeRemaining);
     }
     if (rewardTimeRemaining > 0) {
-      console.log(rewardTimeRemaining);
       rewardIntervalRef = setInterval(() => {
         rewardTimeRemaining -= 1000;
-        console.log(rewardTimeRemaining);
       }, 1000);
       timeoutRef = setTimeout(
         () => clearInterval(rewardIntervalRef),
@@ -106,7 +103,6 @@
 
   //Maybe redundant to make a function for this
   function initBonusTime() {
-    console.log("Initiating bonus time");
     clearInterval(intervalRef);
     bonusIntervalRef = setInterval(() => (bonusTime += 1000), 1000);
   }

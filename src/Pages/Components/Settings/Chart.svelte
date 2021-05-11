@@ -14,7 +14,6 @@ Used in / Parent components: /src/Pages/Settings.svelte
   } from "@fortawesome/free-solid-svg-icons";
 
   export let stats;
-  console.log("Stats:",stats);
   //stats comes in in this format:
   //stats = [ learnTime, procTime, completed, skips, snoozes, title ];
 

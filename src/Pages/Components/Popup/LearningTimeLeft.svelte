@@ -5,7 +5,6 @@
 <script>
   import { parseTimerDownLong } from "../../../util/utilities";
   export let learnTimeRemaining;
-  console.log("L-time:",learnTimeRemaining)
 </script>
 
 <div class="container">

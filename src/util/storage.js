@@ -212,7 +212,6 @@ async function storeSession(data) {
       newData.procrastinationDuration += data[key];
     }
   }
-  console.log("HERE!", newData);
   storage.set({ sessionData: newData });
 }
 
