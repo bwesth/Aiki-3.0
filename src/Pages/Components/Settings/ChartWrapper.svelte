@@ -10,7 +10,7 @@
   let skips, completed, snoozes, procTime, learnTime, title;
 
   //Getting all variables from data to pipe into the graph, depending on the type.
-  function populateChart() {
+  function getChartData() {
     switch (type) {
       case "today":
         skips = data.skipCount;
@@ -46,7 +46,7 @@
     }
   }
 
-  populateChart();
+  getChartData();
 
   learnTime = Math.round(learnTime);
   procTime = Math.round(procTime);
