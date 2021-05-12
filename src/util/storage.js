@@ -217,12 +217,15 @@ async function storeSession(data) {
 
 async function checkDate(statsDate) {
   const date = makeDate().dateString;
+  console.log(statsDate, date);
   if (statsDate !== date) {
     await overWriteYesterday();
     await storage.set({ snoozeCount: 0 });
     await storage.set({ completedCount: 0 });
     await storage.set({ skipCount: 0 });
-    await storage.set({ sessionData: {} });
+    await storage.set({
+      sessionData: { procrastinationDuration: 0, learningDuration: 0 },
+    });
     await storage.set({ statsDate: date });
   }
 }
@@ -266,6 +269,20 @@ async function getAllStats() {
   return result;
 }
 
+// async function testStatsFlow() {
+//   await storage.set({ statsDate: new Date(2010, 5, 9) });
+//   await storeSession({ theguardian: 60, sololearn: 60 });
+//   await incrContinueCount();
+//   await storage.set({ statsDate: new Date(2010, 5, 10) });
+//   await storeSession({ theguardian: 60, sololearn: 60 });
+//   await incrContinueCount();
+//   await storage.set({ statsDate: new Date(2010, 5, 11) });
+//   await storeSession({ theguardian: 60, sololearn: 60 });
+//   await incrContinueCount();
+// }
+
+// testStatsFlow();
+
 function initializeStats() {
   storage.set({
     sessionData: { procrastinationDuration: 0, learningDuration: 0 },
@@ -306,12 +323,27 @@ async function overWriteYesterday() {
 
 async function addToHistory() {
   let { yesterday, history } = await storage.get(["yesterday", "history"]);
+  console.log(yesterday, history);
+  if (!history.hasOwnProperty("skipCount") || history.skipCount === NaN)
+    history.skipCount = 0;
+  if (!history.hasOwnProperty("completedCount") || history.completedCount === NaN)
+    history.completedCount = 0;
+  if (!history.hasOwnProperty("snoozeCount") || history.snoozeCount === NaN)
+    history.snoozeCount = 0;
+  if (!history.hasOwnProperty("sessionData")) {
+    history.sessionData = { procrastinationDuration: 0, learningDuration: 0 };
+  } else if (
+    history.sessionData.procrastinationDuration === NaN ||
+    history.sessionData.learningDuration === NaN
+  ) {
+    history.sessionData = { procrastinationDuration: 0, learningDuration: 0 };
+  }
   history.skipCount += yesterday.skipCount;
   history.completedCount += yesterday.completedCount;
   history.snoozeCount += yesterday.snoozeCount;
-  history.procrastinationDuration +=
+  history.sessionData.procrastinationDuration +=
     yesterday.sessionData.procrastinationDuration;
-  history.learningDuration += yesterday.sessionData.learningDuration;
+  history.sessionData.learningDuration += yesterday.sessionData.learningDuration;
   storage.set({ history: history });
 }
 
