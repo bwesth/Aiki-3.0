@@ -44,6 +44,7 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 async function setup() {
+  redirection.addMirceaListener();
   // console.log(await storage.stats.getAll());
   // storage.stats.storeSession({theguardian: 10, sololearn: 10})
   intervals.intervalSetup();

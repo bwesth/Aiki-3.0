@@ -1,11 +1,35 @@
 import storage from "./util/storage";
-import { participantResource } from "./util/constants";
+import { learningSites, participantResource } from "./util/constants";
 import firebase from "./util/firebase";
 import browser from "webextension-polyfill";
 import timer from "./timer";
 import { parseUrl, makeDate } from "./util/utilities";
 
 let shouldShowWelcome = true;
+
+async function addMirceaListener() {
+  const url = learningSites.map((item) => {
+    console.log(item);
+    return { hostContains: `${item.name}.` };
+  });
+  const filter = { url: url };
+  console.log(filter);
+
+  async function mirceaListener(details) {
+    const user = await storage.uid.get();
+    firebase.addLog(
+      {
+        user: user,
+        event: `User went to ${details.url}`,
+        details: details,
+        date: makeDate(),
+      },
+      "learning_site"
+    );
+  }
+
+  browser.webNavigation.onBeforeNavigate.addListener(mirceaListener, filter);
+}
 
 async function createFilter() {
   const procList = await storage.list.get();
@@ -137,6 +161,7 @@ async function onOriginRemoved(details) {
       storage.origin.remove();
       timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
       timer.stopLearningSession(); // This is fine
+      storage.shouldRedirect(state)
     }
   }
 }
@@ -331,4 +356,5 @@ export default {
   addOriginTabCloseListener,
   removeLearningSiteLoadedListener,
   checkActiveTab,
+  addMirceaListener,
 };
