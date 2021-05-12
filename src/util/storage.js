@@ -236,7 +236,6 @@ async function storeSession(data) {
 
 async function checkDate(statsDate) {
   const date = makeDate().dateString;
-  console.log(statsDate, date);
   if (statsDate !== date) {
     await overWriteYesterday();
     await storage.set({ snoozeCount: 0 });
@@ -342,7 +341,6 @@ async function overWriteYesterday() {
 
 async function addToHistory() {
   let { yesterday, history } = await storage.get(["yesterday", "history"]);
-  console.log(yesterday, history);
   if (!history.hasOwnProperty("skipCount") || history.skipCount === NaN)
     history.skipCount = 0;
   if (

@@ -12,9 +12,9 @@
   import TimeSelector from "./TimeSelector.svelte";
 
   //These arrays are for the seconds display
-  let hoursArray = Array.from({ length: 23 }, (_, i) => i + 1); //Generates an array with values from 1->23
+  let hoursArray = Array.from({ length: 25 }, (_, i) => i); //Generates an array with values from 1->23
   let minutesArray = Array.from({ length: 59 }, (_, i) => i + 1); //Generates an array with values from 1->59
-  let secondsArray = [0, 15, 30, 45];
+  let quarterIncrArray = [0, 15, 30, 45];
   let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
   let secondLabels = ["Hours", "Minutes", "Hr/Min"];
 
@@ -96,7 +96,7 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={minutesArray}
-        secondValues={secondsArray}
+        secondValues={quarterIncrArray}
         labels={firstLabels}
         values={[learningTime.min, learningTime.sec]}
         onChange={changeSettings.learningTime}
@@ -113,7 +113,7 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={minutesArray}
-        secondValues={secondsArray}
+        secondValues={quarterIncrArray}
         labels={firstLabels}
         values={[rewardTime.min, rewardTime.sec]}
         onChange={changeSettings.rewardTime}
@@ -138,7 +138,7 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={hoursArray}
-        secondValues={minutesArray}
+        secondValues={quarterIncrArray}
         labels={secondLabels}
         values={[activeTimeFrom.hrs, activeTimeFrom.min]}
         onChange={changeSettings.activeFrom}
@@ -155,12 +155,11 @@
     <div class="col-sm">
       <TimeSelector
         firstValues={hoursArray}
-        secondValues={minutesArray}
+        secondValues={quarterIncrArray}
         labels={secondLabels}
         values={[activeTimeTo.hrs, activeTimeTo.min]}
         onChange={changeSettings.activeTo}
         ids={["hrs", "min"]}
-        shouldDisable={shouldDisableTo}
       />
     </div>
   </div>

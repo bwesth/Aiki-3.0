@@ -6,7 +6,10 @@
   export let values;
   export let onChange;
   export let ids;
-  export let shouldDisable = () => false;
+
+  function parse(number) {
+    return number < 9 ? `0${number}` : number;
+  }
 </script>
 
 <div class="wrapper">
@@ -19,15 +22,11 @@
   >
     <optgroup label={labels[0]}>
       {#each firstValues as value}
-        <option
-          disabled={shouldDisable(value)}
-          selected={value === values[0]}
-          {value}>{value}</option
-        >
+        <option selected={value === values[0]} {value}>{parse(value)}</option>
       {/each}
     </optgroup>
   </select>
-
+<p>:</p>
   <!-- svelte-ignore a11y-no-onchange -->
   <select
     id={ids[1]}
@@ -36,7 +35,7 @@
   >
     <optgroup label={labels[1]}>
       {#each secondValues as value}
-        <option selected={value === values[1]} {value}>{value}</option>
+        <option selected={value === values[1]} {value}>{parse(value)}</option>
       {/each}
     </optgroup>
   </select>

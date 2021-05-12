@@ -57,13 +57,17 @@ async function addEntry(entry, reference, type) {
  * Finally adds entry at appropriate log type within the appropriate date collection.
  */
 async function addLog(entry, type) {
-  console.log("Logging to firestore:", "Entry:", entry, "type:", type);
-  entry.user = `${hash(entry.user)}`;
-  const userRef = db.collection("user_logs").doc(entry.user);
-  resolveDoc(userRef);
-  const dateRef = userRef.collection("dates").doc(entry.date.dateString);
-  resolveDoc(dateRef);
-  addEntry(entry, dateRef, type);
+  try {
+    console.log("Logging to firestore:", "Entry:", entry, "type:", type);
+    entry.user = `${hash(entry.user)}`;
+    const userRef = db.collection("user_logs").doc(entry.user);
+    resolveDoc(userRef);
+    const dateRef = userRef.collection("dates").doc(entry.date.dateString);
+    resolveDoc(dateRef);
+    addEntry(entry, dateRef, type);
+  } catch (error) {
+    // console.log(error); // user probably offline. Can't really do anything about that.
+  }
 }
 
 export default {

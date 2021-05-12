@@ -9,11 +9,9 @@ let shouldShowWelcome = true;
 
 async function addMirceaListener() {
   const url = learningSites.map((item) => {
-    console.log(item);
     return { hostContains: `${item.name}.` };
   });
   const filter = { url: url };
-  console.log(filter);
 
   async function mirceaListener(details) {
     const user = await storage.uid.get();
@@ -161,7 +159,7 @@ async function onOriginRemoved(details) {
       storage.origin.remove();
       timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
       timer.stopLearningSession(); // This is fine
-      storage.shouldRedirect(state)
+      storage.shouldRedirect.set(true)
     }
   }
 }
@@ -193,8 +191,8 @@ async function messageLearningResource(details) {
       removeLearningSiteLoadedListener();
     }
   } catch (error) {
-    console.log(error);
-    // browser.webNavigation.onCompleted.removeListener(messageLearningResource);
+    // console.log(error);
+    // // browser.webNavigation.onCompleted.removeListener(messageLearningResource);
   }
 }
 
@@ -268,7 +266,6 @@ async function gotoOrigin(event, source) {
   await storage.stats[event]();
   const origin = await storage.origin.get();
   const learningTab = await browser.tabs.get(origin.tabId);
-  console.log(learningTab);
   storage.learningUri.set(learningTab.url);
   await storage.shouldRedirect.set(false);
   try {
