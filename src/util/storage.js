@@ -106,6 +106,25 @@ function removeOrigin() {
   storage.remove("origin");
 }
 
+function setLearningUri(uri) {
+  if (uri) {
+    storage.set({ learningUri: uri });
+  } else {
+    storage.set({ learningUri: participantResource.host });
+  }
+}
+
+async function getLearningUri() {
+  let result = await storage.get("learningUri");
+  if (result.learningUri) {
+    return result.learningUri;
+  } else return `https://${participantResource.host}`
+}
+
+// function setLearningUri (uri){
+//   storage.set({learningUri: uri});
+// }
+
 /**
  * @async @function
  * @returns {number} learningTime
@@ -326,7 +345,10 @@ async function addToHistory() {
   console.log(yesterday, history);
   if (!history.hasOwnProperty("skipCount") || history.skipCount === NaN)
     history.skipCount = 0;
-  if (!history.hasOwnProperty("completedCount") || history.completedCount === NaN)
+  if (
+    !history.hasOwnProperty("completedCount") ||
+    history.completedCount === NaN
+  )
     history.completedCount = 0;
   if (!history.hasOwnProperty("snoozeCount") || history.snoozeCount === NaN)
     history.snoozeCount = 0;
@@ -343,7 +365,8 @@ async function addToHistory() {
   history.snoozeCount += yesterday.snoozeCount;
   history.sessionData.procrastinationDuration +=
     yesterday.sessionData.procrastinationDuration;
-  history.sessionData.learningDuration += yesterday.sessionData.learningDuration;
+  history.sessionData.learningDuration +=
+    yesterday.sessionData.learningDuration;
   storage.set({ history: history });
 }
 
@@ -378,6 +401,7 @@ export default {
   clearStorage,
   getUserData,
   origin: { get: getOrigin, set: setOrigin, remove: removeOrigin },
+  learningUri: { get: getLearningUri, set: setLearningUri },
   list: { set: setList, get: getList },
   uid: { set: setUid, get: getUid },
   redirection: { toggle: toggleRedirection, get: getRedirectionToggled },

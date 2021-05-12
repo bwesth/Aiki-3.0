@@ -88,7 +88,7 @@ function renderProcrastinationContent(url) {
 function renderLearningContent(countdown, shouldShowWelcome) {
   return new Promise((resolve) => {
     function gotoOrigin(source) {
-      resolve({ continue: true, endInjection: false, source: source });
+      resolve({ continue: true, endInjection: false, source: source, uri: location.href });
     }
 
     function endInjection() {

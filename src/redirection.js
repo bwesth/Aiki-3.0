@@ -89,9 +89,10 @@ async function redirect(details) {
       const shouldRedirect = await storage.shouldRedirect.get();
       if (toggled && shouldRedirect) {
         timer.startLearningSession();
+        const learningUri = await storage.learningUri.get();
         try {
           await browser.tabs.update(details.tabId, {
-            url: `https://${participantResource.host}`,
+            url: learningUri,
           });
           storage.origin.set({ url: details.url, tabId: details.tabId });
           addRedirectionLog(
@@ -160,6 +161,7 @@ async function messageLearningResource(details) {
     });
     shouldShowWelcome = false;
     if (await response.continue) {
+      // storage.learningUri.set(response.uri);
       gotoOrigin("continue", response.source);
       removeLearningSiteLoadedListener();
     } else if (await response.endInjection) {
@@ -193,7 +195,8 @@ async function checkActiveTab() {
           tabSiteName,
           participantResource.name
         );
-        talkToContent(tab.id, `https://${participantResource.host}`, tab.url);
+        const learningUri = await storage.learningUri.get();
+        talkToContent(tab.id, learningUri, tab.url);
       }
     }
   } catch (error) {
@@ -238,8 +241,11 @@ async function checkTab(tab) {
  * Origin is an object of type: {integer: tabId, string: url} */
 async function gotoOrigin(event, source) {
   await storage.stats[event]();
-  await storage.shouldRedirect.set(false);
   const origin = await storage.origin.get();
+  const learningTab = await browser.tabs.get(origin.tabId);
+  console.log(learningTab);
+  storage.learningUri.set(learningTab.url);
+  await storage.shouldRedirect.set(false);
   try {
     await browser.tabs.update(origin.tabId, { url: origin.url });
     addRedirectionLog(
@@ -324,5 +330,5 @@ export default {
   gotoOrigin,
   addOriginTabCloseListener,
   removeLearningSiteLoadedListener,
-  checkActiveTab
+  checkActiveTab,
 };
