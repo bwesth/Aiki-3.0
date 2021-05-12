@@ -48,6 +48,9 @@
 
   populateChart();
 
+  learnTime = Math.round(learnTime);
+  procTime = Math.round(procTime);
+
   let stats = [learnTime, procTime, completed, skips, snoozes, title];
   let noStats = false;
 
