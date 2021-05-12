@@ -4,7 +4,7 @@
     "description": "Development build of Aiki³, soon to be deployed!",
     "version": "1.1.0",
     "icons": {
-      "128": "/images/aikido.png"
+      "128": "/images/AikiLogo.png"
     },
     "permissions": [
       "storage",
@@ -20,7 +20,7 @@
     "browser_action": {
       "default_title": "Aiki",
       "default_popup": "index.html?page=popup",
-      "default_icon": "/images/aikido.png"
+      "default_icon": "/images/AikiLogo.png"
     },
     
     "content_scripts" : [

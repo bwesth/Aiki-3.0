@@ -5,11 +5,15 @@
 <script>
   // Functional and module imports
   import storage from "../../../util/storage";
-  import { parseTime } from "../../../util/utilities";
-  // import Fa from "svelte-fa";
-  // import { faHourglassHalf } from "@fortawesome/free-solid-svg-icons";
+  import { parseTime, makeDate } from "../../../util/utilities";
+  import firebase from "../../../util/firebase";
 
+  // Component imports
+  import Container from "./Container.svelte";
+  import ThemeSelector from "./ThemeSelector.svelte";
   import TimeSelector from "./TimeSelector.svelte";
+
+  export let user = "";
 
   //These arrays are for the seconds display
   let hoursArray = Array.from({ length: 25 }, (_, i) => i); //Generates an array with values from 1->23
@@ -17,10 +21,6 @@
   let quarterIncrArray = [0, 15, 30, 45];
   let firstLabels = ["Minutes", "Seconds", "Min/Sec"];
   let secondLabels = ["Hours", "Minutes", "Hr/Min"];
-
-  // Component imports
-  import Container from "./Container.svelte";
-  import ThemeSelector from "./ThemeSelector.svelte";
 
   let learningTime = { min: 1, sec: 30 };
   let rewardTime = { min: 1, sec: 30 };
@@ -54,18 +54,56 @@
     learningTime: ({ target }) => {
       learningTime[target.id] = parseInt(target.value);
       storage.timeSettings.learningTime.set(parseTime.toSystem(learningTime));
+      firebase.addLog(
+        {
+          user: user,
+          event: "User changed learning time in settings",
+          value: learningTime,
+          date: makeDate(),
+        },
+        "config"
+      );
     },
     rewardTime: ({ target }) => {
       rewardTime[target.id] = parseInt(target.value);
       storage.timeSettings.rewardTime.set(parseTime.toSystem(rewardTime));
+      firebase.addLog(
+        {
+          user: user,
+          event: "User changed reward time in settings",
+          value: rewardTime,
+          date: makeDate(),
+        },
+        "config"
+      );
     },
     activeFrom: ({ target }) => {
       activeTimeFrom[target.id] = parseInt(target.value);
       storage.activeTime.from.set(activeTimeFrom);
+      firebase.addLog(
+        {
+          user: user,
+          event: "User changed operating hours in settings",
+          activeFrom: activeTimeFrom,
+          activeto: activeTimeTo,
+          date: makeDate(),
+        },
+        "config"
+      );
     },
     activeTo: ({ target }) => {
       activeTimeTo[target.id] = parseInt(target.value);
       storage.activeTime.to.set(activeTimeTo);
+      firebase.addLog(
+        {
+          user: user,
+          event: "User changed operating hours in settings",
+          activeFrom: activeTimeFrom,
+          activeto: activeTimeTo,
+          date: makeDate(),
+        },
+        "config"
+      );
     },
   };
 

@@ -6,7 +6,7 @@
 </script>
 
 <div class="header">
-  <img src="images/aikido.png" class="icon" alt="Aiki logo" />
+  <img src="images/AikiLogo.png" class="icon" alt="Aiki logo" />
   <h5 class="text">Aiki<sup>3</sup></h5>
 </div>
 

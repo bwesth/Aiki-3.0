@@ -42,7 +42,7 @@
         <SetWebsites {user} {port} />
       </div>
       <div class="container">
-        <SetRedirection />
+        <SetRedirection {user} />
       </div>
       <div class="container">
         <Statistics />
