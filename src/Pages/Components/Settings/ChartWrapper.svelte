@@ -1,3 +1,8 @@
+<!-- This acts as a wrapper for the Chart.svelte
+  component, retreiving and processing data before 
+  rendering the Chart.
+Used in / Parent components: /src/Pages/Settings.svelte	
+-->
 <script>
   // Component imports
   import Chart from "./Chart.svelte";
@@ -7,6 +12,7 @@
   export let data;
   export let type;
 
+  //procTime and learnTime are in seconds. Probably need to refactor this.
   let skips, completed, snoozes, procTime, learnTime, title;
 
   //Getting all variables from data to pipe into the graph, depending on the type.
@@ -48,13 +54,10 @@
 
   getChartData();
 
-  console.log("This is the unrounded learnTime:",learnTime);
-  learnTime = Math.round(learnTime/60);
-  procTime = Math.round(procTime/60);
-  console.log("This is the rounded learnTime:",learnTime);
+  learnTime = Math.round(learnTime / 60);
+  procTime = Math.round(procTime / 60);
 
   let stats = [learnTime, procTime, completed, skips, snoozes, title];
-  console.log("These are the chart stats:", stats)
   let noStats = false;
 
   if (learnTime === 0 && procTime === 0) {
