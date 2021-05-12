@@ -7,6 +7,7 @@
   import storage from "../../../util/storage";
   import { parseTime, makeDate } from "../../../util/utilities";
   import firebase from "../../../util/firebase";
+  import {participantResource} from "../../../util/constants"
 
   // Component imports
   import Container from "./Container.svelte";
@@ -114,8 +115,8 @@
   <h5>Your Python Learning Platform:</h5>
   <hr />
   <div class="container">
-    <a href="https://www.codecademy.com"
-      ><button type="button" class="btn btn-dark">www.codecademy.com</button></a
+    <a href="https://{participantResource.host}"
+      ><button type="button" class="btn btn-dark">{participantResource.host}</button></a
     >
   </div>
   <hr />

@@ -45,8 +45,6 @@ async function installationSetup() {
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 async function setup() {
   redirection.addMirceaListener();
-  // console.log(await storage.stats.getAll());
-  // storage.stats.storeSession({theguardian: 10, sololearn: 10})
   intervals.intervalSetup();
   storage.shouldRedirect.set(true);
   redirection.navigationListener.start();
@@ -56,7 +54,6 @@ async function setup() {
 }
 
 async function killAiki() {
-  // storage.origin.remove();
   const tabs = await browser.tabs.query({
     active: true,
     currentWindow: true,
