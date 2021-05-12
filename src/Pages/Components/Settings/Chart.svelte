@@ -43,8 +43,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
             ],
             data: [
               //ORDER MATTERS
-              stats[0] / 60,
-              stats[1] / 60,
+              stats[0],
+              stats[1],
             ],
             hoverOffset: 8,
           },

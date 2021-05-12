@@ -3,7 +3,7 @@
   import Chart from "./Chart.svelte";
   import Fa from "svelte-fa";
   import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-  //Accepts a data object and a type string passed down from statistics.svelte
+
   export let data;
   export let type;
 
@@ -48,10 +48,13 @@
 
   getChartData();
 
-  learnTime = Math.round(learnTime);
-  procTime = Math.round(procTime);
+  console.log("This is the unrounded learnTime:",learnTime);
+  learnTime = Math.round(learnTime/60);
+  procTime = Math.round(procTime/60);
+  console.log("This is the rounded learnTime:",learnTime);
 
   let stats = [learnTime, procTime, completed, skips, snoozes, title];
+  console.log("These are the chart stats:", stats)
   let noStats = false;
 
   if (learnTime === 0 && procTime === 0) {
