@@ -4,8 +4,8 @@ import { getTheme, drawTheme } from "./util/themes"
 
 //This controls our theme!
 const app = async ()=> {
-  let theme = await getTheme();
-  drawTheme(theme);
+  // let theme = await getTheme();
+  await drawTheme();
   return new App({
     target: document.body,
   });

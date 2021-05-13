@@ -60,8 +60,8 @@
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
     origin = {};
-    // location.reload();
-    port.postMessage("get: timer");
+    // port.postMessage("get: timer");
+    location.reload();
   }
 
   setup();
