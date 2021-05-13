@@ -44,8 +44,18 @@ function startBonusTime() {
   bonusTimeIntervalRef = setInterval(incrementEarnedTime, 1000);
 }
 
-function incrementEarnedTime() {
-  earnedTime++;
+async function incrementEarnedTime() {
+  if (await checkActive()) earnedTime++;
+}
+
+async function checkActive() {
+  const current = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  })[0];
+  const origin = await storage.origin.get();
+  console.log(current, origin);
+  return current.id === origin.tabId;
 }
 
 // When redirecting to origin site
