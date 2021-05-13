@@ -178,14 +178,13 @@
               {item.host}
             </td>
             <td style="text-align: center">
-              <div title="Remove Site" on:click={() => removeItem(index)}>
-                <Fa
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Removes this site from the list"
-                  icon={faTimes}
-                  primaryColor="red"
-                />
+              <div
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Removes this site from the list."
+                on:click={() => removeItem(index)}
+              >
+                <Fa icon={faTimes} primaryColor="red" />
               </div>
             </td>
           </tr>
