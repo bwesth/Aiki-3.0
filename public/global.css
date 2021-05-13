@@ -83,7 +83,7 @@ button:focus {
   border-color: #666;
 }
 
-/* SCROLLBAR ------------------------------------ */
+/* SCROLLBAR --------------------------------- */
 /* Variables */
 html {
   --scrollbarBG: #cfd8dc;
@@ -109,3 +109,10 @@ body::-webkit-scrollbar-thumb {
   border: 3px solid var(--scrollbarBG);
 }
 
+/* TOOLTIPS ---------------------------------- */
+.tooltip .tooltip-inner {
+  background-color: #f0f2f5;
+  color: #444444;
+  border: 1px solid #AAAAAA;
+  font-family: var(--fontContent);
+}

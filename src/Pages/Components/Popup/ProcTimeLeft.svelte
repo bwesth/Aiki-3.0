@@ -11,7 +11,7 @@
   class="container"
   data-toggle="tooltip"
   data-placement="top"
-  title="Time you have left to procrastinate"
+  title="Time you have left to procrastinate."
 >
   <h6 class="item">Reward Time Left:</h6>
   <!-- Need a function to put a value in this P tag -->
