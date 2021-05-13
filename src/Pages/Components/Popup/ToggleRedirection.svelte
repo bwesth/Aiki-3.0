@@ -9,7 +9,6 @@
   import storage from "../../../util/storage";
 
   export let port;
-  export let killAiki;
   let toggled;
 
   async function setup() {

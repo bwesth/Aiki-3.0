@@ -94,15 +94,18 @@ function stopBonusTime() {
 }
 
 async function checkActive() {
-  const currentTabs = await browser.tabs.query({
-    active: true,
-    currentWindow: true,
-  });
-  if (currentTabs.length > 0) {
-    const current = currentTabs[0];
-    const origin = await storage.origin.get();
-    console.log("current: ", current, "origin: ", origin);
-    return current.id === origin?.tabId;
+  const window = await browser.windows.getCurrent();
+  const views = chrome.extension.getViews({ type: "popup" });
+  if (window.focused || views.length > 0) {
+    const currentTabs = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (currentTabs.length > 0) {
+      const current = currentTabs[0];
+      const origin = await storage.origin.get();
+      return current.id === origin?.tabId;
+    }
   } else {
     return false;
   }

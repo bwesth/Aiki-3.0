@@ -29,7 +29,6 @@
 
   function sync(res) {
     timeValues = new Promise((resolve) => {
-      console.log(res);
       resolve(res);
     });
   }
@@ -38,13 +37,9 @@
   });
   port.postMessage("get: timer");
 
-  // new Promise((resolve) => {
-  //   port.postMessage("get: timer");
-  //     console.log(msg);
-  //     resolve(await msg);
-  //   });
-  // });
-
+  let updateIntervalRef = setInterval(() => {
+    port.postMessage("get: timer");
+  }, 1000);
 
   async function setup() {
     origin = await storage.origin.get();
@@ -65,43 +60,8 @@
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
     origin = {};
-    location.reload();
-  }
-
-  function killAiki() {
-    clearInterval(intervalRef);
-    clearTimeout(timeoutRef);
-    clearInterval(rewardIntervalRef);
-    clearInterval(bonusIntervalRef);
-    rewardTimeRemaining = 0;
-    learningTimeRemaining = -1;
-    bonusTime = -1;
-  }
-
-  function handleTimers() {
-    if (learningTimeRemaining === 0) {
-      initBonusTime();
-    } else if (learningTimeRemaining > 0) {
-      intervalRef = setInterval(() => {
-        learningTimeRemaining -= 1000;
-      }, 1000);
-      setTimeout(initBonusTime, learningTimeRemaining);
-    }
-    if (rewardTimeRemaining > 0) {
-      rewardIntervalRef = setInterval(() => {
-        rewardTimeRemaining -= 1000;
-      }, 1000);
-      timeoutRef = setTimeout(
-        () => clearInterval(rewardIntervalRef),
-        rewardTimeRemaining
-      );
-    }
-  }
-
-  //Maybe redundant to make a function for this
-  function initBonusTime() {
-    clearInterval(intervalRef);
-    bonusIntervalRef = setInterval(() => (bonusTime += 1000), 1000);
+    // location.reload();
+    port.postMessage("get: timer");
   }
 
   setup();
@@ -111,14 +71,16 @@
   <Header />
   <SettingsButton />
   <hr />
-  <ToggleRedirection {port} {killAiki} />
+  <ToggleRedirection {port} />
   <hr />
   {#await timeValues}
     LOADING
   {:then values}
     {#if siteName !== ""}
       {#if values.learningTimeRemaining > 0}
-        <LearningTimeLeft learningTimeRemaining={values.learningTimeRemaining} />
+        <LearningTimeLeft
+          learningTimeRemaining={values.learningTimeRemaining}
+        />
         <hr />
         <div class="container">
           <SkipButton {gotoOrigin} />
