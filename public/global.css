@@ -131,7 +131,7 @@ body::-webkit-scrollbar-thumb {
   left: 50%;
   margin-bottom: 5px;
   padding: 7px;
-  width: 100%;
+  width: 90%;
   min-width: 70px;
   max-width: 250px;
   -webkit-border-radius: 3px;
@@ -141,6 +141,7 @@ body::-webkit-scrollbar-thumb {
   background-color: hsla(0, 0%, 20%, 0.9);
   color: #fff;
   content: attr(data-tooltip);
+  font-family: var (--fontContent);
   text-align: center;
   font-size: 14px;
   line-height: 1.2;

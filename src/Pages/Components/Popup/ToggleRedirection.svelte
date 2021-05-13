@@ -39,7 +39,7 @@
     class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
     data-tooltip="Turn Aiki ON or OFF"
     on:click={toggleRedirection}
-    ><Fa icon={faPowerOff} /> {toggled ? "On" : "Off"}</button
+    ><Fa icon={faPowerOff} /> {toggled ? "ON" : "OFF"}</button
   >
 </div>
 

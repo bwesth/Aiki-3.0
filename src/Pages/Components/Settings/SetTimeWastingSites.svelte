@@ -128,23 +128,22 @@
   <!-- Bootstrap Input field. -->
   <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
   <form on:submit|preventDefault={addItem}>
-    <div class="input-group mb-3">
-      <input
-        bind:value={addItemValue}
-        id="addItem"
-        type="text"
-        class="form-control"
-        placeholder="Enter a time wasting site here..."
-        aria-label=""
-        aria-describedby="basic-addon2"
-      />
-      <div class="input-group-append">
-        <button
-          id="add-button"
-          class="btn btn-primary"
-          type="submit"
-          data-tooltip="Add to your list of procrastination sites">Add</button
-        >
+    <div data-tooltip="Add to your list of procrastination sites">
+      <div class="input-group mb-3">
+        <input
+          bind:value={addItemValue}
+          id="addItem"
+          type="text"
+          class="form-control"
+          placeholder="Enter a time wasting site here..."
+          aria-label=""
+          aria-describedby="basic-addon2"
+        />
+        <div class="input-group-append">
+          <button id="add-button" class="btn btn-primary" type="submit"
+            >Add</button
+          >
+        </div>
       </div>
     </div>
   </form>
@@ -172,12 +171,12 @@
               />
               {firstLetterUppercase(item.name)}
             </th>
-            <td>
+            <td class="hostName">
               {item.host}
             </td>
             <td style="text-align: center">
               <div
-                data-tooltip="Removes this site from the list."
+                data-tooltip="Remove this site from the list."
                 on:click={() => removeItem(index)}
               >
                 <Fa icon={faTimes} primaryColor="red" />
@@ -215,8 +214,12 @@
     font-size: var(--fontSizeSettings);
     color: var(--textColor);
     border-bottom: 1px solid var(--hrColor);
-    font-family: "Lucida Console", "Courier New", monospace;
+    font-family: var(--fontContent);
     padding: 15px;
+  }
+
+  td.hostName {
+    font-family: "Lucida Console", "Courier New", monospace;
   }
 
   h5 {

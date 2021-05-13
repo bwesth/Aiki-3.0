@@ -119,7 +119,7 @@
       ><button
         type="button"
         class="btn btn-dark"
-        data-tooltip="Takes you to your learning platform!"
+        data-tooltip="Go to your learning platform!"
         >{participantResource.host}</button
       ></a
     >
@@ -224,8 +224,14 @@
 
 <style>
   .container {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 15px;
+  }
+
+  .btn-dark {
+    display: flex;
   }
 
   h5 {
