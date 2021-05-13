@@ -1,6 +1,7 @@
 import browser from "webextension-polyfill";
 import { ProcrastinationWarning } from "./content/ProcrastinationWarning";
 import { LearningContent } from "./content/LearningContent";
+import { participantResource } from "./util/constants";
 
 /* Listener for messages from background script. */
 browser.runtime.onMessage.addListener((request) => {
@@ -13,8 +14,38 @@ browser.runtime.onMessage.addListener((request) => {
       timer.stop();
       resolve({ continue: false, endInjection: true, snooze: false });
     });
+  } else if (request.action === "removeCloseListener") {
+    removeCloseListener();
+    return new Promise((resolve) => {
+      resolve({
+        continue: false,
+        endInjection: false,
+        snooze: false,
+        confirmed: true,
+      });
+    });
   }
 });
+
+function addCloseListener() {
+  console.log("addCloseListener");
+  window.addEventListener("beforeunload", closeListener);
+}
+
+function removeCloseListener() {
+  console.log("removeCloseListener");
+  window.removeEventListener("beforeunload", closeListener);
+}
+
+function closeListener(e) {
+  if (location.host.includes(participantResource.name)) {
+    console.log(e);
+    // Cancel the event
+    e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
+    // Chrome requires returnValue to be set
+    e.returnValue = "";
+  }
+}
 
 /* This object contains countdown functionality including 
   functions to hasten and slow the countdown progress.
@@ -87,8 +118,15 @@ function renderProcrastinationContent(url) {
 
 function renderLearningContent(countdown, shouldShowWelcome) {
   return new Promise((resolve) => {
+    addCloseListener();
     function gotoOrigin(source) {
-      resolve({ continue: true, endInjection: false, source: source, uri: location.href });
+      removeCloseListener();
+      resolve({
+        continue: true,
+        endInjection: false,
+        source: source,
+        uri: location.href,
+      });
     }
 
     function endInjection() {
