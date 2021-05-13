@@ -85,10 +85,10 @@
       });
     } else {
       //add rejection function here
-      toast.pop();
-      toast.push("Action canceled", {
-        theme: themes.infoTheme(toastCoords),
-      });
+      // toast.pop();
+      // toast.push("Action canceled", {
+      //   theme: themes.infoTheme(toastCoords),
+      // }); // Lets do nothing, actually.
     }
   }
 
@@ -101,8 +101,10 @@
         resolve(true);
       };
       link.onerror = function () {
-        const confirmation = confirm(`Could not establish connection to https://${site}/\nBe sure to check the spelling.
-          \nDo you want to add it anyway?`);
+        const confirmation = confirm(`
+          We could not get the icon from https://${site}/. This either means the website does not exist, or it may not be an issue at all.\n
+          Be sure to check the spelling or copy-paste the website address into the input field. \n
+          If you are certain it is correct, click "yes"`);
         confirmation ? resolve(true) : resolve(false);
       };
       document.body.appendChild(link);
