@@ -16,7 +16,6 @@
     toggled = !toggled;
     if (!toggled) {
       port.postMessage("goto: off");
-      killAiki();
       location.reload();
     } else {
       port.postMessage("goto: on");
