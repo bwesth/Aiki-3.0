@@ -1,78 +1,91 @@
 import storage from "./util/storage";
+import browser from "webextension-polyfill";
 import badge from "./badge";
 import { parseTimerDown } from "./util/utilities";
 
-let earnedTime = 0;
 let learningTimeRemaining = 0;
-let rewardTimeRemaining = 0;
+let learningTimeIntervalRef;
 
-let bonusTimeIntervalRef;
-let learningTimeCountdownRef;
-let learningTimeOutRef;
-let rewardTimeCountdownRef;
-let redirectionTimeoutRef;
+async function decrementLearningTime() {
+  if (await checkActive()) {
+    if (learningTimeRemaining > 0) {
+      learningTimeRemaining -= 1000;
+      badge.setText(parseTimerDown(learningTimeRemaining));
+    } else if (learningTimeRemaining < 0) {
+      learningTimeRemaining = 0;
+    } else {
+      startBonusTime();
+    }
+  }
+}
 
-//When redirecting to learning site
 async function startLearningSession() {
   if (bonusTimeIntervalRef) stopBonusTime();
-  if (learningTimeCountdownRef) clearInterval(learningTimeCountdownRef);
+  if (learningTimeIntervalRef) clearInterval(learningTimeIntervalRef);
   badge.setBusy();
-  const time = await storage.timeSettings.learningTime.get();
-  learningTimeRemaining = time;
+  learningTimeRemaining = await storage.timeSettings.learningTime.get();
   badge.setText(parseTimerDown(learningTimeRemaining));
-  learningTimeCountdownRef = setInterval(decrementLearningTime, 1000);
-  learningTimeOutRef = setTimeout(startBonusTime, time);
+  learningTimeIntervalRef = setInterval(decrementLearningTime, 1000);
 }
 
 function stopLearningSession() {
-  clearInterval(learningTimeCountdownRef);
-  clearTimeout(learningTimeOutRef);
+  clearInterval(learningTimeIntervalRef);
+  learningTimeIntervalRef = undefined;
+  learningTimeRemaining = 0;
   badge.remove();
 }
 
-function decrementLearningTime() {
-  learningTimeRemaining -= 1000;
-  badge.setText(parseTimerDown(learningTimeRemaining));
+let rewardTimeRemaining = 0;
+let rewardTimeIntervalRef;
+
+async function decrementRewardTime(callback) {
+  if (rewardTimeRemaining > 0) {
+    rewardTimeRemaining -= 1000;
+  } else if (rewardTimeRemaining < 0) {
+    rewardTimeRemaining = 0;
+  } else {
+    stopProcrastinationSession(callback);
+  }
+}
+
+async function startProcrastinationSession(callback, rewardTime) {
+  stopLearningSession();
+  stopBonusTime();
+  bonusTime = 0;
+  rewardTimeRemaining = rewardTime;
+  rewardTimeIntervalRef = setInterval(
+    () => decrementRewardTime(callback),
+    1000
+  );
+}
+
+function stopProcrastinationSession(callback) {
+  clearInterval(rewardTimeIntervalRef);
+  rewardTimeIntervalRef = undefined;
+  storage.shouldRedirect.set(true);
+  callback();
+}
+
+let bonusTime = 0;
+let bonusTimeIntervalRef;
+
+async function incrementBonusTime() {
+  if (await checkActive()) {
+    if (bonusTime >= 0) {
+      bonusTime += 1000;
+    } else {
+      bonusTime = 0;
+    }
+  }
 }
 
 function startBonusTime() {
   if (bonusTimeIntervalRef) stopBonusTime();
   badge.setDone();
   badge.setText("Done");
-  clearInterval(learningTimeCountdownRef);
-  learningTimeCountdownRef = undefined;
-  bonusTimeIntervalRef = setInterval(incrementEarnedTime, 1000);
-}
-
-async function incrementEarnedTime() {
-  if (await checkActive()) earnedTime++;
-}
-
-async function checkActive() {
-  const current = await browser.tabs.query({
-    active: true,
-    currentWindow: true,
-  })[0];
-  const origin = await storage.origin.get();
-  console.log(current, origin);
-  return current.id === origin.tabId;
-}
-
-// When redirecting to origin site
-async function startProcrastinationSession(callback, rewardTime) {
-  stopLearningSession();
-  stopBonusTime();
-  earnedTime = 0;
-  rewardTimeRemaining = rewardTime;
-  rewardTimeCountdownRef = setInterval(decrementRewardTime, 1000);
-  redirectionTimeoutRef = setTimeout(
-    () => stopProcrastinationSession(callback),
-    rewardTime
-  );
-}
-
-function decrementRewardTime() {
-  rewardTimeRemaining -= 1000;
+  clearInterval(learningTimeIntervalRef);
+  learningTimeIntervalRef = undefined;
+  bonusTimeIntervalRef = setInterval(incrementBonusTime, 1000);
 }
 
 function stopBonusTime() {
@@ -80,27 +93,34 @@ function stopBonusTime() {
   bonusTimeIntervalRef = undefined;
 }
 
-function stopProcrastinationSession(callback) {
-  clearInterval(rewardTimeCountdownRef);
-  rewardTimeCountdownRef = undefined;
-  storage.shouldRedirect.set(true);
-  callback();
+async function checkActive() {
+  const currentTabs = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+  if (currentTabs.length > 0) {
+    const current = currentTabs[0];
+    const origin = await storage.origin.get();
+    console.log("current: ", current, "origin: ", origin);
+    return current.id === origin?.tabId;
+  } else {
+    return false;
+  }
 }
 
 function killAiki() {
-  clearTimeout(redirectionTimeoutRef);
-  clearInterval(rewardTimeCountdownRef);
+  clearInterval(rewardTimeIntervalRef);
+  rewardTimeIntervalRef = undefined;
   stopBonusTime();
-  rewardTimeCountdownRef = undefined;
   storage.shouldRedirect.set(true);
   rewardTimeRemaining = 0;
-  earnedTime = -1;
-  learningTimeRemaining = -1;
+  bonusTime = 0;
+  learningTimeRemaining = 0;
 }
 
 function getTime() {
   return {
-    earnedTime: earnedTime,
+    bonusTime: bonusTime,
     learningTimeRemaining: learningTimeRemaining,
     rewardTimeRemaining: rewardTimeRemaining,
   };
@@ -108,10 +128,10 @@ function getTime() {
 
 export default {
   startLearningSession,
-  startProcrastinationSession,
   stopLearningSession,
-  stopBonusTime,
+  startProcrastinationSession,
   stopProcrastinationSession,
+  stopBonusTime,
   getTime,
   killAiki,
 };

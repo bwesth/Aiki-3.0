@@ -4,7 +4,7 @@
  -->
 <script>
   import { parseTimerDownLong } from "../../../util/utilities";
-  export let learnTimeRemaining;
+  export let learningTimeRemaining;
 </script>
 
 <div
@@ -14,7 +14,7 @@
   title="Time until this learning session is complete"
 >
   <h6 class="item">Learning Time Left:</h6>
-  <p class="item">{parseTimerDownLong(learnTimeRemaining)}</p>
+  <p class="item">{parseTimerDownLong(learningTimeRemaining)}</p>
 </div>
 
 <style>

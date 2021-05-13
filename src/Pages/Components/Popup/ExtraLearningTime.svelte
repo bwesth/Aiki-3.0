@@ -14,7 +14,11 @@
   title="Extra time you have spent learning this session. (Good job!)"
 >
   <h6 class="item">Extra Learning Time:</h6>
-  <p class="item">{parseTimerUpLong(bonusTime)}</p>
+  {#if bonusTime > 0}
+    <p class="item">{parseTimerUpLong(bonusTime)}</p>
+  {:else}
+    <p class="item">Done</p>
+  {/if}
 </div>
 
 <style>
