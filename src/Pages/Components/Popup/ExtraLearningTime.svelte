@@ -9,9 +9,7 @@
 
 <div
   class="container"
-  data-toggle="tooltip"
-  data-placement="top"
-  title="Extra time you have spent learning this session. (Good job!)"
+  data-tooltip="Extra time you have spent learning this session"
 >
   <h6 class="item">Extra Learning Time:</h6>
   <p class="item">{parseTimerUpLong(bonusTime)}</p>

@@ -20,9 +20,7 @@
   type="default"
   on:click={handleClick}
   class="btn btn-success item"
-  data-toggle="tooltip"
-  data-placement="top"
-  title="Takes you back to your original procrastination site!"
+  data-tooltip="Takes you back to your original procrastination site!"
   ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
 </button>
 

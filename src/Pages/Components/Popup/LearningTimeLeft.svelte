@@ -9,9 +9,7 @@
 
 <div
   class="container"
-  data-toggle="tooltip"
-  data-placement="top"
-  title="Time until this learning session is complete"
+  data-tooltip="Time until this learning session is complete"
 >
   <h6 class="item">Learning Time Left:</h6>
   <p class="item">{parseTimerDownLong(learnTimeRemaining)}</p>

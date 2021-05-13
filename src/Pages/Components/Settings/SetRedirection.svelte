@@ -119,9 +119,7 @@
       ><button
         type="button"
         class="btn btn-dark"
-        data-toggle="tooltip"
-        data-placement="top"
-        title="Takes you to your learning platform!"
+        data-tooltip="Takes you to your learning platform!"
         >{participantResource.host}</button
       ></a
     >

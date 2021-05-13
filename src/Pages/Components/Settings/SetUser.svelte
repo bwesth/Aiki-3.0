@@ -83,9 +83,7 @@
     <button
       class="btn btn-danger"
       on:click={resetUid}
-      data-toggle="tooltip"
-      data-placement="bottom"
-      title="Removes your email. WARNING: Aiki cannot log your activity if you do not provide it with an email."
+      data-tooltip="Removes your email. WARNING: Aiki cannot log your activity if you do not provide it with an email."
       ><Fa icon={faUserSlash} /> Remove Email</button
     >
   {:else}

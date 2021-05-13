@@ -17,9 +17,7 @@
   on:click={handleClick}
   type="default"
   class="btn btn-danger item"
-  data-toggle="tooltip"
-  data-placement="top"
-  title="Skip this learning session and go to procrastination land!"
+  data-tooltip="Skip this learning session and go to procrastination land!"
   ><Fa icon={faSkull} /> Emergency Skip!</button
 >
 

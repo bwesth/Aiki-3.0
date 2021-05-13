@@ -143,9 +143,7 @@
           id="add-button"
           class="btn btn-primary"
           type="submit"
-          data-toggle="tooltip"
-          data-placement="top"
-          title="Add to your list of procrastination sites">Add</button
+          data-tooltip="Add to your list of procrastination sites">Add</button
         >
       </div>
     </div>
@@ -179,9 +177,7 @@
             </td>
             <td style="text-align: center">
               <div
-                data-toggle="tooltip"
-                data-placement="top"
-                title="Removes this site from the list."
+                data-tooltip="Removes this site from the list."
                 on:click={() => removeItem(index)}
               >
                 <Fa icon={faTimes} primaryColor="red" />
