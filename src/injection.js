@@ -28,21 +28,16 @@ browser.runtime.onMessage.addListener((request) => {
 });
 
 function addCloseListener() {
-  console.log("addCloseListener");
   window.addEventListener("beforeunload", closeListener);
 }
 
 function removeCloseListener() {
-  console.log("removeCloseListener");
   window.removeEventListener("beforeunload", closeListener);
 }
 
 function closeListener(e) {
   if (location.host.includes(participantResource.name)) {
-    console.log(e);
-    // Cancel the event
-    e.preventDefault(); // If you prevent default behavior in Mozilla Firefox prompt will always be shown
-    // Chrome requires returnValue to be set
+    e.preventDefault();
     e.returnValue = "";
   }
 }

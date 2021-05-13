@@ -23,7 +23,8 @@ function intervalSetup() {
 
 async function counter() {
   const window = await browser.windows.getCurrent();
-  if (window.focused) {
+  const views = chrome.extension.getViews({ type: "popup" });
+  if (window.focused || views.length > 0) {
     data.chromeActive++;
     const result = await browser.tabs.query({
       active: true,
@@ -88,7 +89,7 @@ async function syncList() {
 
 function storeData(data) {
   if (user) {
-    storage.stats.storeSession(data)
+    storage.stats.storeSession(data);
     const entry = { data: data, user: user, date: makeDate() };
     firebase.addLog(entry, "session");
   }

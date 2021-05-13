@@ -24,21 +24,25 @@
 
   let siteName = "";
   let origin = {};
-  //Need to calculate this procTimeRemaining somehow...
-  let rewardTimeRemaining = -1;
-  let learnTimeRemaining = -1;
-  let bonusTime = -1;
-  let bonusIntervalRef;
-  let intervalRef;
-  let timeoutRef;
-  let rewardIntervalRef;
 
-  $: canContinue = learnTimeRemaining <= 0 ? true : false;
+  let timeValues = new Promise((resolve) => {});
+
+  function sync(res) {
+    timeValues = new Promise((resolve) => {
+      resolve(res);
+    });
+  }
+  port.onMessage.addListener(function (msg) {
+    sync(msg);
+  });
+  port.postMessage("get: timer");
+
+  let updateIntervalRef = setInterval(() => {
+    port.postMessage("get: timer");
+  }, 1000);
 
   async function setup() {
-    await getTimer();
     origin = await storage.origin.get();
-    handleTimers();
   }
 
   $: if (origin) {
@@ -56,55 +60,8 @@
   function gotoOrigin(type) {
     port.postMessage("goto: origin: " + type);
     origin = {};
-    location.reload();
-  }
-
-  async function getTimer() {
-    return new Promise((resolve) => {
-      port.postMessage("get: timer");
-      port.onMessage.addListener(async function (msg) {
-        learnTimeRemaining = await msg.learningTimeRemaining;
-        rewardTimeRemaining = await msg.rewardTimeRemaining;
-        bonusTime = (await msg.earnedTime) * 1000;
-        resolve();
-      });
-    });
-  }
-
-  function killAiki() {
-    clearInterval(intervalRef);
-    clearTimeout(timeoutRef);
-    clearInterval(rewardIntervalRef);
-    clearInterval(bonusIntervalRef);
-    rewardTimeRemaining = 0;
-    learnTimeRemaining = -1;
-    bonusTime = -1;
-  }
-
-  function handleTimers() {
-    if (learnTimeRemaining === 0) {
-      initBonusTime();
-    } else if (learnTimeRemaining > 0) {
-      intervalRef = setInterval(() => {
-        learnTimeRemaining -= 1000;
-      }, 1000);
-      setTimeout(initBonusTime, learnTimeRemaining);
-    }
-    if (rewardTimeRemaining > 0) {
-      rewardIntervalRef = setInterval(() => {
-        rewardTimeRemaining -= 1000;
-      }, 1000);
-      timeoutRef = setTimeout(
-        () => clearInterval(rewardIntervalRef),
-        rewardTimeRemaining
-      );
-    }
-  }
-
-  //Maybe redundant to make a function for this
-  function initBonusTime() {
-    clearInterval(intervalRef);
-    bonusIntervalRef = setInterval(() => (bonusTime += 1000), 1000);
+    // location.reload();
+    port.postMessage("get: timer");
   }
 
   setup();
@@ -114,32 +71,34 @@
   <Header />
   <SettingsButton />
   <hr />
-  <ToggleRedirection {port} {killAiki} />
+  <ToggleRedirection {port} />
   <hr />
-
-  {#if siteName !== ""}
-    {#if canContinue}
-      {#if bonusTime >= 0}
-        <ExtraLearningTime {bonusTime} />
+  {#await timeValues}
+    LOADING
+  {:then values}
+    {#if siteName !== ""}
+      {#if values.learningTimeRemaining > 0}
+        <LearningTimeLeft
+          learningTimeRemaining={values.learningTimeRemaining}
+        />
+        <hr />
+        <div class="container">
+          <SkipButton {gotoOrigin} />
+        </div>
+        <hr />
       {:else}
-        <p>Done!</p>
+        <ExtraLearningTime bonusTime={values.bonusTime} />
+        <hr />
+        <div class="container">
+          <ContinueButton {siteName} {gotoOrigin} />
+        </div>
+        <hr />
       {/if}
-      <hr />
-      <div class="container">
-        <ContinueButton {siteName} {gotoOrigin} />
-      </div>
     {:else}
-      <LearningTimeLeft {learnTimeRemaining} />
+      <ProcTimeLeft rewardTimeRemaining={values.rewardTimeRemaining} />
       <hr />
-      <div class="container">
-        <SkipButton {gotoOrigin} />
-      </div>
     {/if}
-    <hr />
-  {:else}
-    <ProcTimeLeft {rewardTimeRemaining} />
-    <hr />
-  {/if}
+  {/await}
 </main>
 
 <style>
