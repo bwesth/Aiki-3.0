@@ -139,8 +139,13 @@
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button id="add-button" class="btn btn-primary" type="submit"
-          >Add</button
+        <button
+          id="add-button"
+          class="btn btn-primary"
+          type="submit"
+          data-toggle="tooltip"
+          data-placement="top"
+          title="Add to your list of procrastination sites">Add</button
         >
       </div>
     </div>
@@ -174,7 +179,13 @@
             </td>
             <td style="text-align: center">
               <div title="Remove Site" on:click={() => removeItem(index)}>
-                <Fa icon={faTimes} primaryColor="red" />
+                <Fa
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Removes this site from the list"
+                  icon={faTimes}
+                  primaryColor="red"
+                />
               </div>
             </td>
           </tr>
@@ -183,7 +194,7 @@
     </table>
   {/if}
   <!-- Add pagination for more than 10 sites? -->
-  </Container>
+</Container>
 
 <style>
   table {

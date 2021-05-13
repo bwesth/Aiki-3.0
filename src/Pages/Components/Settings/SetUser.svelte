@@ -80,8 +80,13 @@
       placeholder={user}
       readonly
     />
-    <button class="btn btn-danger" on:click={resetUid}
-      ><Fa icon={faUserSlash} /> Reset Email</button
+    <button
+      class="btn btn-danger"
+      on:click={resetUid}
+      data-toggle="tooltip"
+      data-placement="bottom"
+      title="Removes your email. WARNING: Aiki cannot log your activity if you do not provide it with an email."
+      ><Fa icon={faUserSlash} /> Remove Email</button
     >
   {:else}
     <h5>Add your email here so we can log your activity:</h5>
@@ -121,7 +126,7 @@
       </div>
     </div>
   {/if}
-  </Container>
+</Container>
 
 <style>
   h5 {

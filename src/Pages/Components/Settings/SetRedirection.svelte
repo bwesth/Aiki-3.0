@@ -7,7 +7,7 @@
   import storage from "../../../util/storage";
   import { parseTime, makeDate } from "../../../util/utilities";
   import firebase from "../../../util/firebase";
-  import {participantResource} from "../../../util/constants"
+  import { participantResource } from "../../../util/constants";
 
   // Component imports
   import Container from "./Container.svelte";
@@ -116,7 +116,14 @@
   <hr />
   <div class="container">
     <a href="https://{participantResource.host}"
-      ><button type="button" class="btn btn-dark">{participantResource.host}</button></a
+      ><button
+        type="button"
+        class="btn btn-dark"
+        data-toggle="tooltip"
+        data-placement="top"
+        title="Takes you to your learning platform!"
+        >{participantResource.host}</button
+      ></a
     >
   </div>
   <hr />
@@ -165,13 +172,13 @@
   <h5>Set Operating Hours:</h5>
   <hr />
   <p>
-    Choose the window of time you would like Aiki to normally be on during the
-    day (for example: ON during your working hours, OFF when you're at home.)
+    Choose the window of time you would like Aiki to be ON during the
+    day.
   </p>
 
   <div class="row">
     <div class="col-sm">
-      <p>Aiki will turn ON at this time:</p>
+      <p>Aiki will turn <strong>ON</strong> at this time:</p>
     </div>
     <div class="col-sm" />
     <div class="col-sm">
@@ -188,7 +195,7 @@
 
   <div class="row">
     <div class="col-sm">
-      <p>Aiki will turn OFF at this time:</p>
+      <p>Aiki will turn <strong>OFF</strong> at this time:</p>
     </div>
     <div class="col-sm" />
     <div class="col-sm">
