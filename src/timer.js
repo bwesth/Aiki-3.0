@@ -4,10 +4,11 @@ import { parseTimerDown } from "./util/utilities";
 
 let earnedTime = 0;
 let learningTimeRemaining = 0;
+let rewardTimeRemaining = 0;
+
 let bonusTimeIntervalRef;
 let learningTimeCountdownRef;
 let learningTimeOutRef;
-let rewardTimeRemaining = 0;
 let rewardTimeCountdownRef;
 let redirectionTimeoutRef;
 
