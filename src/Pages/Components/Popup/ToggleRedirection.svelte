@@ -9,11 +9,7 @@
   import storage from "../../../util/storage";
 
   export let port;
-  let toggled;
-
-  async function setup() {
-    toggled = await storage.redirection.get();
-  }
+  let toggled = storage.redirection.get();
 
   function toggleRedirection() {
     storage.redirection.toggle();
@@ -27,21 +23,23 @@
       location.reload();
     }
   }
-
-  setup();
 </script>
 
 <div class="container">
   <h6 class="item">Aiki is:</h6>
-  <button
-    type="default"
-    class="btn {toggled ? 'btn-success' : 'btn-danger'} item"
-    data-toggle="tooltip"
-    data-placement="top"
-    title="Turn Aiki ON or OFF"
-    on:click={toggleRedirection}
-    ><Fa icon={faPowerOff} /> {toggled ? "On" : "Off"}</button
-  >
+  {#await toggled}
+    <button type="default" class="btn item">...</button>
+  {:then value}
+    <button
+      type="default"
+      class="btn {value ? 'btn-success' : 'btn-danger'} item"
+      data-toggle="tooltip"
+      data-placement="top"
+      title="Turn Aiki ON or OFF"
+      on:click={toggleRedirection}
+      ><Fa icon={faPowerOff} /> {value ? "On" : "Off"}</button
+    >
+  {/await}
 </div>
 
 <style>
