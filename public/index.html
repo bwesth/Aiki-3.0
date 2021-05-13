@@ -23,13 +23,17 @@
     />
     <!-- Bundle imports for boostrap etc -->
     <script defer src="/build/bundle.js"></script>
-    
+
     <script src="jquery-3.5.1.slim.min.js"></script>
     <script src="popper.min.js"></script>
     <script src="bootstrap.min.js"></script>
+    <!-- JQuery command for tooltips -->
+    <script>
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+    </script>
   </head>
 
-  <body>
-    
-  </body>
+  <body></body>
 </html>

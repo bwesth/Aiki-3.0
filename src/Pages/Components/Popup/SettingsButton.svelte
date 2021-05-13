@@ -26,6 +26,9 @@
   <button
     type="default"
     class="btn btn-primary item"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Open the settings page"
     on:click={openSettingsPage}><Fa icon={faCog} /> Settings</button
   >
 </div>

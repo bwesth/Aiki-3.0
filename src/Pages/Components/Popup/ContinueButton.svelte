@@ -4,15 +4,15 @@
  -->
 <script>
   /* Functional and module imports */
-  import storage from '../../../util/storage'
+  import storage from "../../../util/storage";
   import Fa from "svelte-fa";
   import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 
   export let siteName;
   export let gotoOrigin;
 
-  function handleClick(){
-    gotoOrigin("continue")
+  function handleClick() {
+    gotoOrigin("continue");
   }
 </script>
 
@@ -20,6 +20,9 @@
   type="default"
   on:click={handleClick}
   class="btn btn-success item"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Takes you back to your original procrastination site!"
   ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
 </button>
 
