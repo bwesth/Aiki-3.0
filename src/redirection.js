@@ -159,7 +159,7 @@ async function onOriginRemoved(details) {
       storage.origin.remove();
       timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
       timer.stopLearningSession(); // This is fine
-      storage.shouldRedirect.set(true)
+      storage.shouldRedirect.set(true);
     }
   }
 }
@@ -192,7 +192,6 @@ async function messageLearningResource(details) {
     }
   } catch (error) {
     // console.log(error);
-    // // browser.webNavigation.onCompleted.removeListener(messageLearningResource);
   }
 }
 
@@ -269,12 +268,17 @@ async function gotoOrigin(event, source) {
   storage.learningUri.set(learningTab.url);
   await storage.shouldRedirect.set(false);
   try {
-    await browser.tabs.update(origin.tabId, { url: origin.url });
-    addRedirectionLog(
-      `Go to origin: ${event}, source: ${source}`,
-      participantResource.name,
-      parseUrl(origin.url).name
-    );
+    const res = await browser.tabs.sendMessage(origin.tabId, {
+      action: "removeCloseListener",
+    });
+    if (await res.confirmed) {
+      await browser.tabs.update(origin.tabId, { url: origin.url });
+      addRedirectionLog(
+        `Go to origin: ${event}, source: ${source}`,
+        participantResource.name,
+        parseUrl(origin.url).name
+      );
+    }
   } catch (error) {
     // console.log(error.message);
   } finally {
