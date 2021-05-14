@@ -8,7 +8,7 @@ browser.runtime.onMessage.addListener((request) => {
   if (request.action === "display: snooze") {
     return renderProcrastinationContent(request.url);
   } else if (request.action === "display: encouragement") {
-    return renderLearningContent(request.countdown, request.shouldShowWelcome);
+    return renderLearningContent(request.shouldShowWelcome);
   } else if (request.action === "kill aiki") {
     removeOverlay();
     return new Promise((resolve) => {
@@ -112,11 +112,12 @@ function renderProcrastinationContent(url) {
   });
 }
 
-function renderLearningContent(countdown, shouldShowWelcome) {
+function renderLearningContent(shouldShowWelcome) {
   return new Promise((resolve) => {
     addCloseListener();
     function gotoOrigin(source) {
       removeCloseListener();
+      clearInterval(intervalRef);
       resolve({
         continue: true,
         endInjection: false,
@@ -126,15 +127,38 @@ function renderLearningContent(countdown, shouldShowWelcome) {
     }
 
     function endInjection() {
+      clearInterval(intervalRef);
       resolve({ continue: false, endInjection: true });
     }
 
+    let port = browser.extension.connect({
+      name: "Content Communication",
+    });
+    port.onMessage.addListener(function (msg) {
+      sync(msg);
+    });
+
+    async function sync(msg) {
+      if (msg.learningTimeRemaining <= 0) {
+        isReady = true;
+      }
+    }
+    let isReady = false;
+
+    let intervalRef = setInterval(() => {
+      port.postMessage("get: timer");
+    }, 1000);
+
+    function getReady() {
+      return isReady;
+    }
+
     LearningContent(
-      countdown,
       shouldShowWelcome,
       gotoOrigin,
       endInjection,
-      browser
+      browser,
+      getReady
     );
   });
 }
