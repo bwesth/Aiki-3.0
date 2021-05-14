@@ -1,5 +1,8 @@
+<!-- 
+  TODO: Description goes here
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
-  // Functional and module imports
   import storage from "../../../util/storage";
   import firebase from "../../../util/firebase";
   import { makeDate } from "../../../util/utilities";
@@ -150,6 +153,7 @@
   .inline {
     display: inline !important;
     width: 25%;
+    min-width: 55px;
     margin: 0px 5px 20px 0px;
   }
 

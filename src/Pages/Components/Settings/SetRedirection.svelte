@@ -41,7 +41,7 @@
     <div class="row">
       <div class="col-sm">Pick a theme:</div>
       <div class="col-sm" />
-      <div class="col-sm">
+      <div class="col-sm center">
         <ThemeSelector />
       </div>
     </div>
@@ -54,6 +54,11 @@
     align-items: center;
     justify-content: center;
     padding: 15px;
+  }
+
+  .center{
+    display: flex;
+    justify-content: center;
   }
 
   .btn-dark {

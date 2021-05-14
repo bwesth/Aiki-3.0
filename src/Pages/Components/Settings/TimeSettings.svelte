@@ -1,3 +1,7 @@
+<!-- 
+  TODO: Description goes here
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
   import storage from "../../../util/storage";
   import TimeSelector from "./TimeSelector.svelte";
@@ -24,7 +28,7 @@
 <style>
   p {
     padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
   }

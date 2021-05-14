@@ -1,5 +1,5 @@
 <!-- 
-
+  TODO: Description goes here
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
@@ -13,6 +13,7 @@
     faGlobe,
     faKeyboard,
     faTimes,
+    faPlusCircle
   } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
   import * as themes from "./util/toastThemes";
@@ -84,11 +85,6 @@
         theme: themes.successTheme(toastCoords),
       });
     } else {
-      //add rejection function here
-      // toast.pop();
-      // toast.push("Action canceled", {
-      //   theme: themes.infoTheme(toastCoords),
-      // }); // Lets do nothing, actually.
     }
   }
 
@@ -127,8 +123,7 @@
     <strong>NB:</strong> You can still visit these websites, Aiki will just be logging
     the amount of time you spend on them.
   </p>
-  <!-- Bootstrap Input field. -->
-  <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
+
   <form on:submit|preventDefault={addItem}>
     <div data-tooltip="Add to your list of procrastination sites">
       <div class="input-group mb-3">
@@ -143,7 +138,7 @@
         />
         <div class="input-group-append">
           <button id="add-button" class="btn btn-primary" type="submit"
-            >Add</button
+            ><Fa icon={faPlusCircle} /> Add Site</button
           >
         </div>
       </div>
