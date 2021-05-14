@@ -8,7 +8,7 @@
   export let ids;
 
   function parse(number) {
-    return number < 9 ? `0${number}` : number;
+    return number < 10 ? `0${number}` : number;
   }
 </script>
 
@@ -17,7 +17,10 @@
   <select
     selected={values[0]}
     id={ids[0]}
-    on:change={onChange}
+    on:change={(e) => {
+      values[0] = parseInt(e.target.value);
+      onChange(values);
+    }}
     class="custom-select custom-select-sm inline"
   >
     <optgroup label={labels[0]}>
@@ -26,11 +29,14 @@
       {/each}
     </optgroup>
   </select>
-<p>:</p>
+  <p>:</p>
   <!-- svelte-ignore a11y-no-onchange -->
   <select
     id={ids[1]}
-    on:change={onChange}
+    on:change={(e) => {
+      values[1] = parseInt(e.target.value);
+      onChange(values);
+    }}
     class="custom-select custom-select-sm inline"
   >
     <optgroup label={labels[1]}>

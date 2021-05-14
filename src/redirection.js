@@ -3,7 +3,7 @@ import { learningSites, participantResource } from "./util/constants";
 import firebase from "./util/firebase";
 import browser from "webextension-polyfill";
 import timer from "./timer";
-import { parseUrl, makeDate } from "./util/utilities";
+import { parseUrl, makeDate, parseTime } from "./util/utilities";
 
 let shouldShowWelcome = true;
 
@@ -132,8 +132,8 @@ async function redirect(details) {
 }
 
 async function checkActiveTime() {
-  const fromTime = await storage.activeTime.from.get();
-  const toTime = await storage.activeTime.to.get();
+  const fromTime = await storage.operatingHours.from.get();
+  const toTime = await storage.operatingHours.to.get();
   const date = makeDate();
   if (date.hours < fromTime.hrs) {
     return false;
@@ -286,7 +286,9 @@ async function gotoOrigin(event, source) {
   }
   const redirectionToggled = await storage.redirection.get();
   if (redirectionToggled) {
-    const rewardTime = await storage.timeSettings.rewardTime.get();
+    const rewardTime = parseTime.toSystem(
+      await storage.timeSettings.rewardTime.get()
+    );
     timer.startProcrastinationSession(checkActiveTab, rewardTime);
   }
 }

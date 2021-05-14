@@ -24,7 +24,7 @@ browser.runtime.onInstalled.addListener(({ reason }) => {
 async function installationSetup() {
   storage.clearStorage();
   storage.stats.init();
-  storage.activeTime.init();
+  storage.operatingHours.init();
   setTheme("light");
   storage.shouldRedirect.set(true);
   storage.redirection.toggle();

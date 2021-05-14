@@ -1,7 +1,7 @@
 import storage from "./util/storage";
 import browser from "webextension-polyfill";
 import badge from "./badge";
-import { parseTimerDown } from "./util/utilities";
+import { parseTimerDown, parseTime } from "./util/utilities";
 
 let learningTimeRemaining = 0;
 let learningTimeIntervalRef;
@@ -23,7 +23,7 @@ async function startLearningSession() {
   if (bonusTimeIntervalRef) stopBonusTime();
   if (learningTimeIntervalRef) clearInterval(learningTimeIntervalRef);
   badge.setBusy();
-  learningTimeRemaining = await storage.timeSettings.learningTime.get();
+  learningTimeRemaining = parseTime.toSystem(await storage.timeSettings.learningTime.get());
   badge.setText(parseTimerDown(learningTimeRemaining));
   learningTimeIntervalRef = setInterval(decrementLearningTime, 1000);
 }

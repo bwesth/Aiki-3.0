@@ -176,8 +176,8 @@ async function getUserTimes() {
 /**
  * @description Initializes the time settings in storage upon app installation. */
 function userTimeInit() {
-  setLearningTime(60000 * 5);
-  setRewardTime(60000 * 15);
+  setLearningTime({ min: 5, sec: 0 });
+  setRewardTime({ min: 15, sec: 0 });
 }
 
 /**
@@ -293,14 +293,14 @@ async function getAllStats() {
 // async function testStatsFlow() {
 //   await storage.set({ statsDate: new Date(2021, 5, 9).toDateString() });
 //   console.log(await storage.get("statsDate"))
-  // await storeSession({ theguardian: 60, sololearn: 60 });
-  // await incrContinueCount();
-  // await storage.set({ statsDate: new Date(2021, 5, 10).dateString });
-  // await storeSession({ theguardian: 60, sololearn: 60 });
-  // await incrContinueCount();
-  // await storage.set({ statsDate: new Date(2021, 5, 11).dateString });
-  // await storeSession({ theguardian: 60, sololearn: 60 });
-  // await incrContinueCount();
+// await storeSession({ theguardian: 60, sololearn: 60 });
+// await incrContinueCount();
+// await storage.set({ statsDate: new Date(2021, 5, 10).dateString });
+// await storeSession({ theguardian: 60, sololearn: 60 });
+// await incrContinueCount();
+// await storage.set({ statsDate: new Date(2021, 5, 11).dateString });
+// await storeSession({ theguardian: 60, sololearn: 60 });
+// await incrContinueCount();
 // }
 
 // testStatsFlow();
@@ -387,7 +387,12 @@ async function getActiveTimeTo() {
   return result.activeTo;
 }
 
-function activeTimeInit() {
+async function getAllActiveTimes() {
+  const result = await storage.get(["activeFrom", "activeTo"]);
+  return result;
+}
+
+function operatingHoursInit() {
   setActiveTimeFrom({ hrs: 8, min: 0 });
   setActiveTimeTo({ hrs: 21, min: 30 });
 }
@@ -415,9 +420,10 @@ export default {
     getAll: getAllStats,
     init: initializeStats,
   },
-  activeTime: {
+  operatingHours: {
     from: { get: getActiveTimeFrom, set: setActiveTimeFrom },
     to: { get: getActiveTimeTo, set: setActiveTimeTo },
-    init: activeTimeInit,
+    getAll: getAllActiveTimes,
+    init: operatingHoursInit,
   },
 };

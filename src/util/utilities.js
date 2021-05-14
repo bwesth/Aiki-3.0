@@ -122,8 +122,8 @@ export function parseTimerDownLong(milliseconds) {
 }
 
 export const parseTime = {
-  toHuman: (time) => {
-    return { min: Math.floor(time / 60 / 1000), sec: (time / 1000) % 60 };
+  toHumanReadableArray: (time) => {
+    return [ Math.floor(time / 60 / 1000), (time / 1000) % 60 ];
   },
 
   toSystem: (time) => {
