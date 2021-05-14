@@ -196,7 +196,7 @@
   }
 
   option:disabled {
-    background-color: lightgray;
-    color: darkgray;
+    background-color: whitesmoke;
+    color: lightgray;
   }
 </style>

@@ -23,12 +23,12 @@
 
 <style>
   p {
-    display: inline;
     padding: 0;
-    margin: 0px 5px 20px 0px;
+    margin-bottom: 1rem;
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
   }
+
   hr {
     background-color: var(--hrColor);
   }
