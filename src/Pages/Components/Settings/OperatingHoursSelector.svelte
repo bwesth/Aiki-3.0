@@ -114,7 +114,7 @@
 <!-- ActiveTo -->
 <div class="row">
   <div class="col-sm">
-    <p>Aiki will turn <strong>OFF</strong> at this time:</p>
+    <p class="header-p">Aiki will turn <strong>OFF</strong> at this time:</p>
   </div>
   <div class="col-sm" />
   <div class="col-sm">
@@ -127,7 +127,7 @@
           hrsTo = parseInt(e.target.value);
           setActiveTo();
         }}
-        class="custom-select custom-select-sm inline"
+        class="custom-select custom-select-sm inline style"
       >
         <optgroup label="Hours">
           {#each hourOptions as value}
@@ -148,7 +148,7 @@
           minTo = parseInt(e.target.value);
           setActiveTo();
         }}
-        class="custom-select custom-select-sm inline"
+        class="custom-select custom-select-sm inline style"
       >
         <optgroup label="Minutes">
           {#each minuteOptions as value}
@@ -187,7 +187,26 @@
     font-size: var(--fontSizeSettings);
   }
 
+  select,
+  optgroup,
+  option {
+    font-family: var(--fontContent);
+    font-size: 0.875rem;
+    color: #212121;
+  }
+
   option:disabled {
     background-color: lightgray;
+    color: darkgray;
+  }
+
+  select.style::-webkit-scrollbar-track {
+    border: rgb(180, 180, 180);
+    background-color: #ff6536;
+  }
+
+  select.style::-webkit-scrollbar-thumb {
+    background-color: #3677ef;
+    border: 1px solid rgb(193, 193, 193);
   }
 </style>
