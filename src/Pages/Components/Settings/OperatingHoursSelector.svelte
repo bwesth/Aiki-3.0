@@ -33,6 +33,11 @@
   }
 
   function setActiveFrom() {
+    if (hrsTo < hrsFrom) {
+      hrsTo = hrsFrom === 24 ? hrsFrom : hrsFrom + 1;
+
+      storage.operatingHours.from.set({ hrs: hrsTo, min: minTo });
+    }
     const setting = { hrs: hrsFrom, min: minFrom };
     storage.operatingHours.from.set(setting);
     firebase.addLog(

@@ -3,7 +3,6 @@
   import OperatingHoursSelector from "./OperatingHoursSelector.svelte";
   let operatingHours = storage.operatingHours.getAll();
   function update() {
-    console.log("STUFF");
     operatingHours = storage.operatingHours.getAll();
   }
 
