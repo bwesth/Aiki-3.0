@@ -28,7 +28,7 @@
 <style>
   p {
     padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     font-family: var(--fontContent);
     font-size: var(--fontSizeSettings);
   }

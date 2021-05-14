@@ -13,6 +13,7 @@
     faGlobe,
     faKeyboard,
     faTimes,
+    faPlusCircle
   } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
   import * as themes from "./util/toastThemes";
@@ -137,7 +138,7 @@
         />
         <div class="input-group-append">
           <button id="add-button" class="btn btn-primary" type="submit"
-            >Add</button
+            ><Fa icon={faPlusCircle} /> Add Site</button
           >
         </div>
       </div>
