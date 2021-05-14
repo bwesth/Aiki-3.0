@@ -236,7 +236,7 @@ async function storeSession(data) {
 }
 
 async function checkDate(statsDate) {
-  const date = new Date().toDateString;
+  const date = new Date().toDateString();
   console.log("inc: ", statsDate, "date: ", date);
   if (statsDate !== date) {
     console.log("Rolling over date");
