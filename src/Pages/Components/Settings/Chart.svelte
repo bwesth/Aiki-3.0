@@ -1,6 +1,6 @@
 <!-- This handles the data and drawing functions required to generate
   a pie chart for our statistics element in the Settings menu. Uses
-  'chart.js' module to do so.
+  'chart.js' module to do so: https://www.chartjs.org/
 Used in / Parent components: /src/Pages/Settings.svelte	
 -->
 <script>
@@ -14,16 +14,11 @@ Used in / Parent components: /src/Pages/Settings.svelte
   } from "@fortawesome/free-solid-svg-icons";
 
   export let stats;
-  //stats comes in in this format:
-  //stats = [ learnTime, procTime, completed, skips, snoozes, title ];
 
-  //Manually grabs the textcolor from global variables to plug into the graph.
-  //Here so the graph sticks to whatever theme is currently applied.
   let textColor = getComputedStyle(document.documentElement).getPropertyValue(
     "--textColor"
   );
 
-  //Generates our pie chart.
   function createPieChart() {
     var ctx = document.getElementById("pie-chart");
     let myChart = new Chart(ctx, {
@@ -38,8 +33,8 @@ Used in / Parent components: /src/Pages/Settings.svelte
           {
             backgroundColor: [
               //ORDER MATTERS
-              "#0077b6", //Blue
-              "#d00000", //Red
+              "#0077b6",
+              "#d00000",
             ],
             data: [
               //ORDER MATTERS
