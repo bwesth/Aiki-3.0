@@ -10,6 +10,7 @@ browser.runtime.onMessage.addListener((request) => {
   } else if (request.action === "display: encouragement") {
     return renderLearningContent(request.countdown, request.shouldShowWelcome);
   } else if (request.action === "kill aiki") {
+    removeOverlay();
     return new Promise((resolve) => {
       timer.stop();
       resolve({ continue: false, endInjection: true, snooze: false });
