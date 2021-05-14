@@ -1,55 +1,166 @@
 <script>
-  //Accepts two arrays of values and a third array of labels for said values.
-  export let firstValues;
-  export let secondValues;
-  export let labels;
-  export let values;
-  export let onChange;
-  export let ids;
+  // Functional and module imports
+  import storage from "../../../util/storage";
+  import firebase from "../../../util/firebase";
+  import { makeDate } from "../../../util/utilities";
 
-  function parse(number) {
+  let minuteOptions = Array.from({ length: 60 }, (_, i) => i); //Generates an array with values from 1->59
+  let secondsOptions = [0, 15, 30, 45];
+  export let settings;
+  export let update;
+  export let user;
+
+  let { min: learnMin, sec: learnSec } = settings.learningTime;
+  let { min: rewardMin, sec: rewardSec } = settings.rewardTime;
+
+  function parseNumberToTime(number) {
     return number < 10 ? `0${number}` : number;
+  }
+
+  function setLearningTime() {
+    const learningTime = { min: learnMin, sec: learnSec };
+    storage.timeSettings.learningTime.set(learningTime);
+    firebase.addLog(
+      {
+        user: user,
+        event: "User changed learning time in settings",
+        value: learningTime,
+        date: makeDate(),
+      },
+      "config"
+    );
+    update();
+  }
+
+  function setRewardTime() {
+    const rewardTime = { min: rewardMin, sec: rewardSec };
+    storage.timeSettings.rewardTime.set(rewardTime);
+    firebase.addLog(
+      {
+        user: user,
+        event: "User changed reward time in settings",
+        value: rewardTime,
+        date: makeDate(),
+      },
+      "config"
+    );
+    update();
   }
 </script>
 
-<div class="wrapper">
-  <!-- svelte-ignore a11y-no-onchange -->
-  <select
-    selected={values[0]}
-    id={ids[0]}
-    on:change={(e) => {
-      values[0] = parseInt(e.target.value);
-      onChange(values);
-    }}
-    class="custom-select custom-select-sm inline"
-  >
-    <optgroup label={labels[0]}>
-      {#each firstValues as value}
-        <option selected={value === values[0]} {value}>{parse(value)}</option>
-      {/each}
-    </optgroup>
-  </select>
-  <p>:</p>
-  <!-- svelte-ignore a11y-no-onchange -->
-  <select
-    id={ids[1]}
-    on:change={(e) => {
-      values[1] = parseInt(e.target.value);
-      onChange(values);
-    }}
-    class="custom-select custom-select-sm inline"
-  >
-    <optgroup label={labels[1]}>
-      {#each secondValues as value}
-        <option selected={value === values[1]} {value}>{parse(value)}</option>
-      {/each}
-    </optgroup>
-  </select>
+<!-- ActiveFrom -->
+<div class="row">
+  <div class="col-sm">
+    <p>Time spent learning:</p>
+  </div>
+  <div class="col-sm" />
+  <div class="col-sm">
+    <div class="wrapper">
+      <!-- svelte-ignore a11y-no-onchange -->
+      <select
+        selected={learnMin}
+        id="hrs"
+        on:change={(e) => {
+          learnMin = parseInt(e.target.value);
+          if (learnMin === 0 && learnSec < 30) learnSec = 30;
+          setLearningTime();
+        }}
+        class="custom-select custom-select-sm inline"
+      >
+        <optgroup label="Hours">
+          {#each minuteOptions as value}
+            <option selected={value === learnMin} {value}
+              >{parseNumberToTime(value)}</option
+            >
+          {/each}
+        </optgroup>
+      </select>
+      <p>:</p>
+      <!-- svelte-ignore a11y-no-onchange -->
+      <select
+        selected={learnSec}
+        id="min"
+        on:change={(e) => {
+          learnMin === 0 && parseInt(e.target.value) < 30
+            ? (learnSec = 30)
+            : (learnSec = parseInt(e.target.value));
+          setLearningTime();
+        }}
+        class="custom-select custom-select-sm inline"
+      >
+        <optgroup label="Minutes">
+          {#each secondsOptions as value}
+            <option selected={value === learnSec} {value}
+              >{parseNumberToTime(value)}</option
+            >
+          {/each}
+        </optgroup>
+      </select>
+      <p><small>{"Min/Sec"}</small></p>
+    </div>
+  </div>
+</div>
 
-  <p><small>{labels[2]}</small></p>
+<!-- ActiveTo -->
+<div class="row">
+  <div class="col-sm">
+    <p>Time you get on your procrastination sites in exchange:</p>
+  </div>
+  <div class="col-sm" />
+  <div class="col-sm">
+    <!-- svelte-ignore a11y-no-onchange -->
+    <div class="wrapper">
+      <select
+        selected={rewardMin}
+        id="hrs"
+        on:change={(e) => {
+          rewardMin = parseInt(e.target.value);
+          if (rewardMin === 0 && rewardSec < 30) rewardSec = 30;
+          setRewardTime();
+        }}
+        class="custom-select custom-select-sm inline"
+      >
+        <optgroup label="Hours">
+          {#each minuteOptions as value}
+            <option selected={value === rewardMin} {value}
+              >{parseNumberToTime(value)}</option
+            >
+          {/each}
+        </optgroup>
+      </select>
+      <p>:</p>
+      <!-- svelte-ignore a11y-no-onchange -->
+      <select
+        selected={rewardSec}
+        id="min"
+        on:change={(e) => {
+          rewardMin === 0 && parseInt(e.target.value) < 30
+            ? (rewardSec = 30)
+            : (rewardSec = parseInt(e.target.value));
+          setRewardTime();
+        }}
+        class="custom-select custom-select-sm inline"
+      >
+        <optgroup label="Minutes">
+          {#each secondsOptions as value}
+            <option selected={value === rewardSec} {value}
+              >{parseNumberToTime(value)}</option
+            >
+          {/each}
+        </optgroup>
+      </select>
+      <p><small>{"Min/Sec"}</small></p>
+    </div>
+  </div>
 </div>
 
 <style>
+  .inline {
+    display: inline !important;
+    width: 25%;
+    margin: 0px 5px 20px 0px;
+  }
+
   .wrapper {
     display: flex;
     flex-direction: row;
@@ -57,15 +168,15 @@
     align-items: center;
   }
 
-  .inline {
-    display: inline !important;
-    width: 25%;
-    margin: 0px 5px 20px 0px;
-  }
-
   p {
     display: inline;
     padding: 0;
     margin: 0px 5px 20px 0px;
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  option:disabled {
+    background-color: lightgray;
   }
 </style>
