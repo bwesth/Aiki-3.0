@@ -1,5 +1,5 @@
 <!-- 
-
+  TODO: Description goes here
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <script>
@@ -84,11 +84,6 @@
         theme: themes.successTheme(toastCoords),
       });
     } else {
-      //add rejection function here
-      // toast.pop();
-      // toast.push("Action canceled", {
-      //   theme: themes.infoTheme(toastCoords),
-      // }); // Lets do nothing, actually.
     }
   }
 
@@ -127,7 +122,7 @@
     <strong>NB:</strong> You can still visit these websites, Aiki will just be logging
     the amount of time you spend on them.
   </p>
-  
+
   <form on:submit|preventDefault={addItem}>
     <div data-tooltip="Add to your list of procrastination sites">
       <div class="input-group mb-3">

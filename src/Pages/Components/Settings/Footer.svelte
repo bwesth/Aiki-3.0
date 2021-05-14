@@ -1,5 +1,5 @@
 <!-- 
-
+  TODO: Description goes here
   Used in / Parent components: /src/Pages/Settings.svelte
  -->
 <footer>IT University of Copenhagen 2021</footer>
