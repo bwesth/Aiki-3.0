@@ -127,8 +127,7 @@
     <strong>NB:</strong> You can still visit these websites, Aiki will just be logging
     the amount of time you spend on them.
   </p>
-  <!-- Bootstrap Input field. -->
-  <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
+  
   <form on:submit|preventDefault={addItem}>
     <div data-tooltip="Add to your list of procrastination sites">
       <div class="input-group mb-3">

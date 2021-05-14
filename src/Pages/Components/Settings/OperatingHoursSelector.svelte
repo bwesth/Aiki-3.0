@@ -170,6 +170,7 @@
   .inline {
     display: inline !important;
     width: 25%;
+    min-width: 55px;
     margin: 0px 5px 20px 0px;
   }
 
