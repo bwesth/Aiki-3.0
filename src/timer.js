@@ -51,7 +51,6 @@ async function decrementRewardTime(callback) {
 async function startProcrastinationSession(callback, rewardTime) {
   stopLearningSession();
   stopBonusTime();
-  bonusTime = 0;
   rewardTimeRemaining = rewardTime;
   rewardTimeIntervalRef = setInterval(
     () => decrementRewardTime(callback),
@@ -90,6 +89,7 @@ function startBonusTime() {
 
 function stopBonusTime() {
   clearInterval(bonusTimeIntervalRef);
+  bonusTime = 0;
   bonusTimeIntervalRef = undefined;
 }
 

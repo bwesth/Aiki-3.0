@@ -118,7 +118,7 @@ async function getLearningUri() {
   let result = await storage.get("learningUri");
   if (result.learningUri) {
     return result.learningUri;
-  } else return `https://${participantResource.host}`
+  } else return `https://${participantResource.host}`;
 }
 
 // function setLearningUri (uri){
@@ -206,6 +206,7 @@ async function storeSession(data) {
     "sessionData",
     "statsDate",
   ]);
+  console.log("From storeSession: ", statsDate);
   await checkDate(statsDate);
   let newData = sessionData;
   if (
@@ -235,8 +236,10 @@ async function storeSession(data) {
 }
 
 async function checkDate(statsDate) {
-  const date = makeDate().dateString;
+  const date = new Date().toDateString;
+  console.log("inc: ", statsDate, "date: ", date);
   if (statsDate !== date) {
+    console.log("Rolling over date");
     await overWriteYesterday();
     await storage.set({ snoozeCount: 0 });
     await storage.set({ completedCount: 0 });
@@ -288,15 +291,16 @@ async function getAllStats() {
 }
 
 // async function testStatsFlow() {
-//   await storage.set({ statsDate: new Date(2010, 5, 9) });
-//   await storeSession({ theguardian: 60, sololearn: 60 });
-//   await incrContinueCount();
-//   await storage.set({ statsDate: new Date(2010, 5, 10) });
-//   await storeSession({ theguardian: 60, sololearn: 60 });
-//   await incrContinueCount();
-//   await storage.set({ statsDate: new Date(2010, 5, 11) });
-//   await storeSession({ theguardian: 60, sololearn: 60 });
-//   await incrContinueCount();
+//   await storage.set({ statsDate: new Date(2021, 5, 9).toDateString() });
+//   console.log(await storage.get("statsDate"))
+  // await storeSession({ theguardian: 60, sololearn: 60 });
+  // await incrContinueCount();
+  // await storage.set({ statsDate: new Date(2021, 5, 10).dateString });
+  // await storeSession({ theguardian: 60, sololearn: 60 });
+  // await incrContinueCount();
+  // await storage.set({ statsDate: new Date(2021, 5, 11).dateString });
+  // await storeSession({ theguardian: 60, sololearn: 60 });
+  // await incrContinueCount();
 // }
 
 // testStatsFlow();
