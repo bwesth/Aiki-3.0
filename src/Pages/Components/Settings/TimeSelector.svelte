@@ -67,7 +67,7 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Hours">
+        <optgroup label="Minutes">
           {#each minuteOptions as value}
             <option selected={value === learnMin} {value}
               >{parseNumberToTime(value)}</option
@@ -88,7 +88,7 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
+        <optgroup label="Seconds">
           {#each secondsOptions as value}
             <option selected={value === learnSec} {value}
               >{parseNumberToTime(value)}</option
@@ -120,7 +120,7 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Hours">
+        <optgroup label="Minutes">
           {#each minuteOptions as value}
             <option selected={value === rewardMin} {value}
               >{parseNumberToTime(value)}</option
@@ -141,7 +141,7 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
+        <optgroup label="Seconds">
           {#each secondsOptions as value}
             <option selected={value === rewardSec} {value}
               >{parseNumberToTime(value)}</option
