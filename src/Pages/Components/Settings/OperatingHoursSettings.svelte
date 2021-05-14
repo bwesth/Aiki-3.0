@@ -1,3 +1,7 @@
+<!-- 
+  TODO: Description goes here
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
   import storage from "../../../util/storage";
   import OperatingHoursSelector from "./OperatingHoursSelector.svelte";
