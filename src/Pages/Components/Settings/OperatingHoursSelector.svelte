@@ -1,11 +1,15 @@
+<!-- 
+  TODO: Description goes here
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
-  // Functional and module imports
   import storage from "../../../util/storage";
   import firebase from "../../../util/firebase";
   import { makeDate } from "../../../util/utilities";
 
   let hourOptions = Array.from({ length: 25 }, (_, i) => i);
   let minuteOptions = [0, 15, 30, 45];
+
   export let settings;
   export let update;
   export let user;
@@ -82,13 +86,11 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Hours">
-          {#each hourOptions as value}
-            <option selected={value === hrsFrom} {value}
-              >{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each hourOptions as value}
+          <option selected={value === hrsFrom} {value}
+            >{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p>:</p>
       <!-- svelte-ignore a11y-no-onchange -->
@@ -101,15 +103,13 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
-          {#each minuteOptions as value}
-            <option
-              disabled={hrsFrom === 0 && value === 0}
-              selected={value === minFrom}
-              {value}>{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each minuteOptions as value}
+          <option
+            disabled={hrsFrom === 0 && value === 0}
+            selected={value === minFrom}
+            {value}>{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p><small>{"Hrs/Min"}</small></p>
     </div>
@@ -119,7 +119,7 @@
 <!-- ActiveTo -->
 <div class="row">
   <div class="col-sm">
-    <p>Aiki will turn <strong>OFF</strong> at this time:</p>
+    <p class="header-p">Aiki will turn <strong>OFF</strong> at this time:</p>
   </div>
   <div class="col-sm" />
   <div class="col-sm">
@@ -134,15 +134,13 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Hours">
-          {#each hourOptions as value}
-            <option
-              disabled={hrsToDisabled(value)}
-              selected={value === hrsTo}
-              {value}>{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each hourOptions as value}
+          <option
+            disabled={hrsToDisabled(value)}
+            selected={value === hrsTo}
+            {value}>{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p>:</p>
       <!-- svelte-ignore a11y-no-onchange -->
@@ -155,15 +153,13 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
-          {#each minuteOptions as value}
-            <option
-              disabled={minToDisabled(value)}
-              selected={value === minTo}
-              {value}>{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each minuteOptions as value}
+          <option
+            disabled={minToDisabled(value)}
+            selected={value === minTo}
+            {value}>{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p><small>{"Hrs/Min"}</small></p>
     </div>
@@ -192,7 +188,15 @@
     font-size: var(--fontSizeSettings);
   }
 
+  select,
+  option {
+    font-family: var(--fontContent);
+    font-size: 0.875rem;
+    color: #212121;
+  }
+
   option:disabled {
     background-color: lightgray;
+    color: darkgray;
   }
 </style>
