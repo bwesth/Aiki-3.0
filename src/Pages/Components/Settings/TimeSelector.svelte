@@ -67,13 +67,11 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
-          {#each minuteOptions as value}
-            <option selected={value === learnMin} {value}
-              >{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each minuteOptions as value}
+          <option selected={value === learnMin} {value}
+            >{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p>:</p>
       <!-- svelte-ignore a11y-no-onchange -->
@@ -88,13 +86,11 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Seconds">
-          {#each secondsOptions as value}
-            <option selected={value === learnSec} {value}
-              >{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each secondsOptions as value}
+          <option selected={value === learnSec} {value}
+            >{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p><small>{"Min/Sec"}</small></p>
     </div>
@@ -120,13 +116,11 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Minutes">
-          {#each minuteOptions as value}
-            <option selected={value === rewardMin} {value}
-              >{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each minuteOptions as value}
+          <option selected={value === rewardMin} {value}
+            >{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p>:</p>
       <!-- svelte-ignore a11y-no-onchange -->
@@ -141,13 +135,11 @@
         }}
         class="custom-select custom-select-sm inline"
       >
-        <optgroup label="Seconds">
-          {#each secondsOptions as value}
-            <option selected={value === rewardSec} {value}
-              >{parseNumberToTime(value)}</option
-            >
-          {/each}
-        </optgroup>
+        {#each secondsOptions as value}
+          <option selected={value === rewardSec} {value}
+            >{parseNumberToTime(value)}</option
+          >
+        {/each}
       </select>
       <p><small>{"Min/Sec"}</small></p>
     </div>
@@ -176,7 +168,10 @@
     font-size: var(--fontSizeSettings);
   }
 
-  option:disabled {
-    background-color: lightgray;
+  select,
+  option {
+    font-family: var(--fontContent);
+    font-size: 0.875rem;
+    color: #212121;
   }
 </style>
