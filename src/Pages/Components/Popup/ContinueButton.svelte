@@ -4,9 +4,11 @@
  -->
 <script>
   /* Functional and module imports */
-  import storage from "../../../util/storage";
-  import Fa from "svelte-fa";
-  import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+  // Old code that might be removed.
+  // import storage from "../../../util/storage";
+  // import Fa from "svelte-fa";
+  // import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
+  //<Fa icon={faArrowAltCircleRight} />
 
   //export let siteName;
   export let gotoOrigin;
@@ -21,7 +23,7 @@
   on:click={handleClick}
   class="btn btn-success item"
   data-tooltip="Takes you back to your original procrastination site!"
-  ><Fa icon={faArrowAltCircleRight} /> Continue Procrastinating
+  >Continue <br />Procrastinating
 </button>
 
 <style>
