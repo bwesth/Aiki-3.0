@@ -23,7 +23,9 @@ async function startLearningSession() {
   if (bonusTimeIntervalRef) stopBonusTime();
   if (learningTimeIntervalRef) clearInterval(learningTimeIntervalRef);
   badge.setBusy();
-  learningTimeRemaining = parseTime.toSystem(await storage.timeSettings.learningTime.get());
+  learningTimeRemaining = parseTime.toSystem(
+    await storage.timeSettings.learningTime.get()
+  );
   badge.setText(parseTimerDown(learningTimeRemaining));
   learningTimeIntervalRef = setInterval(decrementLearningTime, 1000);
 }
@@ -104,7 +106,11 @@ async function checkActive() {
     if (currentTabs.length > 0) {
       const current = currentTabs[0];
       const origin = await storage.origin.get();
-      return current.id === origin?.tabId;
+      if (origin !== undefined) {
+        if (origin.tabId !== undefined) {
+          return current.id === origin.tabId;
+        }
+      }
     }
   } else {
     return false;

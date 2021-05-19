@@ -202,12 +202,9 @@ async function getShouldRedirect() {
 }
 
 async function storeSession(data) {
-  const { sessionData, statsDate } = await storage.get([
-    "sessionData",
-    "statsDate",
-  ]);
-  console.log("From storeSession: ", statsDate);
+  const { statsDate } = await storage.get("statsDate");
   await checkDate(statsDate);
+  const { sessionData } = await storage.get("sessionData");
   let newData = sessionData;
   if (
     !newData.hasOwnProperty("procrastinationDuration") ||

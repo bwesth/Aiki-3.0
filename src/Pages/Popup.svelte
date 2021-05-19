@@ -35,10 +35,18 @@
   port.onMessage.addListener(function (msg) {
     sync(msg);
   });
-  port.postMessage("get: timer");
+  try {
+    port.postMessage("get: timer");
+  } catch (error) {
+    console.error(error);
+  }
 
   let updateIntervalRef = setInterval(() => {
-    port.postMessage("get: timer");
+    try {
+      port.postMessage("get: timer");
+    } catch (error) {
+      console.error(error);
+    }
   }, 1000);
 
   async function setup() {
@@ -58,10 +66,14 @@
    * restoring the origin uri.
    */
   function gotoOrigin(type) {
-    port.postMessage("goto: origin: " + type);
-    origin = {};
-    // port.postMessage("get: timer");
-    location.reload();
+    try {
+      port.postMessage("goto: origin: " + type);
+      origin = {};
+      // port.postMessage("get: timer");
+      location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   setup();

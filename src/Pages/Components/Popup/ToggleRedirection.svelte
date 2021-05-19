@@ -14,12 +14,16 @@
   function toggleRedirection() {
     storage.redirection.toggle();
     toggled = !toggled;
-    if (!toggled) {
-      port.postMessage("goto: off");
-      location.reload();
-    } else {
-      port.postMessage("goto: on");
-      location.reload();
+    try {
+      if (!toggled) {
+        port.postMessage("goto: off");
+        location.reload();
+      } else {
+        port.postMessage("goto: on");
+        location.reload();
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 </script>
