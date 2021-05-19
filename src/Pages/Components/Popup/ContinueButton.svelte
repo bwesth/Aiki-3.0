@@ -8,7 +8,7 @@
   import Fa from "svelte-fa";
   import { faArrowAltCircleRight } from "@fortawesome/free-solid-svg-icons";
 
-  export let siteName;
+  //export let siteName;
   export let gotoOrigin;
 
   function handleClick() {
@@ -21,7 +21,7 @@
   on:click={handleClick}
   class="btn btn-success item"
   data-tooltip="Takes you back to your original procrastination site!"
-  ><Fa icon={faArrowAltCircleRight} /> Continue to {siteName}
+  ><Fa icon={faArrowAltCircleRight} /> Continue Procrastinating
 </button>
 
 <style>

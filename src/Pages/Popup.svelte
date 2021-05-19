@@ -102,7 +102,7 @@
         <ExtraLearningTime bonusTime={values.bonusTime} />
         <hr />
         <div class="container">
-          <ContinueButton {siteName} {gotoOrigin} />
+          <ContinueButton {gotoOrigin} />
         </div>
         <hr />
       {/if}
