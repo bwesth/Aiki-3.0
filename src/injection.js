@@ -1,7 +1,7 @@
 import browser from "webextension-polyfill";
 import { ProcrastinationWarning } from "./content/ProcrastinationWarning";
 import { LearningContent } from "./content/LearningContent";
-import { participantResource } from "./util/constants";
+import { ContentBlocker } from "./content/ContentBlocker";
 
 /* Listener for messages from background script. */
 browser.runtime.onMessage.addListener((request) => {
@@ -13,35 +13,15 @@ browser.runtime.onMessage.addListener((request) => {
     removeOverlay();
     return new Promise((resolve) => {
       timer.stop();
-      resolve({ continue: false, endInjection: true, snooze: false });
+      resolve({ action: "end injection" });
     });
-  } else if (request.action === "removeCloseListener") {
-    removeCloseListener();
-    return new Promise((resolve) => {
-      resolve({
-        continue: false,
-        endInjection: false,
-        snooze: false,
-        confirmed: true,
-      });
-    });
+  } else if (request.action === "inject blocker") {
+    console.log(request);
+    return renderContentBlocker();
+  } else if (request.action === "remove blocker") {
+    removeOverlay();
   }
 });
-
-function addCloseListener() {
-  window.addEventListener("beforeunload", closeListener);
-}
-
-function removeCloseListener() {
-  window.removeEventListener("beforeunload", closeListener);
-}
-
-function closeListener(e) {
-  if (location.host.includes(participantResource.name)) {
-    e.preventDefault();
-    e.returnValue = "";
-  }
-}
 
 /* This object contains countdown functionality including 
   functions to hasten and slow the countdown progress.
@@ -72,12 +52,6 @@ let timer = {
     timer.time = 5000;
     removeOverlay();
   },
-  slow: function () {
-    timer.slowed = true;
-  },
-  hasten: function () {
-    timer.slowed = false;
-  },
 };
 
 /**
@@ -87,7 +61,11 @@ let timer = {
 function removeOverlay() {
   try {
     const element = document.getElementById("aiki-overlay");
-    element.remove();
+    if (element.hasOwnProperty("remove")) element.remove();
+    const elements = document.getElementsByClassName("aiki-overlay");
+    if (elements.length > 0) {
+      for (let i = 0; elements.length; i++) elements[i].remove();
+    }
   } catch (error) {
     // console.log(error);
   }
@@ -104,7 +82,7 @@ function renderProcrastinationContent(url) {
     function snooze() {
       timer.stop();
       timer.time = 5000;
-      resolve({ msg: "Clicked", snooze: true });
+      resolve({ action: "snooze" });
       removeOverlay();
     }
 
@@ -114,13 +92,12 @@ function renderProcrastinationContent(url) {
 
 function renderLearningContent(shouldShowWelcome) {
   return new Promise((resolve) => {
-    addCloseListener();
+    // addCloseListener();
     function gotoOrigin(source) {
-      removeCloseListener();
+      // removeCloseListener();
       clearInterval(intervalRef);
       resolve({
-        continue: true,
-        endInjection: false,
+        action: "continue",
         source: source,
         uri: location.href,
       });
@@ -128,7 +105,7 @@ function renderLearningContent(shouldShowWelcome) {
 
     function endInjection() {
       clearInterval(intervalRef);
-      resolve({ continue: false, endInjection: true });
+      resolve({ action: "end injection" });
     }
 
     let port = browser.extension.connect({
@@ -161,4 +138,19 @@ function renderLearningContent(shouldShowWelcome) {
       getReady
     );
   });
+}
+
+function renderContentBlocker() {
+  const element = document.getElementById("aiki-overlay");
+  const elements = document.getElementsByClassName("aiki-overlay");
+  if (elements.length > 0 || element) {
+    l("Nothing injected");
+  } else {
+    return new Promise((resolve) => {
+      function gotoOriginTab() {
+        resolve({ action: "go to origin tab" });
+      }
+      ContentBlocker(gotoOriginTab, browser);
+    });
+  }
 }

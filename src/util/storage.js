@@ -373,15 +373,15 @@ function setActiveTimeFrom(value) {
   storage.set({ activeFrom: value });
 }
 async function getActiveTimeFrom() {
-  const result = await storage.get("activeFrom");
-  return result.activeFrom;
+  const { activeFrom } = await storage.get("activeFrom");
+  return activeFrom;
 }
 function setActiveTimeTo(value) {
   storage.set({ activeTo: value });
 }
 async function getActiveTimeTo() {
-  const result = await storage.get("activeTo");
-  return result.activeTo;
+  const { activeTo } = await storage.get("activeTo");
+  return activeTo;
 }
 
 async function getAllActiveTimes() {
@@ -392,6 +392,26 @@ async function getAllActiveTimes() {
 function operatingHoursInit() {
   setActiveTimeFrom({ hrs: 8, min: 0 });
   setActiveTimeTo({ hrs: 21, min: 30 });
+}
+
+async function addBlockedTabs(tab) {
+  const { blockedTabs } = await storage.get("blockedTabs");
+  if (blockedTabs) {
+    storage.set({ blockedTabs: [...blockedTabs, tab] });
+  } else {
+    storage.set({ blockedTabs: [tab] });
+  }
+}
+
+async function getBlockedTabs() {
+  const { blockedTabs } = await storage.get("blockedTabs");
+  if (blockedTabs) {
+    return blockedTabs;
+  } else return [];
+}
+
+function clearBlockedTabs() {
+  storage.remove("blockedTabs");
 }
 
 export default {
@@ -422,5 +442,10 @@ export default {
     to: { get: getActiveTimeTo, set: setActiveTimeTo },
     getAll: getAllActiveTimes,
     init: operatingHoursInit,
+  },
+  blockedTabs: {
+    get: getBlockedTabs,
+    add: addBlockedTabs,
+    clear: clearBlockedTabs,
   },
 };
