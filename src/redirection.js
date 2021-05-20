@@ -102,6 +102,7 @@ function addOriginUpdatedListener() {
 }
 
 function removeOriginUpdatedListener() {
+  "Removing originUpdatedListener";
   browser.tabs.onUpdated.removeListener(originUpdatedListener);
 }
 
@@ -189,7 +190,8 @@ async function onOriginRemoved(details) {
   const origin = await storage.origin.get();
   if (origin) {
     if (details === origin.tabId) {
-      removeOriginUpdatedListener(origin.tabId);
+      l("Origin killed");
+      removeOriginUpdatedListener();
       removeAllContentBlockers();
       storage.origin.remove();
       timer.stopBonusTime(); // Without this badge goes "Done". This is bad. Maybe I'll fix it later.
@@ -206,24 +208,28 @@ async function addLearningSiteLoadedListener() {
 }
 
 function removeLearningSiteLoadedListener() {
+  l("Removing Leaning site loaded listener");
   browser.webNavigation.onCompleted.removeListener(messageLearningResource);
   shouldShowWelcome = true;
 }
 
 async function messageLearningResource(details) {
   try {
-    const response = await browser.tabs.sendMessage(details.tabId, {
-      action: "display: encouragement",
-      countdown: timer.getTime().learningTimeRemaining,
-      shouldShowWelcome: shouldShowWelcome,
-    });
-    shouldShowWelcome = false;
-    if ((await response.action) === "continue") {
-      // storage.learningUri.set(response.uri);
-      gotoOrigin("continue", response.source);
-      removeLearningSiteLoadedListener();
-    } else if ((await response.action) === "end injection") {
-      removeLearningSiteLoadedListener();
+    const origin = await storage.origin.get();
+    if (!origin || origin.tabId === details.tabId) {
+      const response = await browser.tabs.sendMessage(details.tabId, {
+        action: "display: encouragement",
+        countdown: timer.getTime().learningTimeRemaining,
+        shouldShowWelcome: shouldShowWelcome,
+      });
+      shouldShowWelcome = false;
+      if ((await response.action) === "continue") {
+        // storage.learningUri.set(response.uri);
+        gotoOrigin("continue", response.source);
+        removeLearningSiteLoadedListener();
+      } else if ((await response.action) === "end injection") {
+        removeLearningSiteLoadedListener();
+      }
     }
   } catch (error) {
     // console.log(error);
@@ -304,19 +310,26 @@ async function checkTab(tab) {
 async function gotoOrigin(event, source) {
   await storage.stats[event]();
   const origin = await storage.origin.get();
-  removeOriginUpdatedListener(origin.tabId);
-  const learningTab = await browser.tabs.get(origin.tabId);
-  storage.learningUri.set(learningTab.url);
+  removeOriginUpdatedListener();
+  try {
+    const learningTab = await browser.tabs.get(origin.tabId);
+    storage.learningUri.set(learningTab.url);
+  } catch (error) {
+    l(error);
+  }
   await storage.shouldRedirect.set(false);
   storage.origin.remove();
-
-  await browser.tabs.update(origin.tabId, { url: origin.url });
-  removeAllContentBlockers();
-  addRedirectionLog(
-    `Go to origin: ${event}, source: ${source}`,
-    participantResource.name,
-    parseUrl(origin.url).name
-  );
+  try {
+    await browser.tabs.update(origin.tabId, { url: origin.url });
+    removeAllContentBlockers();
+    addRedirectionLog(
+      `Go to origin: ${event}, source: ${source}`,
+      participantResource.name,
+      parseUrl(origin.url).name
+    );
+  } catch (error) {
+    l(error);
+  }
 
   const redirectionToggled = await storage.redirection.get();
   if (redirectionToggled) {
