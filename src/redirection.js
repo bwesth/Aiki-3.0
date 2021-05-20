@@ -133,11 +133,11 @@ async function redirect(details) {
       const toggled = await storage.redirection.get();
       const shouldRedirect = await storage.shouldRedirect.get();
       if (toggled && shouldRedirect) {
+        l("ShouldRedirect", shouldRedirect);
         const origin = await storage.origin.get();
         l("Checking against this: ", origin);
         if (origin) {
           l(details);
-          storage.blockedTabs.add(details.tabId);
           addProcsiteLoadedListener();
         } else {
           timer.startLearningSession();
@@ -286,8 +286,8 @@ async function checkTab(tab) {
   const procListNames = procList.map((site) => site.name);
   if (procListNames.includes(tabSiteName)) {
     const origin = await storage.origin.get();
-    l("Checking against this: ", origin);
     if (origin) {
+      renderContentBlocker({ tabId: tab.id, frameId: 0 });
     } else {
       redirect({ frameId: 0, url: tab.url, tabId: tab.id });
     }
@@ -374,23 +374,23 @@ async function addRedirectionLog(event, from, to) {
   );
 }
 
-async function renderContentBlocker(details) {
-  l(details);
-  removeProcsiteLoadedListener();
-  try {
-    const result = await browser.tabs.sendMessage(details.tabId, {
-      action: "inject blocker",
-    });
-    if (result.action === "go to origin tab") {
-      const origin = await storage.origin.get();
-      browser.tabs.update(origin.tabId, { selected: true });
+function renderContentBlocker(details) {
+  if (details.frameId === 0) {
+    removeProcsiteLoadedListener();
+    storage.blockedTabs.add(details.tabId);
+    try {
+      l("Sending block request to content");
+      browser.tabs.sendMessage(details.tabId, {
+        action: "inject blocker",
+      });
+    } catch (error) {
+      // l(error);
     }
-  } catch (error) {
-    // l(error);
   }
 }
 
 function removeContentBlocker(tabId) {
+  l("Removing blocker on tab ", tabId);
   try {
     browser.tabs.sendMessage(tabId, { action: "remove blocker" });
   } catch (error) {
@@ -400,6 +400,7 @@ function removeContentBlocker(tabId) {
 
 async function removeAllContentBlockers() {
   const blockedTabs = await storage.blockedTabs.get();
+  l("Blocked tabs: ", blockedTabs);
   blockedTabs.forEach((tabId) => {
     removeContentBlocker(tabId);
   });
@@ -415,11 +416,7 @@ async function addProcsiteLoadedListener() {
 
 async function removeProcsiteLoadedListener() {
   l("Removing listener");
-  const filter = await createFilter();
-  browser.webNavigation.onCompleted.removeListener(
-    messageLearningResource,
-    filter
-  );
+  browser.webNavigation.onCompleted.removeListener(renderContentBlocker);
 }
 
 export default {

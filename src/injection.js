@@ -3,6 +3,8 @@ import { ProcrastinationWarning } from "./content/ProcrastinationWarning";
 import { LearningContent } from "./content/LearningContent";
 import { ContentBlocker } from "./content/ContentBlocker";
 
+const l = console.log;
+
 /* Listener for messages from background script. */
 browser.runtime.onMessage.addListener((request) => {
   if (request.action === "display: snooze") {
@@ -16,8 +18,9 @@ browser.runtime.onMessage.addListener((request) => {
       resolve({ action: "end injection" });
     });
   } else if (request.action === "inject blocker") {
-    console.log(request);
-    return renderContentBlocker();
+    console.log("Request: ", request);
+    l("Render blocking function should fire now");
+    renderContentBlocker();
   } else if (request.action === "remove blocker") {
     removeOverlay();
   }
@@ -59,12 +62,19 @@ let timer = {
  * @description Removes the aiki interception overlay
  * by searching for DOM elements with the name "aiki-overlay" and calling remove() on it/them.  */
 function removeOverlay() {
+  l("Removing aiki-overlay");
   try {
     const element = document.getElementById("aiki-overlay");
-    if (element.hasOwnProperty("remove")) element.remove();
+    l("Element: ", element);
+    if (element) {
+      element.remove();
+    }
     const elements = document.getElementsByClassName("aiki-overlay");
+    l("Elements: ", elements);
     if (elements.length > 0) {
-      for (let i = 0; elements.length; i++) elements[i].remove();
+      for (let i = 0; elements.length; i++) {
+        elements[i].remove();
+      }
     }
   } catch (error) {
     // console.log(error);
@@ -141,16 +151,13 @@ function renderLearningContent(shouldShowWelcome) {
 }
 
 function renderContentBlocker() {
-  const element = document.getElementById("aiki-overlay");
-  const elements = document.getElementsByClassName("aiki-overlay");
-  if (elements.length > 0 || element) {
-    l("Nothing injected");
-  } else {
-    return new Promise((resolve) => {
-      function gotoOriginTab() {
-        resolve({ action: "go to origin tab" });
-      }
-      ContentBlocker(gotoOriginTab, browser);
+  removeOverlay();
+    let port = browser.extension.connect({
+      name: "Content Communication",
     });
-  }
+    l("Injecting blocker");
+    function gotoOriginTab() {
+      port.postMessage("goto: originTab");
+    }
+    ContentBlocker(gotoOriginTab, browser);
 }

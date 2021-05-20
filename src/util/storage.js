@@ -397,7 +397,9 @@ function operatingHoursInit() {
 async function addBlockedTabs(tab) {
   const { blockedTabs } = await storage.get("blockedTabs");
   if (blockedTabs) {
-    storage.set({ blockedTabs: [...blockedTabs, tab] });
+    if (!blockedTabs.includes(tab)) {
+      storage.set({ blockedTabs: [...blockedTabs, tab] });
+    }
   } else {
     storage.set({ blockedTabs: [tab] });
   }

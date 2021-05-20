@@ -89,6 +89,11 @@ async function reviveAiki() {
   );
 }
 
+async function gotoOriginTab() {
+  const origin = await storage.origin.get();
+  browser.tabs.update(origin.tabId, { selected: true });
+}
+
 /* Add listener for incomming communication from extension options page runtime and extension popup runetime 
 
 case "user" means the user added or removed a user ID. This requires the logger interval to be reset, 
@@ -127,6 +132,8 @@ browser.extension.onConnect.addListener(function (port) {
       case "on":
         reviveAiki();
         break;
+      case "originTab":
+        gotoOriginTab();
     }
   });
 });
