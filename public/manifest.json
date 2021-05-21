@@ -1,7 +1,7 @@
   {
     "manifest_version": 2,
-    "name": "Aiki³ Phase 2",
-    "description": "Phase 2 of the Aiki³ research project.",
+    "name": "Aiki³ - The Lungu version",
+    "description": "Aiki³ specifically modified for Mircea Lungu",
     "version": "2.0.0",
     "icons": {
       "128": "/images/AikiLogo.png"

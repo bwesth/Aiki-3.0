@@ -4,7 +4,11 @@
  -->
 <script>
   // Functional and module imports
-  import { participantResource } from "../../../util/constants";
+  // import { participantResource } from "../../../util/constants";
+  import { parseUrl, makeDate } from "../../../util/utilities";
+  import Fa from "svelte-fa";
+  import { faSave } from "@fortawesome/free-solid-svg-icons";
+  import storage from "../../../util/storage";
 
   // Component imports
   import Container from "./Container.svelte";
@@ -12,22 +16,62 @@
   import OperatingHoursSettings from "./OperatingHoursSettings.svelte";
   import TimeSettings from "./TimeSettings.svelte";
 
+  let learningUri = storage.learningUri.get();
+  let inputValue = "";
   export let user = "";
 
+  async function changeValue() {
+    if (inputValue === "") {
+      return;
+    }
+    if (!inputValue.includes("https://")) {
+      inputValue = `https://${inputValue}`;
+    }
+    storage.learningUri.set(inputValue);
+    inputValue = "";
+    learningUri = storage.learningUri.get();
+  }
 </script>
 
 <Container headline="Redirection Settings">
-  <h5>Your Python Learning Platform:</h5>
+  <h6>Your Learning Platform:</h6>
   <hr />
   <div class="container">
-    <a href="https://{participantResource.host}"
-      ><button
-        type="button"
-        class="btn btn-dark"
-        data-tooltip="Go to your learning platform!"
-        >{participantResource.host}</button
-      ></a
-    >
+    {#await learningUri}
+      LOADING...
+    {:then learningResource}
+      <div class="change-site-setting">
+        <h4>Current learning URI:</h4>
+        <a href="{learningResource}"
+          ><button
+            type="button"
+            class="btn btn-dark"
+            data-tooltip="Go to your learning platform!"
+            >{learningResource}</button
+          ></a
+        >
+        <form on:submit|preventDefault={changeValue}>
+          <div data-tooltip="Change your learning resource.">
+            <div class="input-group mb-3">
+              <input
+                bind:value={inputValue}
+                id="addItem"
+                type="text"
+                class="form-control"
+                placeholder="Enter website here..."
+                aria-label=""
+                aria-describedby="basic-addon2"
+              />
+              <div class="input-group-append">
+                <button id="add-button" class="btn btn-primary" type="submit"
+                  ><Fa icon={faSave} /> Change Site</button
+                >
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    {/await}
   </div>
   <hr />
   <TimeSettings {user} />
@@ -56,7 +100,14 @@
     padding: 15px;
   }
 
-  .center{
+  .change-site-setting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .center {
     display: flex;
     justify-content: center;
   }
