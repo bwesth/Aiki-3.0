@@ -1,81 +1,143 @@
-<!-- This component is rendered as a block on the settings page for users to input their UID for logging purposes.-->
+<!-- This component is rendered as a block on the settings 
+  page for users to input their UID for logging purposes.
+  Used in / Parent components: /src/Pages/Settings.svelte
+-->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
-  import storage from '../../../util/storage'
-  import { logConfigEvent } from "../../../util/logger"
+  import Container from "./Container.svelte";
+  import storage from "../../../util/storage";
+  import firebase from "../../../util/firebase";
+  import { makeDate } from "../../../util/utilities";
+  import Fa from "svelte-fa";
+  import { faUserSlash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+  import { toast } from "@zerodevx/svelte-toast";
+  import * as themes from "./util/toastThemes";
 
   export let user = "";
   export let userIsRegistered;
+  export let port;
+  let toastCoords = { y: "id-input-field", x: "user-settings" };
 
-  function setup() {
-    storage.getUID(uid => {
-      user = uid
-      if (user!=="") {
-        userIsRegistered = true;
-      } else {
-        userIsRegistered = false;
-      }
-    });
+  async function setup() {
+    user = await storage.uid.get();
+    userIsRegistered = user !== "" ? true : false;
   }
-  
-  function confirmUID(){
-    const confirmation = confirm("Are you certain the user ID is correct?");
+
+  function confirmUid() {
+    const confirmation = confirm(
+      "Are you certain the provided email is correct?"
+    );
     if (confirmation) {
-      storage.setUID(user);
-      logConfigEvent({
-        user: user,
-        event: "Added user ID to storage"
-      })
+      storage.uid.set(user);
+      let date = makeDate();
+      firebase.addLog(
+        {
+          user: user,
+          event: "Added user ID to storage",
+          date: date,
+        },
+        "config"
+      );
       userIsRegistered = true;
+      port.postMessage(`Update: user`);
+      setTimeout(() => {
+        toast.push("User registered!", {
+          theme: themes.successTheme(toastCoords),
+        });
+      }, 500);
     }
   }
 
-  function resetUID() {
-    const confirmation = confirm("Are you certain you want to reset your UID?");
+  function resetUid() {
+    const confirmation = confirm(
+      "Are you certain you want to reset your email?"
+    );
     if (confirmation) {
-      logConfigEvent({
-        user: user,
-        event: "Reset user ID in storage"
-      })
-      storage.setUID("");
+      firebase.addLog(
+        {
+          user: user,
+          event: "Reset user ID in storage",
+          date: makeDate(),
+        },
+        "config"
+      );
+      storage.uid.set("");
       userIsRegistered = false;
       user = "";
-    } 
+      port.postMessage(`Update: user`);
+    }
   }
 
-  //We have to save user and userisregistered somewhere globally without losing them each time the page is reloaded...
   setup();
-
 </script>
 
-<h4>Register UID</h4>
-<SettingsContainer>
-    {#if userIsRegistered}
-      <p>Registered User ID: </p>
-      <input class="form-control" type="text" placeholder={user} readonly>
-      <button class="btn btn-danger" on:click={resetUID}>Reset User ID</button>
-    {:else}
-    <h5>Add your UID here so we can track your usage:</h5>
-    <hr>
-    <p><strong>Note:</strong> Please make sure you enter the correct UID provided to you by email. If you provide the incorrect one, your
-      data will become mixed up with another test participant.</p>
-    <p>Secondly, please note that you may be asked to re-enter your UID if you clear your cache or browser history, in order
-        for us to resume tracking.</p>
-    <p>If you have not recieved a UID, or have misplaced yours, contact <a href="mailto:aiki.itu.info@gmail.com">aiki.itu.info@gmail.com</a> for assistance</p>
+<Container id="user-settings" headline="Register Email">
+  {#if userIsRegistered}
+    <h5>Registered Email:</h5>
+    <input
+      id="id-input-field"
+      class="form-control"
+      type="text"
+      placeholder={user}
+      readonly
+    />
+    <button
+      class="btn btn-danger"
+      on:click={resetUid}
+      data-tooltip="Removes your email. 
+      WARNING: Aiki cannot log your activity if you do not provide it with an email."
+      ><Fa icon={faUserSlash} /> Remove Email</button
+    >
+  {:else}
+    <h5>Add your email here so we can log your activity:</h5>
+    <hr />
+    <p>
+      <strong>Note:</strong> Please make sure you enter the correct email you have
+      been using so far for the study. If you provide the incorrect one, your data
+      is likely to become mixed up with another participant.
+    </p>
+    <p>
+      Secondly, please note that you may be asked to re-enter your email if you
+      clear your cache or browser history, in order for us to resume logging.
+    </p>
+    <p>
+      If you have any questions or problems, contact <a
+        href="mailto:aiki.itu.info@gmail.com">aiki.itu.info@gmail.com</a
+      >
+      for assistance.
+    </p>
 
-    <hr>
+    <hr />
     <!-- Bootstrap Input field. -->
     <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
     <div class="input-group mb-3">
-      <input bind:value={user} type="text" class="form-control" placeholder="Enter your UID here..." aria-label="" aria-describedby="basic-addon2">
+      <input
+        bind:value={user}
+        type="text"
+        class="form-control"
+        placeholder="Enter your email here..."
+        aria-label=""
+        aria-describedby="basic-addon2"
+      />
       <div class="input-group-append">
-        <button on:click={confirmUID} class="btn btn-primary" type="button">Submit</button>
+        <button on:click={confirmUid} class="btn btn-primary" type="button"
+          ><Fa icon={faUserPlus} /> Submit</button
+        >
       </div>
     </div>
-    {/if}
-
-</SettingsContainer>
+  {/if}
+</Container>
 
 <style>
+  h5 {
+    font-family: var(--fontHeaders);
+  }
 
+  p {
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
+  }
 </style>

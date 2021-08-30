@@ -1,15 +1,74 @@
-<!-- This component is rendered as a block on the settings page to display a user's browsing statistics (if available).-->
-
+<!-- 
+  The main container for the statistics panel in the settings window.
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
-    import SettingsContainer from "./SettingsContainer.svelte";
+  // Functional and module imports
+  import storage from "../../../util/storage";
+
+  // Component imports
+  import Container from "./Container.svelte";
+  import ChartWrapper from "./ChartWrapper.svelte";
+
+  let type = "today";
+
+  let statistics = storage.stats.getAll();
+
+  function changeChart(newType) {
+    type = newType;
+    statistics = storage.stats.getAll();
+  }
 </script>
 
-<SettingsContainer>
-    <h3>Statistics</h3>
-    <hr>
-    <h5>Your stats will show up here as soon as you start using Aiki</h5>
-    <button>Start Using Aiki</button>
-</SettingsContainer>
+<Container headline="Statistics">
+  <h5>Your Statistics:</h5>
+  <hr />
+  <p>Here's how you use Aiki! (Updates every 5 minutes)</p>
+  {#await statistics}
+    <h1>Loading...</h1>
+  {:then data}
+    <ChartWrapper {type} {data} />
+    <div class="buttons">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("today")}>Today</button
+      >
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("yesterday")}>Yesterday</button
+      >
+      <button
+        type="button"
+        class="btn btn-secondary"
+        on:click={() => changeChart("history")}>All Time</button
+      >
+    </div>
+  {/await}
+</Container>
 
 <style>
+  h5 {
+    font-family: var(--fontHeaders);
+  }
+
+  p {
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
+  }
+
+  .btn {
+    margin: 10px;
+  }
+
+  .buttons {
+    display: flex;
+    widows: 100%;
+    justify-content: center;
+  }
 </style>

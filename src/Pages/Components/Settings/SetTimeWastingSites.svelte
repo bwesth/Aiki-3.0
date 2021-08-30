@@ -1,97 +1,240 @@
-<!-- This component is rendered as a block on the settings page for users to input their time wasting websites.-->
-
+<!-- 
+  TODO: Description goes here
+  Used in / Parent components: /src/Pages/Settings.svelte
+ -->
 <script>
-  import SettingsContainer from "./SettingsContainer.svelte";
-  import storage from "../../../util/storage"
-  import { logConfigEvent } from "../../../util/logger"
+  import Container from "./Container.svelte";
+  import storage from "../../../util/storage";
+  import firebase from "../../../util/firebase";
+  import { parseUrl, makeDate } from "../../../util/utilities";
+  import Fa from "svelte-fa";
+  import {
+    faTrashAlt,
+    faGlobe,
+    faKeyboard,
+    faTimes,
+    faPlusCircle
+  } from "@fortawesome/free-solid-svg-icons";
+  import { toast } from "@zerodevx/svelte-toast";
+  import * as themes from "./util/toastThemes";
 
   export let user = "";
+  export let port;
   $: list = [];
-  storage.getList(data => list = data);
+
+  let toastCoords = { y: "add-button", x: "site-input-container" };
+
+  async function setup() {
+    list = await storage.list.get();
+  }
+  setup();
   let addItemValue = "";
 
   function removeItem(index) {
-    logConfigEvent({
-      user: user,
-      event: "User removed procrastination site",
-      site: list[index]
-    })
-    let newList = [...list]
+    firebase.addLog(
+      {
+        user: user,
+        event: "User removed procrastination site",
+        site: list[index],
+        date: makeDate(),
+      },
+      "config"
+    );
+    let newList = [...list];
     newList.splice(index, 1);
     list = newList;
-    storage.setList(list);
+    storage.list.set(list);
+    port.postMessage(`Update: list`);
+    toast.pop();
+    toast.push("Website removed!", {
+      theme: themes.successTheme(toastCoords),
+    });
   }
 
-  function addItem() {
-    let site = parseURL(addItemValue)
-    //Need some defensive checking here. Is a website, empty strings, already on list, etc.
-    let newList = [...list]
-    newList.push(site)
-    list = newList;
-    storage.setList(list);
-    logConfigEvent({
-      user: user,
-      event: "User added procrastination site",
-      site: site
-    })
+  async function addItem() {
+    if (addItemValue === "") {
+      return;
+    }
+    let site = parseUrl(addItemValue);
+    if (list.find((item) => item.name == site.name)) {
+      toast.pop();
+      toast.push("Website already in list.", {
+        theme: themes.infoTheme(toastCoords),
+      });
+      return;
+    }
+    let status = await pingSite(site.host);
+    if (status) {
+      let newList = [...list];
+      newList.push(site);
+      list = newList;
+      storage.list.set(list);
+      firebase.addLog(
+        {
+          user: user,
+          event: "User added procrastination site",
+          site: site,
+          date: makeDate(),
+        },
+        "config"
+      );
+      port.postMessage(`Update: list`);
+      addItemValue = "";
+      toast.pop();
+      toast.push("New Website Added!", {
+        theme: themes.successTheme(toastCoords),
+      });
+    } else {
+    }
   }
 
-  function parseURL(site){
-    let host = site.includes("http") ? site.split("/")[2] : site.split("/")[0];
-    let name = site.includes("www") ? site.split(".")[1] : site;
-    return {host: host, name: name}
+  function pingSite(site) {
+    return new Promise(function (resolve, reject) {
+      let link = document.createElement("img");
+      link.src = `https://${site}/favicon.ico`;
+      link.style = "display: none;";
+      link.onload = function () {
+        resolve(true);
+      };
+      link.onerror = function () {
+        const confirmation = confirm(`
+          We could not get the icon from https://${site}/. This either means the website does not exist, or it may not be an issue at all.\n
+          Be sure to check the spelling or copy-paste the website address into the input field. \n
+          If you are certain it is correct, click "yes"`);
+        confirmation ? resolve(true) : resolve(false);
+      };
+      document.body.appendChild(link);
+    });
   }
-  // console.log(parseURL("https://www.reddit.com/r/YouShouldKnow/comments/lwv8ip/ysk_the_fcc_just_approved_a_50_a_month_subsidy/"))
 
+  function firstLetterUppercase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 </script>
 
-<h4>Set Time Wasting Sites</h4>
-<SettingsContainer>
-    <h5>Add your Time Wasting Sites here:</h5>
-    <hr>
-    <p>Type in pages you feel like you spend a little too much time 
-      on here (e.g. facebook.com, reddit.com):</p>
-    <p><strong>NB:</strong> You can still visit these websites, we will just be tracking
-      the amount of time you spend on them.</p>
-    <!-- Bootstrap Input field. -->
-    <!-- https://getbootstrap.com/docs/4.0/components/input-group/ -->
-    <!-- Important functionality needed here! -->
-    <form on:submit|preventDefault={addItem}>
+<Container id="site-input-container" headline="Set Time Wasting Sites">
+  <h5>Add your Time Wasting Sites here:</h5>
+  <hr />
+  <p>
+    Type in pages you feel like you spend a little too much time on here (e.g:
+    www.facebook.com, www.reddit.com, 9gag.com).
+  </p>
+  <p>
+    <strong>NB:</strong> You can still visit these websites, Aiki will just be logging
+    the amount of time you spend on them.
+  </p>
+
+  <form on:submit|preventDefault={addItem}>
+    <div data-tooltip="Add to your list of procrastination sites">
       <div class="input-group mb-3">
-        <input bind:value={addItemValue} type="text" class="form-control" placeholder="Enter a time wasting site here..." aria-label="" aria-describedby="basic-addon2">
+        <input
+          bind:value={addItemValue}
+          id="addItem"
+          type="text"
+          class="form-control"
+          placeholder="Enter a time wasting site here..."
+          aria-label=""
+          aria-describedby="basic-addon2"
+        />
         <div class="input-group-append">
-          <button class="btn btn-primary" type="submit">Add</button>
+          <button id="add-button" class="btn btn-primary" type="submit"
+            ><Fa icon={faPlusCircle} /> Add Site</button
+          >
         </div>
       </div>
-    </form>
+    </div>
+  </form>
 
-    <!-- Insert bootstrap table thing here -->
-    <!-- Need to somehow create functionality tying this table to the above input. Aiki has some very impressive
-    functionality here that would be nice to mimic. -->
-    <table class="table">
-      <thead class="thead-light ">
+  {#if list.length > 0}
+    <table>
+      <thead>
         <tr>
-          <th scope="col">Page Name</th>
-          <th scope="col">Page URL</th>
-          <th scope="col">Remove Site from List</th>
+          <th scope="col"><Fa icon={faKeyboard} /> Page Name</th>
+          <th scope="col"><Fa icon={faGlobe} /> Page URL</th>
+          <th scope="col" style="text-align: center"
+            ><Fa icon={faTrashAlt} /> Remove Site</th
+          >
         </tr>
       </thead>
       <tbody>
         {#each list as item, index}
           <tr>
-            <!-- Basically need to find a way to inject rows, handle large amounts of sites, and add functionality
-            to certain buttons in the row. -->
-            <th scope="row">{item.name}</th>
-            <td>{item.host}</td>
-            <td><button on:click={() => removeItem(index)} type="button" class="btn btn-danger">X</button></td>
+            <th scope="row"
+              ><img
+                class="webFavicon"
+                src={`https://${item.host}/favicon.ico`}
+                alt="Favicon"
+                on:error={(event) => event.target.remove()}
+              />
+              {firstLetterUppercase(item.name)}
+            </th>
+            <td class="hostName">
+              {item.host}
+            </td>
+            <td style="text-align: center">
+              <div
+                data-tooltip="Remove this site from the list."
+                on:click={() => removeItem(index)}
+              >
+                <Fa icon={faTimes} primaryColor="red" />
+              </div>
+            </td>
           </tr>
         {/each}
       </tbody>
     </table>
-
-    <!-- Add pagination for more than 10 sites? -->
-
-</SettingsContainer>
+  {/if}
+  <!-- Add pagination for more than 10 sites? -->
+</Container>
 
 <style>
+  table {
+    width: 100%;
+  }
+
+  thead {
+    padding: 20px;
+    color: var(--textColor);
+    background-color: var(--theadBackgroundColor);
+  }
+
+  th {
+    color: var(--textColor);
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+    border-bottom: 1px solid var(--hrColor);
+    border-top: 1px solid var(--hrColor);
+    padding: 15px;
+  }
+
+  td {
+    font-size: var(--fontSizeSettings);
+    color: var(--textColor);
+    border-bottom: 1px solid var(--hrColor);
+    font-family: var(--fontContent);
+    padding: 15px;
+  }
+
+  td.hostName {
+    font-family: "Lucida Console", "Courier New", monospace;
+  }
+
+  h5 {
+    font-family: var(--fontHeaders);
+  }
+
+  p {
+    font-family: var(--fontContent);
+    font-size: var(--fontSizeSettings);
+  }
+
+  hr {
+    background-color: var(--hrColor);
+  }
+
+  .webFavicon {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 10px;
+  }
 </style>

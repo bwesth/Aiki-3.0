@@ -1,88 +1,141 @@
-<!-- Popup component that is painted when user clicks the extension icon in chrome extensions menu -->
-<!-- To begin with, the popup will only have a settings button for the logger. -->
-
+<!-- 
+  This popup is displayed when the user clicks on the extension icon on the toolbar.
+  Used in / Parent components: /src/App.svelte
+ -->
 <script>
-import storage from '../util/storage'
-import {logConfigEvent} from "../util/logger"
+  /* Functional and module imports */
+  import { parseUrl } from "../util/utilities";
+  import storage from "../util/storage";
+  import browser from "webextension-polyfill";
 
-$: redirectionToggled = false;
-storage.getRedirectionToggled((toggled) => redirectionToggled = toggled)
+  /* Components import */
+  import Header from "./Components/Popup/Header.svelte";
+  import SettingsButton from "./Components/Popup/SettingsButton.svelte";
+  import ToggleRedirection from "./Components/Popup/ToggleRedirection.svelte";
+  import ContinueButton from "./Components/Popup/ContinueButton.svelte";
+  import SkipButton from "./Components/Popup/SkipButton.svelte";
+  import LearningTimeLeft from "./Components/Popup/LearningTimeLeft.svelte";
+  import ProcTimeLeft from "./Components/Popup/ProcTimeLeft.svelte";
+  import ExtraLearningTime from "./Components/Popup/ExtraLearningTime.svelte";
 
-function toggleRedirection(){
-  storage.getUID((user) => logConfigEvent({
-      user: user,
-      event: `User toggled retirection ${redirectionToggled ? 'on' : "off"}`
-    })
-  )
-    storage.toggleRedirection()
-}
+  const port = browser.extension.connect({
+    name: "Popup Communication",
+  });
 
-/* Opens a new tab with settings page and selects it */
-  function openSettingsPage () {
-    chrome.management.getSelf(result => {
-          chrome.tabs.create({
-              active: true,
-              url: result.optionsUrl
-          })
-      })
+  let siteName = "";
+  let origin = {};
+
+  let timeValues = new Promise((resolve) => {});
+
+  function sync(res) {
+    timeValues = new Promise((resolve) => {
+      resolve(res);
+    });
   }
+  port.onMessage.addListener(function (msg) {
+    sync(msg);
+  });
+  try {
+    port.postMessage("get: timer");
+  } catch (error) {
+    console.error(error);
+  }
+
+  let updateIntervalRef = setInterval(() => {
+    try {
+      port.postMessage("get: timer");
+    } catch (error) {
+      console.error(error);
+    }
+  }, 1000);
+
+  async function setup() {
+    origin = await storage.origin.get();
+  }
+
+  $: if (origin) {
+    if (origin.url) {
+      siteName = parseUrl(origin.url).name;
+    }
+  }
+
+  /**
+   * @function
+   * @description Sends a message to the background script for intepretation.
+   * Background script will initiate a tab update on the tab that triggered a redirection,
+   * restoring the origin uri.
+   */
+  function gotoOrigin(type) {
+    try {
+      port.postMessage("goto: origin: " + type);
+      origin = {};
+      // port.postMessage("get: timer");
+      location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  setup();
 </script>
 
 <main>
-  <div class="popup">
-    <!-- Using bootstraps grid layout here. -->
-    <!-- https://getbootstrap.com/docs/4.0/layout/grid/ -->
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <img src='images/aikido.png' class="popupLogo" alt="logo" />
+  <Header />
+  <SettingsButton />
+  <hr />
+  <ToggleRedirection {port} />
+  <hr />
+  {#await timeValues}
+    LOADING
+  {:then values}
+    {#if siteName !== ""}
+      {#if values.learningTimeRemaining > 0}
+        <LearningTimeLeft
+          learningTimeRemaining={values.learningTimeRemaining}
+        />
+        <hr />
+        <div class="container">
+          <SkipButton {gotoOrigin} />
         </div>
-        <div class="col-6">
-          <h5>Aiki</h5>
+        <hr />
+      {:else}
+        <ExtraLearningTime bonusTime={values.bonusTime} />
+        <hr />
+        <div class="container">
+          <ContinueButton {gotoOrigin} />
         </div>
-      </div>
-    </div>
-
-    <hr> 
-
-    <!-- Open settings page -->
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <p>Settings:</p>
-        </div>
-        <div class="col-6">
-          <button type="default" class="btn btn-primary" on:click={openSettingsPage}>Click Me</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-  <div class="custom-control custom-switch">
-    <input bind:checked="{redirectionToggled}" on:change={toggleRedirection} type="checkbox" class="custom-control-input" id="customSwitch1">
-    <label class="custom-control-label" for="customSwitch1">Toggle Aiki redirection</label>
-  </div>
+        <hr />
+      {/if}
+    {:else}
+      <ProcTimeLeft rewardTimeRemaining={values.rewardTimeRemaining} />
+      <hr />
+    {/if}
+  {/await}
 </main>
 
 <style>
-  .popup {
-    padding: 5px;
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
   }
 
   hr {
-    height:1px;
-    border-width:0;
-    color:gray;
-    background-color:gray;
+    color: var(--hrColor);
+    background-color: var(--hrColor);
+    height: 1px;
+    border-width: 0;
     width: 90%;
+    margin: 10px 10px;
   }
 
   main {
-    background-color:#282C34;
-    color: white;
+    font-family: var(--fontHeaders);
+    background-color: var(--backgroundColorSecondary);
+    color: var(--textColor);
     text-align: center;
-    height:fit-content;
-    width:250px;
+    height: fit-content;
+    width: 220px;
   }
-  
 </style>

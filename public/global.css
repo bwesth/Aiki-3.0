@@ -1,63 +1,177 @@
-html, body {
-	position: relative;
-	width: 100%;
-	height: 100%;
+/* Trying to control all CSS from here now rather than across components. */
+/* Want to use variables and apply them to components from this file. */
+
+/* GLOBAL CSS VARIABLES ------------------------- */
+:root {
+  /* UNIVERSAL RULES */
+  /* Fonts */
+  --fontHeaders: "Roboto", sans-serif;
+  --fontContent: "Lato", sans-serif;
+  --fontSizeSettings: 16px;
+  --fontSizePopup: 14px;
+  /* Toasts */
+  --toastContainerTop: 0;
+  --toastContainerRight: auto;
+  --toastContainerBottom: auto;
+  --toastContainerLeft: 0;
+
+  /* LIGHT MODE THEME */
+  /* Colours - Content */
+  --textColor: #444444;
+  --backgroundColorPrimary: #f0f2f5;
+  --backgroundColorSecondary: #ffffff;
+  --borderColor: #aaaaaa;
+  /* Colours - Banners */
+  --bannerTextColor: #ffffff;
+  --bannerBackgroundColor: #282c34;
+  /* Colours - Misc */
+  --hrColor: #d3d3d3;
+  --footerBackgroundColor: #e8ecf3;
+  --theadBackgroundColor: #aaaaaa;
+}
+
+/* OTHER STYLING -------------------------------- */
+html,
+body {
+  width: 100%;
+  height: 100%;
 }
 
 body {
-	color: #333;
-	margin: 0;
-	padding: 8px;
-	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 a {
-	color: rgb(0,100,200);
-	text-decoration: none;
+  color: rgb(0, 100, 200);
+  text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 a:visited {
-	color: rgb(0,80,160);
+  color: rgb(0, 80, 160);
 }
 
-label {
-	display: block;
-}
-
-input, button, select, textarea {
-	font-family: inherit;
-	font-size: inherit;
-	-webkit-padding: 0.4em 0;
-	padding: 0.4em;
-	margin: 0 0 0.5em 0;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 2px;
+input,
+button,
+select,
+textarea {
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 input:disabled {
-	color: #ccc;
-}
-
-button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
+  color: #ccc;
 }
 
 button:disabled {
-	color: #999;
+  color: #999;
 }
 
 button:not(:disabled):active {
-	background-color: #ddd;
+  background-color: #ddd;
 }
 
 button:focus {
-	border-color: #666;
+  border-color: #666;
+}
+
+/* SCROLLBAR --------------------------------- */
+/* Variables */
+html {
+  --scrollbarBG: #cfd8dc;
+  --thumbBG: #90a4ae;
+}
+/* Style */
+body::-webkit-scrollbar {
+  width: 11px;
+}
+
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+
+/* TOOLTIPS ---------------------------------- */
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  display: block;
+}
+
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s ease-out;
+  transform: translate(-50%, 5px);
+}
+
+[data-tooltip]:before {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-bottom: 5px;
+  padding: 7px;
+  width: 90%;
+  min-width: 70px;
+  max-width: 250px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  font-family: var (--fontContent);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+  transition: 0.3s ease-out;
+  transition-delay: 0.5s;
+}
+
+[data-tooltip]:after {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  width: 0;
+  border-top: 5px solid #000;
+  border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  content: " ";
+  font-size: 0;
+  line-height: 0;
+  transition-delay: 0.5s;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+[data-tooltip="false"]:hover:before,
+[data-tooltip="false"]:hover:after {
+  visibility: hidden;
+  opacity: 0;
 }
