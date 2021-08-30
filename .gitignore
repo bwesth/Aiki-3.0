@@ -1,4 +1,4 @@
 /node_modules/
 /public/build/
-
+.secret
 .DS_Store
