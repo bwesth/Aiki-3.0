@@ -5,7 +5,7 @@
 <script>
   import Container from "./Container.svelte";
   import storage from "../../../util/storage";
-  import firebase from "../../../util/firebase";
+  import API from "../../../util/API";
   import { makeDate } from "../../../util/utilities";
   import Fa from "svelte-fa";
   import { faUserSlash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
@@ -29,7 +29,7 @@
     if (confirmation) {
       storage.uid.set(user);
       let date = makeDate();
-      firebase.addLog(
+      API.addLog(
         {
           user: user,
           event: "Added user ID to storage",
@@ -52,7 +52,7 @@
       "Are you certain you want to reset your email?"
     );
     if (confirmation) {
-      firebase.addLog(
+      API.addLog(
         {
           user: user,
           event: "Reset user ID in storage",

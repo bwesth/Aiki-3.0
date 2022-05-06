@@ -5,7 +5,7 @@
 <script>
   import Container from "./Container.svelte";
   import storage from "../../../util/storage";
-  import firebase from "../../../util/firebase";
+  import API from "../../../util/API";
   import { parseUrl, makeDate } from "../../../util/utilities";
   import Fa from "svelte-fa";
   import {
@@ -31,7 +31,7 @@
   let addItemValue = "";
 
   function removeItem(index) {
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: "User removed procrastination site",
@@ -69,7 +69,7 @@
       newList.push(site);
       list = newList;
       storage.list.set(list);
-      firebase.addLog(
+      API.addLog(
         {
           user: user,
           event: "User added procrastination site",

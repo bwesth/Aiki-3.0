@@ -4,7 +4,7 @@
  -->
 <script>
   import storage from "../../../util/storage";
-  import firebase from "../../../util/firebase";
+  import API from "../../../util/API";
   import { makeDate } from "../../../util/utilities";
 
   let minuteOptions = Array.from({ length: 60 }, (_, i) => i); //Generates an array with values from 1->59
@@ -23,7 +23,7 @@
   function setLearningTime() {
     const learningTime = { min: learnMin, sec: learnSec };
     storage.timeSettings.learningTime.set(learningTime);
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: "User changed learning time in settings",
@@ -38,7 +38,7 @@
   function setRewardTime() {
     const rewardTime = { min: rewardMin, sec: rewardSec };
     storage.timeSettings.rewardTime.set(rewardTime);
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: "User changed reward time in settings",

@@ -5,7 +5,7 @@ import redirection from "./redirection";
 import timer from "./timer";
 import { setTheme } from "./util/themes";
 import badge from "./badge";
-import firebase from "./util/firebase";
+import API from "./util/API";
 import { makeDate } from "./util/utilities";
 import { participantResource } from "./util/constants";
 
@@ -66,7 +66,7 @@ async function killAiki() {
   timer.killAiki();
   badge.remove();
   const user = await storage.uid.get();
-  firebase.addLog(
+  API.addLog(
     {
       user: user,
       event: "User toggled redirection off",
@@ -79,7 +79,7 @@ async function killAiki() {
 async function reviveAiki() {
   redirection.checkActiveTab();
   const user = await storage.uid.get();
-  firebase.addLog(
+  API.addLog(
     {
       user: user,
       event: "User toggled redirection on",

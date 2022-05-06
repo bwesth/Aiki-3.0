@@ -4,7 +4,7 @@
  -->
 <script>
   import storage from "../../../util/storage";
-  import firebase from "../../../util/firebase";
+  import API from "../../../util/API";
   import { makeDate } from "../../../util/utilities";
 
   let hourOptions = Array.from({ length: 25 }, (_, i) => i);
@@ -24,7 +24,7 @@
   function setActiveTo() {
     const setting = { hrs: hrsTo, min: minTo };
     storage.operatingHours.to.set(setting);
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: "User changed operating hours in settings",
@@ -44,7 +44,7 @@
     }
     const setting = { hrs: hrsFrom, min: minFrom };
     storage.operatingHours.from.set(setting);
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: "User changed operating hours in settings",

@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 import storage from "./util/storage";
-import firebase from "./util/firebase";
+import API from "./util/API";
 import { parseUrl, makeDate } from "./util/utilities";
 import { learningSites } from "./util/constants";
 
@@ -91,7 +91,7 @@ function storeData(data) {
   if (user) {
     storage.stats.storeSession(data);
     const entry = { data: data, user: user, date: makeDate() };
-    firebase.addLog(entry, "session");
+    API.addLog(entry, "session");
   }
 }
 

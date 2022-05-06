@@ -1,6 +1,6 @@
 import storage from "./util/storage";
 import { learningSites, participantResource } from "./util/constants";
-import firebase from "./util/firebase";
+import API from "./util/API";
 import browser from "webextension-polyfill";
 import timer from "./timer";
 import { parseUrl, makeDate, parseTime } from "./util/utilities";
@@ -17,7 +17,7 @@ async function addMirceaListener() {
 
   async function mirceaListener(details) {
     const user = await storage.uid.get();
-    firebase.addLog(
+    API.addLog(
       {
         user: user,
         event: `User went to ${details.url}`,
@@ -374,7 +374,7 @@ async function talkToContent(tabId, url, originUrl) {
 async function addRedirectionLog(event, from, to) {
   const user = await storage.uid.get();
   const timeSettings = await storage.timeSettings.getAll();
-  firebase.addLog(
+  API.addLog(
     {
       user: user,
       event: event,
