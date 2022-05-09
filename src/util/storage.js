@@ -177,7 +177,7 @@ async function getUserTimes() {
  * @description Initializes the time settings in storage upon app installation. */
 function userTimeInit() {
   setLearningTime({ min: 5, sec: 0 });
-  setRewardTime({ min: 15, sec: 0 });
+  setRewardTime({ min: 5, sec: 0 });
 }
 
 /**
