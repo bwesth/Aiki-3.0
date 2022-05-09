@@ -8,10 +8,11 @@ const definition = {
     status: "status",
     start: "start",
     end: "end",
+    user: "user"
   },
 };
 
-const statusTypes = {
+const statusNames = {
   started: "started",
   skipped: "skipped",
   completed: "completed",
@@ -22,8 +23,10 @@ export function createSession() {
   const Session = Parse.Object.extend(definition.name);
   Session.set(definition.fields.from, from);
   Session.set(definition.fields.to, to);
-  Session.set(definition.fields.status, statusTypes.started);
+  Session.set(definition.fields.status, statusNames.started);
   Session.set(definition.fields.start, new Date());
-  Session.set(definition.fields.end, new Date());
+  Session.set(definition.fields.end, {});
+  Session.set(definition.fields.user, Parse.User.current())
+
   return Session;
 }

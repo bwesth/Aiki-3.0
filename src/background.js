@@ -5,9 +5,11 @@ import redirection from "./redirection";
 import timer from "./timer";
 import { setTheme } from "./util/themes";
 import badge from "./badge";
-import API from "./util/API";
-import { makeDate } from "./util/utilities";
 import { participantResource } from "./util/constants";
+
+// API-related imports
+import API from "./API";
+import { eventNames } from "./API/Event";
 
 /* Add listener if the runtime is caused by initial installation of extension.
 If so, run initial setup */
@@ -65,28 +67,16 @@ async function killAiki() {
   timer.stopBonusTime();
   timer.killAiki();
   badge.remove();
-  const user = await storage.uid.get();
-  API.addLog(
-    {
-      user: user,
-      event: "User toggled redirection off",
-      date: makeDate(),
-    },
-    "config"
-  );
+  const details = {
+    message: "Aiki killed",
+  };
+  API.event.create(eventNames.redirectionToggledOff, details);
 }
 
 async function reviveAiki() {
   redirection.checkActiveTab();
-  const user = await storage.uid.get();
-  API.addLog(
-    {
-      user: user,
-      event: "User toggled redirection on",
-      date: makeDate(),
-    },
-    "config"
-  );
+  const details = { message: "Aiki revived" };
+  API.event.create(eventNames.redirectionToggledOn, details);
 }
 
 async function gotoOriginTab() {

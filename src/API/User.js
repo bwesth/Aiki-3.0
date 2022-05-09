@@ -1,25 +1,26 @@
 import Parse from 'parse'
 import { createRedirectionTargetSite } from './RedirectionTargetSite';
 
-const definition = {
+export const definition = {
     name: "User",
     fields: {
       email: "email",
+      password: "password",
       timeWastingSiteList: "timeWastingSiteList",
       redirectionTargetSite: "redirectionTargetSite",
-      dateList: "dateList",
-      sessionStats: "sessionStats",
+      activityStats: "activityStats",
     }
 }
 
-export function createUser(email) {
+export function createUser(email, password) {
     const extensionReference = await browser.management.getSelf();
     const optionsPageURL = extensionReference.optionsUrl
-    const User = Parse.Object.extend(definition.name);
+    const User = Parse.User();
     User.set(definition.fields.email, email)
+    User.set(definition.fields.password, password)
     User.set(definition.fields.timeWastingSiteList, [])
     User.set(definition.fields.redirectionTargetSite, createRedirectionTargetSite(optionsPageURL))
-    User.set(definition.fields.dateList, [])
-    User.set(definition.fields.sessionStats, [])
+    User.set(definition.fields.activityStats, [])
     return User
 }
+

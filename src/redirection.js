@@ -1,34 +1,33 @@
 import storage from "./util/storage";
 import { learningSites, participantResource } from "./util/constants";
-import API from "./util/API";
 import browser from "webextension-polyfill";
 import timer from "./timer";
 import { parseUrl, makeDate, parseTime } from "./util/utilities";
+
+// API-related imports
+import API from "./API/index";
+import { eventNames } from "./API/Event";
 
 const l = console.log;
 
 let shouldShowWelcome = true;
 
-async function addMirceaListener() {
+async function addRedirectionTargetListener() {
   const url = learningSites.map((item) => {
     return { hostContains: `${item.name}.` };
   });
   const filter = { url: url };
 
-  async function mirceaListener(details) {
+  async function redirectionTargetListener(details) {
     const user = await storage.uid.get();
-    API.addLog(
-      {
-        user: user,
-        event: `User went to ${details.url}`,
-        details: details,
-        date: makeDate(),
-      },
-      "learning_site"
-    );
+
+    API.event.create(eventNames.redirectionTargetVisited, details);
   }
 
-  browser.webNavigation.onBeforeNavigate.addListener(mirceaListener, filter);
+  browser.webNavigation.onBeforeNavigate.addListener(
+    redirectionTargetListener,
+    filter
+  );
 }
 
 async function createFilter() {
@@ -371,20 +370,16 @@ async function talkToContent(tabId, url, originUrl) {
   }
 }
 
-async function addRedirectionLog(event, from, to) {
+async function addRedirectionLog(message, from, to) {
   const user = await storage.uid.get();
   const timeSettings = await storage.timeSettings.getAll();
-  API.addLog(
-    {
-      user: user,
-      event: event,
-      from: from,
-      to: to,
-      timeSettings: timeSettings,
-      date: makeDate(),
-    },
-    "redirection"
-  );
+  const details = {
+    message: message,
+    from: from,
+    to: to,
+    timeSettings: timeSettings,
+  };
+  API.event.create(eventNames.redirected, details);
 }
 
 function renderContentBlocker(details) {
@@ -452,5 +447,5 @@ export default {
   addOriginTabCloseListener,
   removeLearningSiteLoadedListener,
   checkActiveTab,
-  addMirceaListener,
+  addMirceaListener: addRedirectionTargetListener,
 };

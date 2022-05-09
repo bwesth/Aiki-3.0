@@ -1,8 +1,11 @@
 import browser from "webextension-polyfill";
 import storage from "./util/storage";
-import API from "./util/API";
+import OLDAPI from "./util/API";
 import { parseUrl, makeDate } from "./util/utilities";
 import { learningSites } from "./util/constants";
+
+// API-related imports
+import API from './API/index'
 
 let list;
 let user;
@@ -87,11 +90,12 @@ async function syncList() {
   list = result ? result.map((item) => item.name) : [];
 }
 
+// TODO: Change to new API
 function storeData(data) {
   if (user) {
     storage.stats.storeSession(data);
     const entry = { data: data, user: user, date: makeDate() };
-    API.addLog(entry, "session");
+    OLDAPI.addLog(entry, "session");
   }
 }
 
