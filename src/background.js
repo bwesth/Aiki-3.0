@@ -83,10 +83,11 @@ async function reviveAiki() {
 
 async function gotoOriginTab() {
   const origin = await storage.origin.get();
+  API.event.create(eventNames.blockerButtonPressed, {})
   browser.tabs.update(origin.tabId, { selected: true });
 }
 
-/* Add listener for incomming communication from extension options page runtime and extension popup runetime 
+/* Adding listener for incomming communication from extension options page runtime and extension popup runetime 
 
 case "user" means the user added or removed a user ID. This requires the logger interval to be reset, 
 as the user value in the interval function is no longer correct. 

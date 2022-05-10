@@ -13,13 +13,13 @@ const definition = {
 export const eventNames = {
   gotoOrigin: "gotoOrigin", // Bad name
   redirected: "redirected",
-  settingsChanged: "settingsChanged", //TODO
+  settingsChanged: "settingsChanged", //TODO: ?
   redirectWarningTriggered: "redirectWarningTriggered",
   redirectWarningSnoozed: "redirectWarningSnoozed",
-  targetSiteFocused: "targetSiteFocused", //TODO
-  targetSiteUnocused: "targetSiteUnocused", //TODO
-  siteBlockerTriggered: "siteBlockerTriggered", //TODO
-  blockerButtonPressed: "blockerButtonPressed", //TODO
+  targetSiteFocused: "targetSiteFocused",
+  targetSiteUnfocused: "targetSiteUnocused",
+  siteBlockerTriggered: "siteBlockerTriggered",
+  blockerButtonPressed: "blockerButtonPressed",
   redirectionToggledOff: "redirectionToggledOff",
   redirectionToggledOn: "redirectionToggledOn",
   redirectionTargetVisited: "redirectionTargetVisited",

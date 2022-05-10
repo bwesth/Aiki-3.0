@@ -11,6 +11,7 @@ import { eventNames, reasonNames } from "./API/Event";
 const l = console.log;
 
 let shouldShowWelcome = true;
+let targetSiteFocused = false;
 
 async function addRedirectionTargetListener() {
   const url = learningSites.map((item) => {
@@ -115,7 +116,7 @@ async function originUpdatedListener(details) {
   }
 }
 
-/** #REDIRECT()#
+/**
  * @async @function
  * @description Checks if redirection should happen,
  * then starts a learning session countdown,
@@ -149,8 +150,8 @@ async function redirect(details) {
               reason: reasonNames.redirected.instant,
               from: parseUrl(details.url).name,
               to: participantResource.name,
-            }
-            API.event.create(eventNames.redirected, eventDetails)
+            };
+            API.event.create(eventNames.redirected, eventDetails);
             addLearningSiteLoadedListener(details.tabId);
           } catch (error) {
             // console.log(error.message);
@@ -233,7 +234,7 @@ async function messageLearningResource(details) {
   }
 }
 
-/** #CHECKCURRENTTAB()#
+/**
 @function
 @async
 @description Gets currently active tab and sends message to the content script if it
@@ -287,12 +288,32 @@ async function checkTab(tab) {
   const tabSiteName = parseUrl(tab.url).name;
   const procList = await storage.list.get();
   const procListNames = procList.map((site) => site.name);
+  const origin = await storage.origin.get();
+  checkIfTargetSiteFocusChange(origin, tab);
   if (procListNames.includes(tabSiteName)) {
-    const origin = await storage.origin.get();
     if (origin) {
+      const eventDetails = {
+        blockedSite: tabSiteName,
+        origin: origin,
+      };
+      API.event.create(eventNames.siteBlockerTriggered, eventDetails);
       renderContentBlocker({ tabId: tab.id, frameId: 0 });
     } else {
       redirect({ frameId: 0, url: tab.url, tabId: tab.id });
+    }
+  }
+}
+
+async function checkIfTargetSiteFocusChange(origin, tab) {
+  if (origin) {
+    const eventDetails = {
+      origin: origin,
+      focusedTab: tab,
+    };
+    if (targetSiteFocused && origin.tabId !== tab.id) {
+      API.event.create(eventNames.targetSiteUnfocused, eventDetails);
+    } else if (!targetSiteFocused && origin.tabId === tab.id) {
+      API.event.create(eventNames.targetSiteFocused, eventDetails);
     }
   }
 }
