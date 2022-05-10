@@ -5,12 +5,16 @@ const definition = {
   fields: {
     url: "url",
     user: "user",
+    addedDate: "addedDate",
+    removedDate: "removedDate",
   },
 };
 
 export function createTimeWastingSite(url) {
-  const TimeWastingSite = Parse.Object.extend(definition.name);
-  TimeWastingSite.set(definition.fields.url, url);
-  TimeWastingSite.set(definition.fields.user, Parse.User.current());
-  return TimeWastingSite;
+  const timeWastingSite = Parse.Object.extend(definition.name);
+  timeWastingSite.set(definition.fields.url, url);
+  timeWastingSite.set(definition.fields.user, Parse.User.current());
+  timeWastingSite.set(definition.fields.addedDate, new Date());
+  timeWastingSite.set(definition.fields.removedDate, {});
+  return timeWastingSite;
 }

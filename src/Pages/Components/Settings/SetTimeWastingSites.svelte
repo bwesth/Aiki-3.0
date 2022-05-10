@@ -5,8 +5,7 @@
 <script>
   import Container from "./Container.svelte";
   import storage from "../../../util/storage";
-  import API from "../../../util/API";
-  import { parseUrl, makeDate } from "../../../util/utilities";
+  import { parseUrl } from "../../../util/utilities";
   import Fa from "svelte-fa";
   import {
     faTrashAlt,
@@ -18,7 +17,9 @@
   import { toast } from "@zerodevx/svelte-toast";
   import * as themes from "./util/toastThemes";
 
-  export let user = "";
+  import API from '../../../API/index'
+  import { eventNames, settingsMessages } from '../../../API/Event'
+
   export let port;
   $: list = [];
 
@@ -31,15 +32,11 @@
   let addItemValue = "";
 
   function removeItem(index) {
-    API.addLog(
-      {
-        user: user,
-        event: "User removed procrastination site",
-        site: list[index],
-        date: makeDate(),
-      },
-      "config"
-    );
+    const eventDetails = {
+      message: settingsMessages.timeWastingSiteRemoved,
+      site: list[index],
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
     let newList = [...list];
     newList.splice(index, 1);
     list = newList;
@@ -69,15 +66,11 @@
       newList.push(site);
       list = newList;
       storage.list.set(list);
-      API.addLog(
-        {
-          user: user,
-          event: "User added procrastination site",
-          site: site,
-          date: makeDate(),
-        },
-        "config"
-      );
+      const eventDetails = {
+      message: settingsMessages.timeWastingSiteAdded,
+      site: site,
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
       port.postMessage(`Update: list`);
       addItemValue = "";
       toast.pop();

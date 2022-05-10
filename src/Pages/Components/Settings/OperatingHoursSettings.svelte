@@ -9,8 +9,6 @@
   function update() {
     operatingHours = storage.operatingHours.getAll();
   }
-
-  export let user;
 </script>
 
 <h5>Set Operating Hours:</h5>
@@ -19,7 +17,7 @@
 {#await operatingHours}
   LOADING...
 {:then settings}
-  <OperatingHoursSelector {update} {settings} {user} />
+  <OperatingHoursSelector {update} {settings} />
 {/await}
 
 <style>

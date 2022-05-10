@@ -14,7 +14,7 @@
   import Header from "./Components/Settings/Header.svelte";
   import Privacy from "./Components/Settings/Privacy.svelte";
   import SetUser from "./Components/Settings/SetUser.svelte";
-  import SetWebsites from "./Components/Settings/SetTimeWastingSites.svelte";
+  import SetTimeWastingSites from "./Components/Settings/SetTimeWastingSites.svelte";
   import Statistics from "./Components/Settings/Statistics.svelte";
   import SetRedirection from "./Components/Settings/SetRedirection.svelte";
 
@@ -39,10 +39,10 @@
     </div>
     {#if userIsRegistered}
       <div class="container">
-        <SetWebsites {user} {port} />
+        <SetTimeWastingSites {port} />
       </div>
       <div class="container">
-        <SetRedirection {user} />
+        <SetRedirection />
       </div>
       <div class="container">
         <Statistics />

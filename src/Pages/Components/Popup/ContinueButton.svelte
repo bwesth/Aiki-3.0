@@ -14,7 +14,7 @@
   export let gotoOrigin;
 
   function handleClick() {
-    gotoOrigin("continue");
+    gotoOrigin("complete");
   }
 </script>
 

@@ -12,8 +12,6 @@
   import OperatingHoursSettings from "./OperatingHoursSettings.svelte";
   import TimeSettings from "./TimeSettings.svelte";
 
-  export let user = "";
-
 </script>
 
 <Container headline="Redirection Settings">
@@ -30,9 +28,9 @@
     >
   </div>
   <hr />
-  <TimeSettings {user} />
+  <TimeSettings />
   <hr />
-  <OperatingHoursSettings {user} />
+  <OperatingHoursSettings />
 
   <hr />
   <h5>Other Settings:</h5>

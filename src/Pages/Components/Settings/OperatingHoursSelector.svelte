@@ -4,15 +4,15 @@
  -->
 <script>
   import storage from "../../../util/storage";
-  import API from "../../../util/API";
-  import { makeDate } from "../../../util/utilities";
+
+  import API from '../../../API/index'
+  import { eventNames, settingsMessages } from '../../../API/Event'
 
   let hourOptions = Array.from({ length: 25 }, (_, i) => i);
   let minuteOptions = [0, 15, 30, 45];
 
   export let settings;
   export let update;
-  export let user;
 
   let { hrs: hrsFrom, min: minFrom } = settings.activeFrom;
   let { hrs: hrsTo, min: minTo } = settings.activeTo;
@@ -24,15 +24,11 @@
   function setActiveTo() {
     const setting = { hrs: hrsTo, min: minTo };
     storage.operatingHours.to.set(setting);
-    API.addLog(
-      {
-        user: user,
-        event: "User changed operating hours in settings",
-        operatingHoursTo: setting,
-        date: makeDate(),
-      },
-      "config"
-    );
+    const eventDetails = {
+      message: settingsMessages.operatingHoursEnd,
+      newSetting: setting,
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
     update();
   }
 
@@ -44,15 +40,11 @@
     }
     const setting = { hrs: hrsFrom, min: minFrom };
     storage.operatingHours.from.set(setting);
-    API.addLog(
-      {
-        user: user,
-        event: "User changed operating hours in settings",
-        operatingHoursFrom: setting,
-        date: makeDate(),
-      },
-      "config"
-    );
+    const eventDetails = {
+      message: settingsMessages.operatingHoursStart,
+      newSetting: setting,
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
     update();
   }
 

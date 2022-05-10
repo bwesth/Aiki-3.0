@@ -6,8 +6,8 @@ const definition = {
     from: "from",
     to: "to",
     status: "status",
-    start: "start",
-    end: "end",
+    startDate: "startDate",
+    endDate: "endDate",
     user: "user"
   },
 };
@@ -20,13 +20,13 @@ const statusNames = {
 };
 
 export function createSession() {
-  const Session = Parse.Object.extend(definition.name);
-  Session.set(definition.fields.from, from);
-  Session.set(definition.fields.to, to);
-  Session.set(definition.fields.status, statusNames.started);
-  Session.set(definition.fields.start, new Date());
-  Session.set(definition.fields.end, {});
-  Session.set(definition.fields.user, Parse.User.current())
+  const session = Parse.Object.extend(definition.name);
+  session.set(definition.fields.from, from);
+  session.set(definition.fields.to, to);
+  session.set(definition.fields.status, statusNames.started);
+  session.set(definition.fields.startDate, new Date());
+  session.set(definition.fields.endDate, {});
+  session.set(definition.fields.user, Parse.User.current())
 
-  return Session;
+  return session;
 }

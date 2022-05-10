@@ -1,16 +1,18 @@
 <!-- This component is rendered as a block on the settings 
   page for users to input their UID for logging purposes.
   Used in / Parent components: /src/Pages/Settings.svelte
+  TODO: login/register options from Parse
 -->
 <script>
   import Container from "./Container.svelte";
   import storage from "../../../util/storage";
-  import API from "../../../util/API";
-  import { makeDate } from "../../../util/utilities";
   import Fa from "svelte-fa";
   import { faUserSlash, faUserPlus } from "@fortawesome/free-solid-svg-icons";
   import { toast } from "@zerodevx/svelte-toast";
   import * as themes from "./util/toastThemes";
+
+  import API from '../../../API/index'
+  import { eventNames, settingsMessages } from '../../../API/Event'
 
   export let user = "";
   export let userIsRegistered;
@@ -28,15 +30,11 @@
     );
     if (confirmation) {
       storage.uid.set(user);
-      let date = makeDate();
-      API.addLog(
-        {
-          user: user,
-          event: "Added user ID to storage",
-          date: date,
-        },
-        "config"
-      );
+      const eventDetails = {
+        message: settingsMessages.addedUser,
+        userID: user
+      }
+      API.event.create(eventNames.settingsChanged, eventDetails)
       userIsRegistered = true;
       port.postMessage(`Update: user`);
       setTimeout(() => {
@@ -52,14 +50,11 @@
       "Are you certain you want to reset your email?"
     );
     if (confirmation) {
-      API.addLog(
-        {
-          user: user,
-          event: "Reset user ID in storage",
-          date: makeDate(),
-        },
-        "config"
-      );
+      const eventDetails = {
+        message: settingsMessages.resetUser, //should be logout, need a "destroy (archive) user" function too
+        userID: user
+      }
+      API.event.create(eventNames.settingsChanged, eventDetails)
       storage.uid.set("");
       userIsRegistered = false;
       user = "";

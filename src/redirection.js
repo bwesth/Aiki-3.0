@@ -6,7 +6,7 @@ import { parseUrl, makeDate, parseTime } from "./util/utilities";
 
 // API-related imports
 import API from "./API/index";
-import { eventNames } from "./API/Event";
+import { eventNames, reasonNames } from "./API/Event";
 
 const l = console.log;
 
@@ -19,8 +19,6 @@ async function addRedirectionTargetListener() {
   const filter = { url: url };
 
   async function redirectionTargetListener(details) {
-    const user = await storage.uid.get();
-
     API.event.create(eventNames.redirectionTargetVisited, details);
   }
 
@@ -101,7 +99,6 @@ function addOriginUpdatedListener() {
 }
 
 function removeOriginUpdatedListener() {
-  "Removing originUpdatedListener";
   browser.tabs.onUpdated.removeListener(originUpdatedListener);
 }
 
@@ -133,11 +130,11 @@ async function redirect(details) {
       const toggled = await storage.redirection.get();
       const shouldRedirect = await storage.shouldRedirect.get();
       if (toggled && shouldRedirect) {
-        l("ShouldRedirect", shouldRedirect);
+        // l("ShouldRedirect", shouldRedirect);
         const origin = await storage.origin.get();
-        l("Checking against this: ", origin);
+        // l("Checking against this: ", origin);
         if (origin) {
-          l(details);
+          // l(details);
           addProcsiteLoadedListener();
         } else {
           timer.startLearningSession();
@@ -148,11 +145,12 @@ async function redirect(details) {
             });
 
             storage.origin.set({ url: details.url, tabId: details.tabId });
-            addRedirectionLog(
-              `Interception: instant redirection`,
-              parseUrl(details.url).name,
-              participantResource.name
-            );
+            const eventDetails = {
+              reason: reasonNames.redirected.instant,
+              from: parseUrl(details.url).name,
+              to: participantResource.name,
+            }
+            API.event.create(eventNames.redirected, eventDetails)
             addLearningSiteLoadedListener(details.tabId);
           } catch (error) {
             // console.log(error.message);
@@ -189,7 +187,7 @@ async function onOriginRemoved(details) {
   const origin = await storage.origin.get();
   if (origin) {
     if (details === origin.tabId) {
-      l("Origin killed");
+      // l("Origin killed");
       removeOriginUpdatedListener();
       removeAllContentBlockers();
       storage.origin.remove();
@@ -252,11 +250,11 @@ async function checkActiveTab() {
       const procList = await storage.list.get();
       const procListNames = procList.map((site) => site.name);
       if (procListNames.includes(tabSiteName)) {
-        addRedirectionLog(
-          `Interception: initiating countdown`,
-          tabSiteName,
-          participantResource.name
-        );
+        const details = {
+          triggerSite: tabSiteName,
+          redirectingTo: participantResource.name,
+        };
+        API.event.create(eventNames.redirectWarningTriggered, details);
         const learningUri = await storage.learningUri.get();
         talkToContent(tab.id, learningUri, tab.url);
       }
@@ -276,7 +274,7 @@ async function checkTabById({ tabId }) {
 }
 // TODO: Rewrite these two functions ^ & v to 1 single function that checks if tab has url (if not, get it)
 
-/** #CHECKTAB()#
+/**
  * @async
  * @function
  * @description Checks a tab against a list of websites defined as procrastination websites.
@@ -299,15 +297,15 @@ async function checkTab(tab) {
   }
 }
 
-/** #GOTOORIGIN()#
+/**
  * @async
  * @function
  * @description Changes location of the tab registered as the tab
  * that triggered a redirection from procrastination to learning site.
  * The uri was saved upon redirection, and here restored in full in the same tab.
  * Origin is an object of type: {integer: tabId, string: url} */
-async function gotoOrigin(event, source) {
-  await storage.stats[event]();
+async function gotoOrigin(reason, source) {
+  await storage.stats[reason]();
   const origin = await storage.origin.get();
   removeOriginUpdatedListener();
   try {
@@ -321,11 +319,13 @@ async function gotoOrigin(event, source) {
   try {
     await browser.tabs.update(origin.tabId, { url: origin.url });
     removeAllContentBlockers();
-    addRedirectionLog(
-      `Go to origin: ${event}, source: ${source}`,
-      participantResource.name,
-      parseUrl(origin.url).name
-    );
+    const details = {
+      reason: reasonNames.gotoOrigin[reason],
+      source: source,
+      from: participantResource.name,
+      to: parseUrl(origin.url).name,
+    };
+    API.event.create(eventNames.gotoOrigin, details);
   } catch (error) {
     l(error);
   }
@@ -346,21 +346,22 @@ async function talkToContent(tabId, url, originUrl) {
       url: url,
     });
     if (result.action === "snooze") {
-      addRedirectionLog(
-        `Interception: snoozed`,
-        parseUrl(originUrl).name,
-        participantResource.name
-      );
+      const details = {
+        from: parseUrl(originUrl).name,
+        to: participantResource.name,
+      };
+      API.event.create(eventNames.redirectWarningSnoozed, details);
       storage.stats.snooze();
       await storage.shouldRedirect.set(false);
       timer.startProcrastinationSession(checkActiveTab, 60000);
     } else {
       addLearningSiteLoadedListener();
-      addRedirectionLog(
-        `Interception: auto resolve`,
-        parseUrl(originUrl).name,
-        participantResource.name
-      );
+      const eventDetails = {
+        reason: reasonNames.redirected.autoResolved,
+        from: parseUrl(originUrl).name,
+        to: participantResource.name,
+      };
+      API.event.create(eventNames.redirected, eventDetails);
       timer.startLearningSession();
       storage.origin.set({ url: originUrl, tabId: tabId });
       addOriginUpdatedListener(tabId);
@@ -370,24 +371,12 @@ async function talkToContent(tabId, url, originUrl) {
   }
 }
 
-async function addRedirectionLog(message, from, to) {
-  const user = await storage.uid.get();
-  const timeSettings = await storage.timeSettings.getAll();
-  const details = {
-    message: message,
-    from: from,
-    to: to,
-    timeSettings: timeSettings,
-  };
-  API.event.create(eventNames.redirected, details);
-}
-
 function renderContentBlocker(details) {
   if (details.frameId === 0) {
     removeProcsiteLoadedListener();
     storage.blockedTabs.add(details.tabId);
     try {
-      l("Sending block request to content");
+      // l("Sending block request to content");
       browser.tabs.sendMessage(details.tabId, {
         action: "inject blocker",
       });
@@ -398,7 +387,7 @@ function renderContentBlocker(details) {
 }
 
 function removeContentBlocker(tabId) {
-  l("Removing blocker on tab ", tabId);
+  // l("Removing blocker on tab ", tabId);
   try {
     browser.tabs.sendMessage(tabId, { action: "remove blocker" });
   } catch (error) {
@@ -408,7 +397,7 @@ function removeContentBlocker(tabId) {
 
 async function removeAllContentBlockers() {
   const blockedTabs = await storage.blockedTabs.get();
-  l("Blocked tabs: ", blockedTabs);
+  // l("Blocked tabs: ", blockedTabs);
   blockedTabs.forEach((tabId) => {
     removeContentBlocker(tabId);
   });
@@ -416,14 +405,14 @@ async function removeAllContentBlockers() {
 }
 
 async function addProcsiteLoadedListener() {
-  l("Adding listener");
+  // l("Adding listener");
   const filter = await createFilter();
-  l(filter);
+  // l(filter);
   browser.webNavigation.onCompleted.addListener(renderContentBlocker, filter);
 }
 
 async function removeProcsiteLoadedListener() {
-  l("Removing listener");
+  // l("Removing listener");
   browser.webNavigation.onCompleted.removeListener(renderContentBlocker);
 }
 

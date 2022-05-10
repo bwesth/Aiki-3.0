@@ -10,7 +10,6 @@
     timeSettings = storage.timeSettings.getAll();
   }
 
-  export let user;
 </script>
 
 <h5>Set Learning Time:</h5>
@@ -22,7 +21,7 @@
 {#await timeSettings}
   LOADING...
 {:then settings}
-  <TimeSelector {update} {settings} {user} />
+  <TimeSelector {update} {settings} />
 {/await}
 
 <style>

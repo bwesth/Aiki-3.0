@@ -4,14 +4,13 @@
  -->
 <script>
   import storage from "../../../util/storage";
-  import API from "../../../util/API";
-  import { makeDate } from "../../../util/utilities";
+  import API from '../../../API/index'
+  import { eventNames, settingsMessages } from '../../../API/Event'
 
-  let minuteOptions = Array.from({ length: 60 }, (_, i) => i); //Generates an array with values from 1->59
+  let minuteOptions = Array.from({ length: 60 }, (_, i) => i);
   let secondsOptions = [0, 15, 30, 45];
   export let settings;
   export let update;
-  export let user;
 
   let { min: learnMin, sec: learnSec } = settings.learningTime;
   let { min: rewardMin, sec: rewardSec } = settings.rewardTime;
@@ -23,30 +22,22 @@
   function setLearningTime() {
     const learningTime = { min: learnMin, sec: learnSec };
     storage.timeSettings.learningTime.set(learningTime);
-    API.addLog(
-      {
-        user: user,
-        event: "User changed learning time in settings",
-        value: learningTime,
-        date: makeDate(),
-      },
-      "config"
-    );
+    const eventDetails = {
+      message: settingsMessages.learningTime,
+      newValue: learningTime,
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
     update();
   }
 
   function setRewardTime() {
     const rewardTime = { min: rewardMin, sec: rewardSec };
     storage.timeSettings.rewardTime.set(rewardTime);
-    API.addLog(
-      {
-        user: user,
-        event: "User changed reward time in settings",
-        value: rewardTime,
-        date: makeDate(),
-      },
-      "config"
-    );
+    const eventDetails = {
+      message: settingsMessages.rewardTime,
+      newValue: rewardTime,
+    }
+    API.event.create(eventNames.settingsChanged, eventDetails)
     update();
   }
 </script>
