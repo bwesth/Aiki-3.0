@@ -1,5 +1,6 @@
 import Parse from "parse";
-import { createRedirectionTargetSite } from "./RedirectionTargetSite";
+
+import { hash } from "../util/security";
 
 export const definition = {
   name: "User",
@@ -11,7 +12,7 @@ export const definition = {
     redirectionTargetSite: "redirectionTargetSite",
     createdDate: "createdDate",
     archivedDate: "archivedDate",
-    activityStats: "activityStats",
+    isArchived: "isArchived",
   },
 };
 
@@ -21,9 +22,9 @@ export async function signup(email, password) {
   user.set(definition.fields.password, password);
   user.set(definition.fields.timeWastingSiteList, []);
   user.set(definition.fields.redirectionTargetSite, "");
-  user.set(definition.fields.activityStats, []);
   user.set(definition.fields.createdDate, new Date());
   user.set(definition.fields.archivedDate, {});
+  user.set(definition.fields.isArchived, false);
   try {
     await user.signup();
     return true;
@@ -55,8 +56,11 @@ export async function logout() {
 
 export async function archiveUser() {
   const currentUser = await Parse.User.currentUser();
+  currentUser.set(definition.fields.isArchived, true);
+  currentUser.set(definition.fields.archivedDate, new Date());
+  currentUser.set(definition.fields.username, hash(currentUser.username));
   try {
-    currentUser.destroy();
+    currentUser.save();
     return true;
   } catch (error) {
     console.log(error);
@@ -64,4 +68,12 @@ export async function archiveUser() {
   }
 }
 
-export async function resetPassword(email) {}
+export async function resetPassword(email) {
+  try {
+    await Parse.User.requestPasswordReset(email);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}

@@ -15,7 +15,9 @@
   import { eventNames, settingsMessages } from '../../../API/Event'
 
   export let user = "";
+  let password = ""
   export let userIsRegistered;
+
   export let port;
   let toastCoords = { y: "id-input-field", x: "user-settings" };
 
@@ -24,30 +26,26 @@
     userIsRegistered = user !== "" ? true : false;
   }
 
-  function confirmUid() {
-    const confirmation = confirm(
-      "Are you certain the provided email is correct?"
-    );
-    if (confirmation) {
-      storage.uid.set(user);
-      const eventDetails = {
-        message: settingsMessages.addedUser,
-        userID: user
-      }
-      API.event.create(eventNames.settingsChanged, eventDetails)
-      userIsRegistered = true;
-      port.postMessage(`Update: user`);
-      setTimeout(() => {
-        toast.push("User registered!", {
-          theme: themes.successTheme(toastCoords),
-        });
-      }, 500);
+  function logon() {
+    storage.uid.set(user);
+    const eventDetails = {
+      message: settingsMessages.addedUser,
+      userID: user
     }
+    API.event.create(eventNames.settingsChanged, eventDetails)
+    API.user.login(user, password)
+    userIsRegistered = true;
+    port.postMessage(`Update: user`);
+    setTimeout(() => {
+      toast.push("Logged in succesful.", {
+        theme: themes.successTheme(toastCoords),
+      });
+    }, 500);
   }
 
-  function resetUid() {
+  function logout() {
     const confirmation = confirm(
-      "Are you certain you want to reset your email?"
+      "Are you certain you want to log out?"
     );
     if (confirmation) {
       const eventDetails = {
@@ -55,6 +53,25 @@
         userID: user
       }
       API.event.create(eventNames.settingsChanged, eventDetails)
+      API.user.logout()
+      storage.uid.set("");
+      userIsRegistered = false;
+      user = "";
+      port.postMessage(`Update: user`);
+    }
+  }
+
+  function deleteUser() {
+    const confirmation = confirm(
+      "Are you certain you want delete your account? \n This is non-reversable, although you can always make a new. \n NB: we will save your data for research purposes, but remove everything that can identify you according to GDPR."
+    );
+    if (confirmation) {
+      const eventDetails = {
+        message: settingsMessages.deleteUser,
+        userID: user
+      }
+      API.event.create(eventNames.settingsChanged, eventDetails)
+      API.user.archive()
       storage.uid.set("");
       userIsRegistered = false;
       user = "";
@@ -65,7 +82,7 @@
   setup();
 </script>
 
-<Container id="user-settings" headline="Register Email">
+<Container id="user-settings" headline="Account">
   {#if userIsRegistered}
     <h5>Registered Email:</h5>
     <input
@@ -77,10 +94,9 @@
     />
     <button
       class="btn btn-danger"
-      on:click={resetUid}
-      data-tooltip="Removes your email. 
-      WARNING: Aiki cannot log your activity if you do not provide it with an email."
-      ><Fa icon={faUserSlash} /> Remove Email</button
+      on:click={logout}
+      data-tooltip="Log out. WARNING: Aiki will not work while no user is logged in."
+      ><Fa icon={faUserSlash} />Log out</button
     >
   {:else}
     <h5>Add your email here so we can log your activity:</h5>
@@ -109,13 +125,21 @@
         bind:value={user}
         type="text"
         class="form-control"
-        placeholder="Enter your email here..."
+        placeholder="youremail@example.com"
+        aria-label=""
+        aria-describedby="basic-addon2"
+      />
+      <input 
+        bind:value={password}
+        type="password"
+        class="form-control"
+        placeholder="CorrectHorseBatteryStaple"
         aria-label=""
         aria-describedby="basic-addon2"
       />
       <div class="input-group-append">
-        <button on:click={confirmUid} class="btn btn-primary" type="button"
-          ><Fa icon={faUserPlus} /> Submit</button
+        <button on:click={logon} class="btn btn-primary" type="button"
+          ><Fa icon={faUserPlus} />Log on</button
         >
       </div>
     </div>

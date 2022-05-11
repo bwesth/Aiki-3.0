@@ -1,4 +1,4 @@
-<!-- 
+<!-- TODO: Good example for TID? ThemeSelector is inside SetRedirection, which also is a bad name
   Contains settings for redirection duration, as well as other misc settings such as changing theme.
   Used in / Parent components: /src/Pages/Settings.svelte
  -->

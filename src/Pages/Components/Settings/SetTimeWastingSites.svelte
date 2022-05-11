@@ -31,21 +31,25 @@
   setup();
   let addItemValue = "";
 
-  function removeItem(index) {
+  async function removeItem(index) {
+    const site = list[index];
     const eventDetails = {
       message: settingsMessages.timeWastingSiteRemoved,
-      site: list[index],
+      site: site,
     }
-    API.event.create(eventNames.settingsChanged, eventDetails)
-    let newList = [...list];
-    newList.splice(index, 1);
-    list = newList;
-    storage.list.set(list);
-    port.postMessage(`Update: list`);
-    toast.pop();
-    toast.push("Website removed!", {
-      theme: themes.successTheme(toastCoords),
-    });
+    const requestResult = await API.timeWastingSite.remove(site.host)
+    if (requestResult) {
+      API.event.create(eventNames.settingsChanged, eventDetails)
+      let newList = [...list];
+      newList.splice(index, 1);
+      list = newList;
+      storage.list.set(list);
+      port.postMessage(`Update: list`);
+      toast.pop();
+      toast.push("Website removed!", {
+        theme: themes.successTheme(toastCoords),
+      });
+    }
   }
 
   async function addItem() {
@@ -67,17 +71,22 @@
       list = newList;
       storage.list.set(list);
       const eventDetails = {
-      message: settingsMessages.timeWastingSiteAdded,
-      site: site,
-    }
-    API.event.create(eventNames.settingsChanged, eventDetails)
-      port.postMessage(`Update: list`);
-      addItemValue = "";
-      toast.pop();
-      toast.push("New Website Added!", {
-        theme: themes.successTheme(toastCoords),
-      });
+        message: settingsMessages.timeWastingSiteAdded,
+        site: site,
+      };
+      const requestResult = await API.timeWastingSite.create(site.host);
+      if (requestResult) {
+        API.event.create(eventNames.settingsChanged, eventDetails);
+        port.postMessage(`Update: list`);
+        addItemValue = "";
+        toast.pop();
+        toast.push("New Website Added!", {
+          theme: themes.successTheme(toastCoords),
+        });
+      }
     } else {
+      // Seriously Bjørn, what's with this code? - kind regards, Bjørn
+      // This means someone pressed cancel during the pingSite()
     }
   }
 

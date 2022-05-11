@@ -311,9 +311,9 @@ async function checkIfTargetSiteFocusChange(origin, tab) {
       focusedTab: tab,
     };
     if (targetSiteFocused && origin.tabId !== tab.id) {
-      API.event.create(eventNames.targetSiteUnfocused, eventDetails);
+      API.event.create(eventNames.redirectionTargetSiteUnfocused, eventDetails);
     } else if (!targetSiteFocused && origin.tabId === tab.id) {
-      API.event.create(eventNames.targetSiteFocused, eventDetails);
+      API.event.create(eventNames.redirectionTargetSiteFocused, eventDetails);
     }
   }
 }
