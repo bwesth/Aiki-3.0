@@ -1,4 +1,5 @@
 import Parse from "parse";
+import { async } from "parse/lib/browser/Storage";
 
 import { hash } from "../util/security";
 
@@ -71,6 +72,18 @@ export async function archiveUser() {
 export async function resetPassword(email) {
   try {
     await Parse.User.requestPasswordReset(email);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function setTargetSite(url) {
+  const currentUser = Parse.User.current();
+  currentUser.set(definition.fields.redirectionTargetSite, url);
+  try {
+    await currentUser.save();
     return true;
   } catch (error) {
     console.log(error);
