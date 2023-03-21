@@ -5,6 +5,7 @@
 <script>
   // Functional and module imports
   // import { participantResource } from "../../../util/constants";
+  import storage from "../../../util/storage";
 
   // Component imports
   import Container from "./Container.svelte";
@@ -19,11 +20,14 @@
   let inputValue = "";
 
   async function onSubmit() {
+    console.log(learningUri);
     if (inputValue === "") {
       return;
     }
     if (!inputValue.includes("https://")) {
+      console.log(inputValue);
       inputValue = `https://${inputValue}`; //TODO: Check if it should be http instead? Most websites enforce https anyway, but not all have security in place and thus https will not work. Maybe ask Mircea.
+      console.log(inputValue);
     }
     storage.learningUri.set(inputValue);
     inputValue = "";
@@ -36,37 +40,40 @@
   <hr />
   <!-- new -->
   <div class="container">
-    <div class="change-site-setting">
-      <h4>Current learning URI:</h4>
-      <a href={learningUri}
-        ><button
-          type="button"
-          class="btn btn-dark"
-          data-tooltip="Go to your learning platform!"
-          >{learningUri}</button
-        ></a
-      >
-      <form on:submit|preventDefault={onSubmit}>
-        <div data-tooltip="Change your learning resource.">
-          <div class="input-group mb-3">
-            <input
-              bind:value={inputValue}
-              id="addItem"
-              type="text"
-              class="form-control"
-              placeholder="Enter website here..."
-              aria-label=""
-              aria-describedby="basic-addon2"
-            />
-            <div class="input-group-append">
-              <button id="add-button" class="btn btn-primary" type="submit"
-                ><Fa icon={faSave} /> Change Site</button
-              >
+    {#await learningUri}
+      Loading...
+    {:then target}
+      <div class="change-site-setting">
+        <h4>Current learning URI:</h4>
+        <a href={target}
+          ><button
+            type="button"
+            class="btn btn-dark"
+            data-tooltip="Go to your learning platform!">{target}</button
+          ></a
+        >
+        <form on:submit|preventDefault={onSubmit}>
+          <div data-tooltip="Change your learning resource.">
+            <div class="input-group mb-3">
+              <input
+                bind:value={inputValue}
+                id="addItem"
+                type="text"
+                class="form-control"
+                placeholder="Enter website here..."
+                aria-label=""
+                aria-describedby="basic-addon2"
+              />
+              <div class="input-group-append">
+                <button id="add-button" class="btn btn-primary" type="submit"
+                  ><Fa icon={faSave} /> Change Site</button
+                >
+              </div>
             </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    {/await}
   </div>
 
   <!-- old -->

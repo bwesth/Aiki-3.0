@@ -107,18 +107,20 @@ function removeOrigin() {
 }
 
 async function setLearningUri(uri) {
+  console.log(uri, "HERE")
   if (uri) {
     storage.set({ learningUri: uri });
   } else {
-    storage.set({ learningUri: await browser.management.getSelf() });
+    storage.set({ learningUri: "https://itu.dk/" });
   }
 }
 
 async function getLearningUri() {
   let result = await storage.get("learningUri");
+  console.log(result)
   if (result.learningUri) {
     return result.learningUri;
-  } else return await browser.management.getSelf();
+  } else {} //return await browser.management.getSelf().optionsUrl;
 }
 
 // function setLearningUri (uri){

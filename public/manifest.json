@@ -1,7 +1,7 @@
   {
     "manifest_version": 2,
-    "name": "Aiki³ Phase 2",
-    "description": "Phase 2 of the Aiki³ research project.",
+    "name": "Aiki³",
+    "description": "Aiki³.",
     "version": "2.0.0",
     "icons": {
       "128": "/images/AikiLogo.png"
@@ -12,6 +12,9 @@
       "windows",
       "<all_urls>",
       "webNavigation"
+    ],
+    "host_permissions": [
+      "<all_urls>"
     ],
     "background": {
       "scripts": ["build/background.js"],
@@ -31,7 +34,7 @@
       }
     ],
 
-    "web_accessible_resources": ["images/AikiLogo.png"] ,
+    "web_accessible_resources": ["images/AikiLogo.png", "/build/aikiInjectedStyle.css", "/build/injection.js"] ,
  
 
     "content_security_policy":"script-src 'self' 'unsafe-eval' https://maps.googleapis.com; object-src 'self'",

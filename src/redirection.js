@@ -9,27 +9,27 @@ const l = console.log;
 
 let shouldShowWelcome = true;
 
-async function addMirceaListener() {
-  const url = learningSites.map((item) => {
-    return { hostContains: `${item.name}.` };
-  });
-  const filter = { url: url };
+// async function addMirceaListener() {
+//   const url = learningSites.map((item) => {
+//     return { hostContains: `${item.name}.` };
+//   });
+//   const filter = { url: url };
 
-  async function mirceaListener(details) {
-    const user = await storage.uid.get();
-    firebase.addLog(
-      {
-        user: user,
-        event: `User went to ${details.url}`,
-        details: details,
-        date: makeDate(),
-      },
-      "learning_site"
-    );
-  }
+//   async function mirceaListener(details) {
+//     const user = await storage.uid.get();
+//     firebase.addLog(
+//       {
+//         user: user,
+//         event: `User went to ${details.url}`,
+//         details: details,
+//         date: makeDate(),
+//       },
+//       "learning_site"
+//     );
+//   }
 
-  browser.webNavigation.onBeforeNavigate.addListener(mirceaListener, filter);
-}
+//   browser.webNavigation.onBeforeNavigate.addListener(mirceaListener, filter);
+// }
 
 async function createFilter() {
   const procList = await storage.list.get();
@@ -452,5 +452,5 @@ export default {
   addOriginTabCloseListener,
   removeLearningSiteLoadedListener,
   checkActiveTab,
-  addMirceaListener,
+  // addMirceaListener,
 };

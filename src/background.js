@@ -29,7 +29,7 @@ async function installationSetup() {
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.learningUri.set(extRef.optionsUrl);
+  storage.learningUri.set("https://itu.dk/");
   storage.timeSettings.init();
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
@@ -43,7 +43,7 @@ async function installationSetup() {
  * @description runtime instance setup function.
  * initiates setup of interval logging functionality, as well as adding navigation and tab change listeners. */
 async function setup() {
-  redirection.addMirceaListener();
+  // redirection.addMirceaListener();
   intervals.intervalSetup();
   storage.shouldRedirect.set(true);
   redirection.navigationListener.start();
