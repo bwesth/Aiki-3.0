@@ -106,11 +106,11 @@ function removeOrigin() {
   storage.remove("origin");
 }
 
-function setLearningUri(uri) {
+async function setLearningUri(uri) {
   if (uri) {
     storage.set({ learningUri: uri });
   } else {
-    storage.set({ learningUri: participantResource.host });
+    storage.set({ learningUri: await browser.management.getSelf() });
   }
 }
 
@@ -118,7 +118,7 @@ async function getLearningUri() {
   let result = await storage.get("learningUri");
   if (result.learningUri) {
     return result.learningUri;
-  } else return `https://${participantResource.host}`;
+  } else return await browser.management.getSelf();
 }
 
 // function setLearningUri (uri){
@@ -177,7 +177,7 @@ async function getUserTimes() {
  * @description Initializes the time settings in storage upon app installation. */
 function userTimeInit() {
   setLearningTime({ min: 5, sec: 0 });
-  setRewardTime({ min: 15, sec: 0 });
+  setRewardTime({ min: 5, sec: 0 });
 }
 
 /**
@@ -220,7 +220,7 @@ async function storeSession(data) {
   }
 
   for (const key in data) {
-    if (key === participantResource.name) {
+    if (key === getLearningUri()) {
       newData.learningDuration += data[key];
     } else if (!["chromeInactive", "chromeActive"].includes(key)) {
       newData[key] = sessionData.hasOwnProperty(key)
