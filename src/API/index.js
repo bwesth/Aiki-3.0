@@ -1,10 +1,10 @@
 import Parse from "parse";
-import { apiKey, jsKey } from "../../secret";
+import { apiKey, jsKey } from "./secret";
 
 import { createActivityLog } from "./ActivityLog";
 import { signup, login, archiveUser, resetPassword, setTargetSite } from './User'
 import { createEvent } from "./Event";
-import { createRedirectionTargetSite } from "./RedirectionTargetSite";
+// import { createRedirectionTargetSite } from "./RedirectionTargetSite";
 import { createSession } from "./Session";
 import { createTimeWastingSite, removeTimeWastingSite } from "./TimeWastingSite";
 
