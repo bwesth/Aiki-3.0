@@ -4,3 +4,4 @@
 .secret
 
 .DS_Store
+/src/API/secret.js
