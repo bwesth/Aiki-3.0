@@ -7,7 +7,6 @@ import { setTheme } from "./util/themes";
 import badge from "./badge";
 import firebase from "./util/firebase";
 import { makeDate } from "./util/utilities";
-import { participantResource } from "./util/constants";
 
 /* Add listener if the runtime is caused by initial installation of extension.
 If so, run initial setup */
@@ -30,7 +29,7 @@ async function installationSetup() {
   storage.redirection.toggle();
   storage.list.set([]);
   storage.uid.set("");
-  storage.learningUri.set(`https://${participantResource.host}`);
+  storage.learningUri.set(extRef.optionsUrl);
   storage.timeSettings.init();
   const extRef = await browser.management.getSelf();
   browser.tabs.create({
