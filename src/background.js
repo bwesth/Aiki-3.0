@@ -34,7 +34,7 @@ async function installationSetup() {
   storage.uid.set("");
   // const extensionReference = await browser.management.getSelf(); TODO
   // const optionsPageURL = extensionReference.optionsUrl
-  storage.learningUri.set(`https://${participantResource.host}`);
+  storage.learningUri.set(extRef.optionsUrl);
   storage.timeSettings.init();
   const extRef = await browser.management.getSelf();
   browser.tabs.create({

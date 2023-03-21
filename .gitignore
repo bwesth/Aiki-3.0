@@ -1,6 +1,11 @@
+
 /node_modules/
 /public/build/
 
 secret*
 
 .DS_Store
+
+/public.pem
+/public.crx
+/src/API/secret.js

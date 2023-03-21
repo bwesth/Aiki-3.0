@@ -1,5 +1,4 @@
 import Parse from "parse";
-import { async } from "parse/lib/browser/Storage";
 
 import { hash } from "../util/security";
 
