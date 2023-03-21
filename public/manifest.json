@@ -16,7 +16,7 @@
       "<all_urls>"
     ],
     "background": {
-      "service_worker": "build/background.js",
+      "service_worker": "background.js",
       "type": "module"
     },
     "action": {
@@ -28,8 +28,8 @@
     "content_scripts" : [
       {
         "matches" : ["<all_urls>"],
-        "css": ["/build/aikiInjectedStyle.css"],
-        "js": ["/build/injection.js"]
+        "css": ["aikiInjectedStyle.css"],
+        "js": ["injection.js"]
       }
     ],
 
@@ -44,7 +44,7 @@
       },
       {
         "resources": [
-          "build/aikiInjectedStyle.css"
+          "aikiInjectedStyle.css"
         ],
         "matches": [
           "*://*/*"
@@ -52,7 +52,7 @@
       }
     ],
     "content_security_policy":{
-      "extension_pages": "script-src 'self'; https://apis.google.com; object-src 'self'"
+      "extension_pages": "script-src 'self'; 'unsafe-eval' https://apis.google.com; object-src 'self'"
     },
     
     "options_page": "/index.html?page=settings"
